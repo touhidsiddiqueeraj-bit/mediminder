@@ -1,0 +1,18 @@
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+app/build/
+
+# Signing files (never commit keystores)
+keystore.properties
+*.jks
+*.keystore
+
+# GitHub Actions / CI
+*.apk.tmp

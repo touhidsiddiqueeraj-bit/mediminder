@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">MediMinder</string>
+
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="next">Next</string>
+    <string name="back">Back</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="saving">Saving…</string>
+    <string name="minutes_n">%1$d min</string>
+    <string name="decrease">Less</string>
+    <string name="increase">More</string>
+    <string name="pick_time">Pick a time</string>
+    <string name="remove_time">Remove this time</string>
+    <string name="check_this_field">Please double-check this — it may be wrong</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_today">Today</string>
+    <string name="nav_history">History</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Status -->
+    <string name="status_upcoming">Upcoming</string>
+    <string name="status_taken">Taken</string>
+    <string name="status_missed">Missed</string>
+    <string name="status_skipped">Skipped</string>
+    <string name="status_snoozed">Snoozed</string>
+
+    <!-- Today screen -->
+    <string name="today_title">Today\'s medicines</string>
+    <string name="this_week_adherence">This week: %1$d%% taken</string>
+    <string name="scan_label_button">Scan medicine label</string>
+    <string name="type_manually_button">Type it in myself</string>
+    <string name="no_medicines_today">No medicines today</string>
+    <string name="no_medicines_today_hint">Add a medicine with the buttons above, and it will show up here.</string>
+    <string name="read_aloud_button">Read today\'s plan aloud</string>
+    <string name="time_morning">Morning</string>
+    <string name="time_afternoon">Afternoon</string>
+    <string name="time_evening">Evening</string>
+    <string name="time_night">Night</string>
+    <string name="section_count">(%1$d)</string>
+    <string name="taken_at">Taken at %1$s</string>
+    <string name="open_details">Open details for %1$s</string>
+    <string name="action_taken">Taken</string>
+    <string name="action_snooze_short">Snooze</string>
+    <string name="action_skip">Skip</string>
+    <string name="low_stock_banner">Only %2$d days of %1$s left. Time to get a refill.</string>
+
+    <!-- Disclaimer -->
+    <string name="disclaimer_short">MediMinder is a reminder tool. It does not replace advice from your doctor.</string>
+    <string name="disclaimer_long">MediMinder helps you remember your medicines. It is not medical advice and it never tells you to change your dose. Always follow the instructions from your doctor or pharmacist.</string>
+
+    <!-- Add / edit medication -->
+    <string name="add_title">Add a medicine</string>
+    <string name="edit_title">Edit medicine</string>
+    <string name="step_of">Step %1$d of %2$d</string>
+    <string name="field_medication_name">Medicine name</string>
+    <string name="field_dosage_amount">Dose amount (e.g. 1 or 500)</string>
+    <string name="field_dosage_unit">Dose unit (e.g. tablet or mg)</string>
+    <string name="field_form">What kind of medicine?</string>
+    <string name="field_instructions">Notes (e.g. take with food)</string>
+    <string name="form_tablet">Tablet</string>
+    <string name="form_capsule">Capsule</string>
+    <string name="form_liquid">Liquid</string>
+    <string name="form_drops">Drops</string>
+    <string name="form_injection">Injection</string>
+    <string name="check_name_online">Check the name online</string>
+    <string name="checking_online">Checking…</string>
+    <string name="dates_title">Start and end</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
+    <string name="no_end_date">This medicine has an end date</string>
+    <string name="review_title">Please check everything</string>
+    <string name="stock_title">Pills left</string>
+    <string name="track_stock_title">Count my pills</string>
+    <string name="track_stock_subtitle">Warn me when only a few days are left</string>
+    <string name="pills_remaining">Pills or doses left</string>
+    <string name="stock_not_tracked">You are not counting pills for this medicine.</string>
+    <string name="save_medicine">Save this medicine</string>
+    <string name="save_anyway">Save anyway</string>
+    <string name="invalid_name">Please type the name of the medicine.</string>
+    <string name="invalid_no_schedule">Please choose when to take it.</string>
+    <string name="invalid_no_times">Please add at least one reminder time.</string>
+    <string name="duplicate_warning_title">Possible double medicine</string>
+    <string name="duplicate_warning_text">"%1$s" may contain the same ingredient as a medicine you already added. Taking the same ingredient twice can be harmful. Ask your doctor or pharmacist if you are not sure.</string>
+    <string name="delete_photo_after_save">Delete the photo after saving</string>
+    <string name="scanned_photo">Photo of the label</string>
+    <string name="scanned_photo_note">This photo stays on your phone only.</string>
+
+    <!-- Schedule editor -->
+    <string name="freq_daily_title">Every day</string>
+    <string name="freq_daily_subtitle">At the same times each day</string>
+    <string name="freq_specific_days_title">On certain days</string>
+    <string name="freq_specific_days_subtitle">For example: Monday, Wednesday, Friday</string>
+    <string name="freq_interval_title">Every few hours</string>
+    <string name="freq_interval_subtitle">For example: every 8 hours</string>
+    <string name="freq_as_needed_title">Only when I need it</string>
+    <string name="freq_as_needed_subtitle">No automatic reminders</string>
+    <string name="freq_as_needed_note">We will not remind you for this medicine. You can still mark it as taken from the Today screen.</string>
+    <string name="freq_pick_days">Which days?</string>
+    <string name="freq_pick_days_error">Please pick at least one day.</string>
+    <string name="freq_reminder_times">Reminder times</string>
+    <string name="freq_every_day">Every day</string>
+    <string name="freq_every_n_days">Every %1$d days</string>
+    <string name="freq_every_n_hours">Every %1$d hours</string>
+    <string name="freq_first_dose_at">First dose of the day at %1$s</string>
+    <string name="add_time">Add another time</string>
+
+    <!-- Scan flow -->
+    <string name="scan_title">Scan the label</string>
+    <string name="scan_instructions">Hold the medicine box or label steady and take a clear photo. The words are read on your phone — nothing is sent anywhere.</string>
+    <string name="camera_permission_title">Camera needs your OK</string>
+    <string name="camera_permission_message">To read a medicine label, MediMinder needs to use the camera once. The photo stays on your phone.</string>
+    <string name="camera_allow_button">Allow camera</string>
+    <string name="take_photo">Take photo</string>
+    <string name="scan_processing">Reading the label…</string>
+    <string name="scan_processing_note">This takes a few seconds. Your photo stays on your phone.</string>
+    <string name="scan_review_title">Please check before saving</string>
+    <string name="scan_review_subtitle">We read the label as best we could. Fields marked in red may be wrong — please check them and fix anything that looks odd.</string>
+    <string name="scan_confirm_schedule">When should we remind you?</string>
+    <string name="scan_failed_title">We could not read that label</string>
+    <string name="scan_failed_message">The writing may be too small or blurry. Try again with more light, or type the details in yourself.</string>
+    <string name="scan_try_again">Try again</string>
+
+    <!-- History -->
+    <string name="history_title">History</string>
+    <string name="weekly_summary_title">This week</string>
+    <string name="weekly_percent">%1$d%% taken</string>
+    <string name="weekly_no_data">No doses recorded yet</string>
+    <string name="weekly_taken_of">%1$d of %2$d doses taken</string>
+    <string name="calendar_day_a11y">%1$s: %2$d taken, %3$d missed</string>
+    <string name="calendar_day_no_doses">%1$s: no medicines</string>
+    <string name="day_empty_title">Nothing on this day</string>
+    <string name="day_empty_message">No medicines were scheduled on this day.</string>
+    <string name="export_report">Make a report for my doctor (PDF)</string>
+
+    <!-- Medication detail -->
+    <string name="detail_info_title">About this medicine</string>
+    <string name="detail_generic_name">Generic name</string>
+    <string name="detail_dosage">Dose</string>
+    <string name="detail_form">Kind</string>
+    <string name="detail_instructions">Notes</string>
+    <string name="detail_active">Reminders on</string>
+    <string name="detail_schedule_title">Reminders</string>
+    <string name="detail_adherence_title">Last 30 days</string>
+    <string name="detail_adherence_value">%1$d%% taken</string>
+    <string name="detail_adherence_counts">Taken: %1$d · Missed: %2$d · Skipped: %3$d</string>
+    <string name="detail_edit">Edit this medicine</string>
+    <string name="detail_stop">Stop reminders</string>
+    <string name="detail_restart">Start reminders again</string>
+    <string name="detail_delete">Delete this medicine</string>
+    <string name="detail_delete_confirm_title">Delete this medicine?</string>
+    <string name="detail_delete_confirm_text">This removes the medicine and all of its history from MediMinder. This cannot be undone.</string>
+    <string name="schedule_daily">Every day at %1$s</string>
+    <string name="schedule_every_n_days">Every %1$d days at %2$s</string>
+    <string name="schedule_specific_days">On chosen days at %1$s</string>
+    <string name="schedule_interval">Every %1$d hours, starting at %2$s</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_reminders_title">Reminders</string>
+    <string name="setting_snooze_minutes">Snooze length</string>
+    <string name="setting_snooze_hint">"Snooze" waits this long before reminding you again.</string>
+    <string name="setting_re_remind_interval">Wait between reminders</string>
+    <string name="setting_max_re_reminds">How many reminders in total</string>
+    <string name="settings_voice_title">Voice</string>
+    <string name="setting_tts_title">Read reminders aloud</string>
+    <string name="setting_tts_subtitle">Speak the medicine name when a reminder opens</string>
+    <string name="settings_appearance_title">Appearance</string>
+    <string name="theme_system">Match my phone setting</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="settings_permissions_title">Important for reliable reminders</string>
+    <string name="settings_permissions_hint">Please make sure all of these show a green tick. If a reminder is ever missed, it is almost always one of these.</string>
+    <string name="perm_notifications_title">Notifications</string>
+    <string name="perm_notifications_ok">On — reminders can be shown</string>
+    <string name="perm_notifications_missing">Off — you will not see reminders</string>
+    <string name="perm_exact_alarms_title">Exact alarms</string>
+    <string name="perm_exact_alarms_ok">On — reminders arrive on time</string>
+    <string name="perm_exact_alarms_missing">Off — reminders may be late by a few minutes</string>
+    <string name="perm_battery_title">Battery saving</string>
+    <string name="perm_battery_ok">This app is exempt — reminders always fire</string>
+    <string name="perm_battery_missing">Battery saving may delay reminders</string>
+    <string name="perm_fullscreen_title">Full-screen reminder</string>
+    <string name="perm_fullscreen_ok">On — reminders show over the lock screen</string>
+    <string name="perm_fullscreen_missing">Off — reminders only show as a small banner</string>
+    <string name="perm_allow">Allow</string>
+    <string name="perm_open_settings">Open settings</string>
+    <string name="settings_privacy_title">Privacy</string>
+    <string name="setting_delete_photos_title">Delete label photos after saving</string>
+    <string name="setting_delete_photos_subtitle">Photos are read on your phone and can be removed right away</string>
+    <string name="privacy_policy_button">Read the privacy policy</string>
+    <string name="settings_data_title">Data</string>
+    <string name="delete_all_data">Delete all my data</string>
+    <string name="delete_all_confirm_title">Delete everything?</string>
+    <string name="delete_all_confirm_text">This removes every medicine and all history from MediMinder. This cannot be undone.</string>
+    <string name="delete_all_confirm_button">Delete everything</string>
+    <string name="settings_about_title">About MediMinder</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_start">Start using MediMinder</string>
+    <string name="onboarding_welcome_title">Never forget your medicine</string>
+    <string name="onboarding_welcome_message">MediMinder reminds you at exactly the right time, in big, clear letters. Your medicine list stays on your phone.</string>
+    <string name="onboarding_how_title">Adding a medicine is easy</string>
+    <string name="onboarding_how_message">Take a photo of the label, check the details, and we do the rest. You can also type everything in yourself.</string>
+    <string name="onboarding_permissions_title">Two quick switches</string>
+    <string name="onboarding_permissions_message">These two switches make sure reminders always arrive — even when the phone is sleeping.</string>
+    <string name="onboarding_done_title">You are ready</string>
+    <string name="onboarding_done_message">Add your first medicine from the Today screen. If you ever need help, everything can be changed in Settings.</string>
+
+    <!-- Notifications -->
+    <string name="channel_reminders_name">Medicine reminders</string>
+    <string name="channel_reminders_desc">Shows the reminder when it is time to take a medicine</string>
+    <string name="channel_low_stock_name">Low medicine supply</string>
+    <string name="channel_low_stock_desc">Warns when only a few days of a medicine are left</string>
+    <string name="channel_feedback_name">Confirmations</string>
+    <string name="channel_feedback_desc">Quiet confirmations after you tap Taken</string>
+    <string name="notif_reminder_title">Time to take %1$s</string>
+    <string name="notif_reminder_fallback_text">Tap "Taken" once you have taken it.</string>
+    <string name="action_snooze">Snooze %1$d min</string>
+    <string name="notif_taken_title">Marked as taken</string>
+    <string name="notif_taken_text">%1$s — nicely done.</string>
+    <string name="notif_low_stock_title">Running low on medicine</string>
+    <string name="notif_low_stock_text">Only %2$s of %1$s left.</string>
+    <plurals name="notif_low_stock_days">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+
+    <!-- Text to speech -->
+    <string name="tts_reminder_with_name">It is time to take %1$s.</string>
+    <string name="tts_reminder_generic">It is time to take your medicine.</string>
+    <string name="tts_today_intro">Your medicines today:</string>
+    <string name="tts_dose_line">%1$s at %2$s.</string>
+
+    <!-- PDF report -->
+    <string name="report_title">MediMinder medicine report</string>
+    <string name="report_generated">Generated: %1$s</string>
+    <string name="report_period">Period: %1$s to %2$s</string>
+    <string name="report_summary">Taken: %1$d · Missed: %2$d · Skipped: %3$d · Adherence: %4$s</string>
+    <string name="report_by_medicine">By medicine</string>
+    <string name="report_by_day">Last 14 days</string>
+    <string name="report_col_medicine">Medicine</string>
+    <string name="report_col_taken">Taken</string>
+    <string name="report_col_missed">Missed</string>
+    <string name="report_col_skipped">Skipped</string>
+    <string name="report_col_adherence">Adherence</string>
+    <string name="report_day_counts">taken %1$d · missed %2$d · skipped %3$d · %4$s</string>
+    <string name="report_disclaimer">This report was created by MediMinder from reminders the user marked as taken, missed or skipped. It is a record only, not medical advice. Doses marked "as needed" are not included.</string>
+
+    <!-- Privacy policy screen -->
+    <string name="privacy_title">Privacy policy</string>
+    <string name="privacy_intro">We built MediMinder so that your health information belongs to you. Here is exactly what happens to your data, in plain language.</string>
+    <string name="privacy_local_title">Your data stays on your phone</string>
+    <string name="privacy_local_body">Your medicines, reminders and history are stored only on this phone, in a database that is encrypted. We have no servers that receive your health data.</string>
+    <string name="privacy_ocr_title">Label photos are read on your phone</string>
+    <string name="privacy_ocr_body">When you scan a medicine label, the photo and the text recognition both happen on your phone. You can have the photo deleted right after the details are saved.</string>
+    <string name="privacy_encryption_title">Your data is encrypted</string>
+    <string name="privacy_encryption_body">The medicine database is encrypted with a key that is held securely by your phone\'s hardware security module.</string>
+    <string name="privacy_network_title">One optional online check</string>
+    <string name="privacy_network_body">The only time the app uses the internet is when you tap "Check the name online" to fix a scanned name. That search sends only the medicine name — never your photos, history or personal details — to a public drug-name service (RxNorm by the U.S. National Library of Medicine). You never have to use it.</string>
+    <string name="privacy_no_tracking_title">No advertising, no tracking</string>
+    <string name="privacy_no_tracking_body">MediMinder contains no ads, no analytics and no third-party trackers. Nobody is watching what you do.</string>
+    <string name="privacy_backup_title">No automatic cloud backup</string>
+    <string name="privacy_backup_body">Your data is not backed up to any cloud service unless you export it yourself. If you delete the app, its data is gone — please keep your own export if that worries you.</string>
+    <string name="privacy_disclaimer_title">A reminder tool, not a doctor</string>
+    <string name="privacy_disclaimer_body">MediMinder does not give medical advice and will never tell you to change your dose. For questions about your medicines, always ask your doctor or pharmacist.</string>
+</resources>

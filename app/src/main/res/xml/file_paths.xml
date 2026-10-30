@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Exported PDF adherence reports (shared with the doctor). -->
+    <cache-path name="reports" path="reports/" />
+    <!-- Photos taken while scanning a label (app-private storage). -->
+    <files-path name="photos" path="photos/" />
+</paths>

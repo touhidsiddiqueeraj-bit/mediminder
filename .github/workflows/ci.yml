@@ -44,7 +44,7 @@ jobs:
 
       - name: Upload unit test reports (on failure)
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: unit-test-reports
           path: app/build/reports/tests/
@@ -52,14 +52,14 @@ jobs:
 
       - name: Upload lint report (on failure)
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lint-report
           path: app/build/reports/lint-results*.html
           if-no-files-found: ignore
 
       - name: Upload debug APK (for manual QA)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: mediminder-debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk

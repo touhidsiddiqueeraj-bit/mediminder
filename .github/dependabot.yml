@@ -27,6 +27,14 @@ updates:
         versions: [">=2.10.0"]
       - dependency-name: "androidx.datastore*"
         versions: [">=1.2.0"]
+      - dependency-name: "androidx.compose*"
+        versions: [">=2025.01.00"]
+      - dependency-name: "androidx.navigation*"
+        versions: [">=2.9.0"]
+      # OkHttp 5 / Retrofit 3 ship newer Kotlin metadata; Retrofit 3 is fine,
+      # keep OkHttp on 4.x until the toolchain upgrade.
+      - dependency-name: "com.squareup.okhttp3*"
+        versions: [">=5.0.0"]
 
   - package-ecosystem: "github-actions"
     directory: "/"

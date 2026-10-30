@@ -1,0 +1,173 @@
+package com.mediminder.app.ui.settings
+
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.PowerManager
+import android.provider.Settings
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.mediminder.app.domain.repository.MedicationRepository
+import com.mediminder.app.domain.repository.ReminderSettings
+import com.mediminder.app.domain.repository.SettingsRepository
+import com.mediminder.app.domain.repository.ThemeMode
+import com.mediminder.app.domain.service.ReminderScheduler
+import com.mediminder.app.notifications.NotificationHelper
+import com.mediminder.app.scheduling.AlarmScheduler
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+/** Live permission status, re-checked whenever [refresh] is called. */
+data class PermissionStatus(
+    val notifications: Boolean = true,
+    val exactAlarms: Boolean = true,
+    val batteryOptimizationIgnored: Boolean = true,
+    val fullScreenIntent: Boolean = true,
+)
+
+data class SettingsUiState(
+    val settings: ReminderSettings = ReminderSettings(),
+    val permissions: PermissionStatus = PermissionStatus(),
+    val confirmDeleteAll: Boolean = false,
+    val deletingAll: Boolean = false,
+)
+
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val settingsRepository: SettingsRepository,
+    private val medicationRepository: MedicationRepository,
+    private val reminderScheduler: ReminderScheduler,
+    private val alarmScheduler: AlarmScheduler,
+    private val notificationHelper: NotificationHelper,
+) : ViewModel() {
+
+    private val _permissions = MutableStateFlow(PermissionStatus())
+    val permissions: StateFlow<PermissionStatus> = _permissions.asStateFlow()
+
+    private val _deleteFlow = MutableStateFlow(SettingsUiState())
+    val uiState: StateFlow<SettingsUiState> = _deleteFlow.asStateFlow()
+
+    val settings = settingsRepository.settings
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ReminderSettings())
+
+    init {
+        refreshPermissions()
+    }
+
+    fun refreshPermissions() {
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        _permissions.value = PermissionStatus(
+            notifications = notificationHelper.areNotificationsEnabled(),
+            exactAlarms = alarmScheduler.canScheduleExact(),
+            batteryOptimizationIgnored = powerManager.isIgnoringBatteryOptimizations(context.packageName),
+            fullScreenIntent = notificationHelper.fullScreenIntentGranted(),
+        )
+    }
+
+    fun setSnoozeMinutes(minutes: Int) {
+        viewModelScope.launch {
+            settingsRepository.setSnoozeMinutes(minutes)
+            reminderScheduler.rescheduleAllAlarms()
+        }
+    }
+
+    fun setReRemindIntervalMinutes(minutes: Int) {
+        viewModelScope.launch {
+            settingsRepository.setReRemindIntervalMinutes(minutes)
+            reminderScheduler.rescheduleAllAlarms()
+        }
+    }
+
+    fun setMaxReReminds(count: Int) {
+        viewModelScope.launch {
+            settingsRepository.setMaxReReminds(count)
+            reminderScheduler.rescheduleAllAlarms()
+        }
+    }
+
+    fun setTtsEnabled(enabled: Boolean) {
+        viewModelScope.launch { settingsRepository.setTtsEnabled(enabled) }
+    }
+
+    fun setThemeMode(mode: ThemeMode) {
+        viewModelScope.launch { settingsRepository.setThemeMode(mode) }
+    }
+
+    fun setDeletePhotosAfterScan(enabled: Boolean) {
+        viewModelScope.launch { settingsRepository.setDeletePhotosAfterScan(enabled) }
+    }
+
+    fun requestDeleteAll() {
+        _deleteFlow.update { it.copy(confirmDeleteAll = true) }
+    }
+
+    fun cancelDeleteAll() {
+        _deleteFlow.update { it.copy(confirmDeleteAll = false) }
+    }
+
+    fun confirmDeleteAll() {
+        if (_deleteFlow.value.deletingAll) return
+        _deleteFlow.update { it.copy(deletingAll = true) }
+        viewModelScope.launch {
+            medicationRepository.getAllMedications().forEach { medication ->
+                medicationRepository.delete(medication.id)
+            }
+            reminderScheduler.rescheduleAllAlarms()
+            _deleteFlow.update { it.copy(confirmDeleteAll = false, deletingAll = false) }
+        }
+    }
+}
+
+/** Opens the system screen where the user can allow exact alarms for the app. */
+fun openExactAlarmSettings(context: Context) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        runCatching {
+            context.startActivity(
+                Intent(
+                    Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
+                    Uri.parse("package:${context.packageName}"),
+                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+            )
+        }
+    }
+}
+
+/** Asks the system to exempt the app from battery optimization. */
+fun requestIgnoreBatteryOptimizations(context: Context) {
+    val intent = Intent(
+        Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+        Uri.parse("package:${context.packageName}"),
+    ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    val fallback = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    runCatching { context.startActivity(intent) }
+        .onFailure { runCatching { context.startActivity(fallback) } }
+}
+
+fun openAppNotificationSettings(context: Context) {
+    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+        .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    runCatching { context.startActivity(intent) }
+}
+
+fun openAppSettings(context: Context) {
+    val intent = Intent(
+        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        Uri.parse("package:${context.packageName}"),
+    ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    runCatching { context.startActivity(intent) }
+}

@@ -19,6 +19,14 @@ updates:
       # Gradle 9+ requires a newer AGP; stay on 8.x until AGP is bumped.
       - dependency-name: "gradle"
         versions: [">=9.0.0"]
+      # These AndroidX lines move to compileSdk 36 / newer Kotlin metadata;
+      # re-enable after the coordinated toolchain upgrade.
+      - dependency-name: "androidx.core*"
+        versions: [">=1.16.0"]
+      - dependency-name: "androidx.work*"
+        versions: [">=2.10.0"]
+      - dependency-name: "androidx.datastore*"
+        versions: [">=1.2.0"]
 
   - package-ecosystem: "github-actions"
     directory: "/"

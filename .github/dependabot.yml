@@ -5,6 +5,19 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
+    ignore:
+      # The toolchain versions below must be upgraded together (Kotlin <->
+      # KSP <-> Hilt <-> AGP <-> Room). Coordinate those bumps manually and
+      # run the full build+test locally, as they regularly break each other.
+      - dependency-name: "org.jetbrains.kotlin*"
+        # Kotlin plugin + serialization plugin
+      - dependency-name: "com.google.devtools.ksp"
+      - dependency-name: "com.google.dagger*"
+      - dependency-name: "com.android.application"
+      - dependency-name: "androidx.room*"
+      # Gradle 9+ requires a newer AGP; stay on 8.x until AGP is bumped.
+      - dependency-name: "gradle"
+        versions: [">=9.0.0"]
 
   - package-ecosystem: "github-actions"
     directory: "/"

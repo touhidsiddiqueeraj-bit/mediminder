@@ -137,12 +137,10 @@ dependencies {
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.exifinterface)
     implementation(libs.mlkit.text.recognition)
 
-    // Optional online drug-name check (RxNorm). Fully functional offline.
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.kotlinx.serialization)
-    implementation(libs.okhttp)
+    // Offline drug-name dictionary asset (JSON Lines, parsed with kotlinx)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.android)
 

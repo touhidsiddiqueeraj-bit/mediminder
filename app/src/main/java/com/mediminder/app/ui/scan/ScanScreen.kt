@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -46,6 +47,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -55,9 +58,9 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.mediminder.app.R
-import com.mediminder.app.domain.model.FieldConfidence
+import com.mediminder.app.domain.model.DrugNameType
 import com.mediminder.app.domain.model.LabelField
-import com.mediminder.app.domain.model.MedicationForm
+import com.mediminder.app.domain.model.ScoredDrugName
 import com.mediminder.app.ui.addmedication.ScheduleEditor
 import com.mediminder.app.ui.components.BigButton
 import com.mediminder.app.ui.components.BigOutlinedButton
@@ -74,6 +77,13 @@ import java.util.Locale
  * Scan a medicine label: camera -> on-device OCR -> confirm every field
  * next to the photo. Never saves anything without an explicit Save tap.
  */
+
+/** Dictionary score at/above which the name is pre-filled without a warning. */
+private const val AUTO_NAME_SCORE = 0.85f
+
+/** Dictionary score at/above which the name is pre-filled but highlighted. */
+private const val REVIEW_NAME_SCORE = 0.60f
+
 @Composable
 fun ScanScreen(
     onFinished: () -> Unit,
@@ -302,8 +312,10 @@ private fun ProcessingStep() {
 
 @Composable
 private fun ReviewStep(state: ScanUiState, viewModel: ScanViewModel) {
-    val draft = state.draft ?: return
+    val item = state.items.getOrNull(state.currentIndex) ?: return
+    val draft = item.draft
     val confidence = draft.confidence
+    val hasMore = state.currentIndex < state.items.lastIndex
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -311,7 +323,7 @@ private fun ReviewStep(state: ScanUiState, viewModel: ScanViewModel) {
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         item(key = "title") {
-            Column {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
                     stringResource(R.string.scan_review_title),
                     style = MaterialTheme.typography.headlineSmall,
@@ -321,6 +333,26 @@ private fun ReviewStep(state: ScanUiState, viewModel: ScanViewModel) {
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+                if (state.items.size > 1) {
+                    Text(
+                        stringResource(
+                            R.string.scan_progress_of,
+                            state.currentIndex + 1,
+                            state.items.size,
+                        ),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                    LinearProgressIndicator(
+                        progress = {
+                            (state.currentIndex + 1).toFloat() / state.items.size
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(8.dp),
+                    )
+                }
             }
         }
 
@@ -339,6 +371,22 @@ private fun ReviewStep(state: ScanUiState, viewModel: ScanViewModel) {
             }
         }
 
+        if (item.rawNameText.isNotBlank() && item.rawNameText != draft.name) {
+            item(key = "read-vs-guess") {
+                SectionCard {
+                    Text(
+                        stringResource(R.string.scan_we_read, item.rawNameText),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                    Text(
+                        stringResource(R.string.scan_did_you_mean, draft.name),
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
+            }
+        }
+
         item(key = "fields") {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 LabeledField(
@@ -347,21 +395,31 @@ private fun ReviewStep(state: ScanUiState, viewModel: ScanViewModel) {
                     onValueChange = { value -> viewModel.updateDraft { it.copy(name = value) } },
                     confidence = confidence?.get(LabelField.NAME),
                 )
-                if (confidence?.get(LabelField.NAME) == FieldConfidence.LOW) {
-                    BigOutlinedButton(
-                        text = if (state.checkingNameOnline) {
-                            stringResource(R.string.checking_online)
-                        } else {
-                            stringResource(R.string.check_name_online)
-                        },
-                        onClick = viewModel::checkNameOnline,
-                        enabled = !state.checkingNameOnline,
+                if (item.candidates.isNotEmpty() && item.nameScore < AUTO_NAME_SCORE) {
+                    Text(
+                        stringResource(R.string.scan_candidates_title),
+                        style = MaterialTheme.typography.titleSmall,
                     )
-                    state.nameSuggestions.forEach { suggestion ->
-                        TextButton(onClick = { viewModel.applySuggestion(suggestion) }) {
-                            Text(suggestion, style = MaterialTheme.typography.bodyLarge)
-                        }
-                    }
+                    CandidateChips(
+                        candidates = item.candidates,
+                        rawNameText = item.rawNameText,
+                        showRawChip = item.nameScore < REVIEW_NAME_SCORE,
+                        onPick = viewModel::applySuggestion,
+                    )
+                }
+                BigOutlinedButton(
+                    text = if (state.checkingName) {
+                        stringResource(R.string.checking_name)
+                    } else {
+                        stringResource(R.string.scan_check_name_again)
+                    },
+                    onClick = viewModel::checkName,
+                    enabled = !state.checkingName,
+                )
+                state.nameSuggestions.forEach { suggestion ->
+                    SuggestionButton(suggestion = suggestion, onClick = {
+                        viewModel.applySuggestion(suggestion)
+                    })
                 }
 
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -423,15 +481,22 @@ private fun ReviewStep(state: ScanUiState, viewModel: ScanViewModel) {
         item(key = "save") {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 BigButton(
-                    text = if (state.saving) {
-                        stringResource(R.string.saving)
-                    } else {
-                        stringResource(R.string.save_medicine)
+                    text = when {
+                        state.saving -> stringResource(R.string.saving)
+                        hasMore -> stringResource(R.string.scan_save_and_continue)
+                        else -> stringResource(R.string.save_medicine)
                     },
                     onClick = viewModel::save,
                     enabled = !state.saving,
                     leadingIcon = Icons.Filled.CameraEnhance,
                 )
+                if (hasMore) {
+                    BigOutlinedButton(
+                        text = stringResource(R.string.scan_skip_medicine),
+                        onClick = viewModel::skipItem,
+                        enabled = !state.saving,
+                    )
+                }
                 Text(
                     stringResource(R.string.disclaimer_short),
                     style = MaterialTheme.typography.bodySmall,
@@ -439,6 +504,76 @@ private fun ReviewStep(state: ScanUiState, viewModel: ScanViewModel) {
                 )
             }
         }
+    }
+}
+
+/** One-tap dictionary candidates plus, when the match was weak, the raw OCR text. */
+@Composable
+private fun CandidateChips(
+    candidates: List<ScoredDrugName>,
+    rawNameText: String,
+    showRawChip: Boolean,
+    onPick: (ScoredDrugName) -> Unit,
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        if (showRawChip && rawNameText.isNotBlank()) {
+            NameChip(
+                text = stringResource(R.string.scan_use_read_name, rawNameText),
+                onClick = {
+                    onPick(
+                        ScoredDrugName(name = rawNameText, type = DrugNameType.GENERIC, score = 0f),
+                    )
+                },
+            )
+        }
+        candidates.forEach { candidate ->
+            NameChip(
+                text = if (candidate.genericName.isNullOrBlank()) {
+                    candidate.name
+                } else {
+                    stringResource(R.string.scan_candidate_with_generic, candidate.name, candidate.genericName)
+                },
+                onClick = { onPick(candidate) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun NameChip(text: String, onClick: () -> Unit) {
+    Surface(
+        onClick = onClick,
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.secondaryContainer,
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 56.dp)
+            .semantics { contentDescription = text },
+    ) {
+        Box(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            contentAlignment = Alignment.CenterStart,
+        ) {
+            Text(
+                text,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+            )
+        }
+    }
+}
+
+@Composable
+private fun SuggestionButton(suggestion: ScoredDrugName, onClick: () -> Unit) {
+    TextButton(onClick = onClick) {
+        Text(
+            if (suggestion.genericName.isNullOrBlank()) {
+                suggestion.name
+            } else {
+                "${suggestion.name} (${suggestion.genericName})"
+            },
+            style = MaterialTheme.typography.bodyLarge,
+        )
     }
 }
 

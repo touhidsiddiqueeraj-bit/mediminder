@@ -45,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mediminder.app.R
-import com.mediminder.app.domain.model.FieldConfidence
 import com.mediminder.app.domain.model.LabelField
 import com.mediminder.app.domain.model.MedicationForm
 import com.mediminder.app.ui.components.BigButton
@@ -199,23 +198,25 @@ private fun StepMedicine(state: AddMedicationUiState, viewModel: AddMedicationVi
             confidence = confidence?.get(LabelField.NAME),
         )
 
-        if (confidence != null && confidence[LabelField.NAME] == FieldConfidence.LOW) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                BigOutlinedButton(
-                    text = if (state.checkingNameOnline) {
-                        stringResource(R.string.checking_online)
+        BigOutlinedButton(
+            text = if (state.checkingName) {
+                stringResource(R.string.checking_name)
+            } else {
+                stringResource(R.string.check_name_button)
+            },
+            onClick = viewModel::checkName,
+            enabled = !state.checkingName && draft.name.trim().length >= 3,
+        )
+        state.nameSuggestions.forEach { suggestion ->
+            TextButton(onClick = { viewModel.applySuggestion(suggestion) }) {
+                Text(
+                    if (suggestion.genericName.isNullOrBlank()) {
+                        suggestion.name
                     } else {
-                        stringResource(R.string.check_name_online)
+                        "${suggestion.name} (${suggestion.genericName})"
                     },
-                    onClick = viewModel::checkNameOnline,
-                    enabled = !state.checkingNameOnline,
-                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.bodyLarge,
                 )
-            }
-            state.nameSuggestions.forEach { suggestion ->
-                TextButton(onClick = { viewModel.applySuggestion(suggestion) }) {
-                    Text(suggestion, style = MaterialTheme.typography.bodyLarge)
-                }
             }
         }
 

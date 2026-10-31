@@ -7,6 +7,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.mediminder.app.domain.model.DoseStatus
+import com.mediminder.app.domain.model.DrugNameType
 import com.mediminder.app.domain.model.FrequencyType
 import com.mediminder.app.domain.model.MedicationForm
 import java.time.LocalDate
@@ -85,4 +86,22 @@ data class MedicationWithSchedules(
     @Embedded val medication: MedicationEntity,
     @Relation(parentColumn = "id", entityColumn = "medicationId")
     val schedules: List<ScheduleEntity>,
+)
+
+/**
+ * One row of the offline drug-name dictionary. Pre-populated on first run
+ * from the packaged asset (rebuilt from the openFDA NDC Directory); used to
+ * fuzzy-correct OCR'd names fully offline.
+ */
+@Entity(tableName = "drug_names", indices = [Index("name")])
+data class DrugNameEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0L,
+    /** Proper-case display name, e.g. "Metformin" or "Glucophage". */
+    val name: String,
+    val type: DrugNameType,
+    /** For brands: the linked generic name, e.g. "Metformin". */
+    val genericName: String? = null,
+    /** Comma-separated common strengths, e.g. "500 mg, 850 mg". */
+    val commonStrengths: String? = null,
 )

@@ -37,6 +37,8 @@ data class ParsedFrequency(
 data class ParsedLabel(
     val rawText: String,
     val name: String? = null,
+    /** Generic ingredient when the dictionary resolved a brand name. */
+    val genericName: String? = null,
     val strengthValue: String? = null,
     val strengthUnit: String? = null,
     /** "1", "2", "1-2" … the number of units per dose. */

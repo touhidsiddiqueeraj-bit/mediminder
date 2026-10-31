@@ -21,10 +21,9 @@
     <!-- Photo capture for label scanning -->
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <!-- Optional, only used for the online RxNorm name check. The app is fully
-         functional offline. -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- No INTERNET permission on purpose: MediMinder is fully offline and
+         physically cannot send health data anywhere. The drug-name dictionary
+         used by the label scanner ships inside the app as an asset. -->
 
     <application
         android:name=".MediMinderApplication"

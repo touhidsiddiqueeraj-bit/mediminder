@@ -30,9 +30,9 @@ text, and keeps a shareable adherence history.
 
 | Area | What it does |
 | --- | --- |
-| **Add by photo** | CameraX photo → ML Kit on-device OCR → regex/rule parser extracts name, strength, dosage, form and frequency ("twice daily" → 08:00 & 20:00) → **confirmation screen with the photo and every field editable**, low-confidence fields flagged. Falls back to the manual form with the photo attached if extraction fails. |
-| **Add manually** | 3-step wizard: medicine → schedule → review. Forms: tablet/capsule/liquid/drops/injection. Frequencies: daily, specific weekdays, every X hours (crossing midnight), "every N days", as-needed. Optional end date, notes, pill count. |
-| **RxNorm check (optional)** | On the confirmation screen, a "Check the name online" button corrects OCR typos against [RxNorm](https://www.nlm.nih.gov/research/umls/rxnorm/). Fully degrades offline — the feature simply hides behind the same button. |
+| **Add by photo** | CameraX photo → image pre-processing (EXIF upright, down-sample, grayscale auto-contrast, one deskew/auto-crop retry) → ML Kit on-device OCR → line clustering finds **one candidate per medication — prescriptions with several medicines are supported** → offline drug-name dictionary fuzzy-corrects OCR typos ("Metf0rmin" → "Metformin") with confidence bands (≥ 0.85 pre-filled, 0.60–0.85 highlighted with one-tap candidate chips, < 0.60 left blank with the raw text offered) → **confirmation screen with the photo and every field editable**, reviewed one medicine at a time. Falls back to the manual form with the photo attached if extraction fails. |
+| **Add manually** | 3-step wizard: medicine → schedule → review. Forms: tablet/capsule/liquid/drops/injection. Frequencies: daily, specific weekdays, every X hours (crossing midnight), "every N days", as-needed. Optional end date, notes, pill count. "Check the name" button matches what you typed against the offline dictionary. |
+| **Offline drug dictionary** | ~10,000 generic and brand names (~725 KB asset) rebuilt from the [openFDA NDC Directory](https://open.fda.gov/data/ndc/) (public domain), copied into Room on first use and searched with a prefix + trigram index — fully offline, brand → generic links included. Rebuild: `tools/rebuild_drug_dictionary.py`. |
 | **Reminders** | Exact alarms (`setExactAndAllowWhileIdle`) with full-screen intent, big text, gentle custom chime + vibration, and **Taken / Snooze 10 min / Skip** actions. If unanswered, re-reminds up to 3× (configurable), then marks the dose **Missed**. |
 | **Today screen** | Doses grouped Morning/Afternoon/Evening/Night with status chips and one-tap "Taken". Low-stock banners ("Only 3 days of Metformin left"). Optional voice read-out (TTS). |
 | **History & reports** | Month calendar with per-day adherence, weekly summary, per-medicine stats, and an exportable **PDF report** for the doctor. |
@@ -46,7 +46,7 @@ text, and keeps a shareable adherence history.
 - **Room** (offline-first) encrypted with **SQLCipher**
 - **CameraX** + **ML Kit Text Recognition** (on-device, bundled Latin model)
 - **AlarmManager** (exact) + **WorkManager** fallback, **NotificationCompat**
-- **DataStore** preferences, **Retrofit + kotlinx.serialization** (RxNorm only)
+- **DataStore** preferences, **kotlinx.serialization** (dictionary asset)
 - **Coil** for photo display, custom **PdfDocument** report generator
 
 ## Project structure
@@ -57,17 +57,16 @@ multi-module evolution is in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)):
 ```
 app/src/main/java/com/mediminder/app/
 ├── domain/                    # pure Kotlin, no Android deps — 100% JVM-testable
-│   ├── model/                 # Medication, Schedule, DoseLog, ParsedLabel, enums
-│   ├── parser/                # MedicationLabelParser (OCR text -> structure) + LabelDefaults
+│   ├── model/                 # Medication, Schedule, DoseLog, ParsedLabel, DrugName, enums
+│   ├── parser/                # MedicationLabelParser, PrescriptionSegmenter, DrugNameMatcher
 │   ├── engine/                # DoseGenerationEngine, AdherenceCalculator, LowStockCalculator
 │   ├── repository/            # interfaces + ReminderSettings
-│   ├── service/               # ReminderScheduler, LabelScanner, DoseEventListener (caregiver hook), ReRemindPolicy
-│   └── usecase/               # Add/Mark/Snooze/Missed/Adherence/LowStock… use cases
+│   ├── service/               # ReminderScheduler, OcrProvider, DrugNameIndex, ReRemindPolicy
+│   └── usecase/               # Add/Mark/Snooze/Missed/Extract use cases
 ├── data/                      # implementations
-│   ├── local/                 # Room entities, DAOs, converters, SQLCipher passphrase guard
-│   ├── repository/            # Medication/DoseLog/Settings/DrugName repositories
-│   ├── remote/                # RxNorm API (optional)
-│   ├── scanner/               # ML Kit wrapper
+│   ├── local/                 # Room entities, DAOs, converters, drug-name seeder
+│   ├── repository/            # Medication/DoseLog/Settings repositories
+│   ├── scanner/               # MlKitOcrProvider, image pre-processor, local dictionary index
 │   ├── report/                # PDF report generator
 │   └── mapper/
 ├── scheduling/                # AlarmScheduler, ReminderPlanner, ReminderTrigger,
@@ -77,6 +76,9 @@ app/src/main/java/com/mediminder/app/
 ├── ui/                        # Compose: theme, components, navigation, screens
 └── di/                        # Hilt modules
 ```
+
+`app/src/main/assets/drug_names.jsonl` is the offline dictionary (see
+[`tools/README.md`](tools/README.md) for how to rebuild it).
 
 ## Getting started
 
@@ -184,7 +186,7 @@ design assumes everything will try to stop it:
 | `RECEIVE_BOOT_COMPLETED` | Re-register alarms after reboot. |
 | `VIBRATE` / `WAKE_LOCK` | Alert pattern; firing from Doze. |
 | `CAMERA` | Photograph the medicine label. Optional: manual entry works without it. |
-| `INTERNET` / `ACCESS_NETWORK_STATE` | Only the optional RxNorm name check. |
+| — | No `INTERNET` permission at all: the app physically cannot send data anywhere. The drug dictionary ships inside the APK. |
 | `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` | Guided exemption so OEM battery managers cannot defer alarms. |
 
 ## Privacy

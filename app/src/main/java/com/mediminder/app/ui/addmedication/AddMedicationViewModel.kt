@@ -3,8 +3,9 @@ package com.mediminder.app.ui.addmedication
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mediminder.app.domain.repository.DrugNameRepository
+import com.mediminder.app.domain.model.ScoredDrugName
 import com.mediminder.app.domain.repository.MedicationRepository
+import com.mediminder.app.domain.service.DrugNameIndex
 import com.mediminder.app.domain.usecase.AddMedicationUseCase
 import com.mediminder.app.domain.usecase.DuplicateMedicationChecker
 import com.mediminder.app.ui.model.MedicationDraft
@@ -26,8 +27,8 @@ data class AddMedicationUiState(
     /** Set when a possible duplicate ingredient was found; user must confirm. */
     val duplicateOf: String? = null,
     val duplicateAcknowledged: Boolean = false,
-    val nameSuggestions: List<String> = emptyList(),
-    val checkingNameOnline: Boolean = false,
+    val nameSuggestions: List<ScoredDrugName> = emptyList(),
+    val checkingName: Boolean = false,
     val deletePhotoAfterSave: Boolean = true,
 )
 
@@ -37,7 +38,7 @@ class AddMedicationViewModel @Inject constructor(
     private val medicationRepository: MedicationRepository,
     private val addMedicationUseCase: AddMedicationUseCase,
     private val duplicateMedicationChecker: DuplicateMedicationChecker,
-    private val drugNameRepository: DrugNameRepository,
+    private val drugNameIndex: DrugNameIndex,
 ) : ViewModel() {
 
     private val medicationId: Long = savedStateHandle.get<Long>("medicationId") ?: 0L
@@ -89,19 +90,24 @@ class AddMedicationViewModel @Inject constructor(
         _uiState.update { it.copy(deletePhotoAfterSave = enabled) }
     }
 
-    /** Asks RxNorm (when online) for standardized names to fix OCR typos. */
-    fun checkNameOnline() {
+    /** Asks the offline dictionary for the closest matching medicine names. */
+    fun checkName() {
         val name = _uiState.value.draft.name.trim()
         if (name.length < 3) return
-        _uiState.update { it.copy(checkingNameOnline = true) }
+        _uiState.update { it.copy(checkingName = true) }
         viewModelScope.launch {
-            val suggestions = drugNameRepository.suggestNames(name)
-            _uiState.update { it.copy(checkingNameOnline = false, nameSuggestions = suggestions) }
+            val suggestions = drugNameIndex.bestMatches(name, maxResults = 3)
+            _uiState.update { it.copy(checkingName = false, nameSuggestions = suggestions) }
         }
     }
 
-    fun applySuggestion(name: String) {
-        updateDraft { it.copy(name = name) }
+    fun applySuggestion(suggestion: ScoredDrugName) {
+        updateDraft {
+            it.copy(
+                name = suggestion.name,
+                genericName = suggestion.genericName.orEmpty(),
+            )
+        }
         _uiState.update { it.copy(nameSuggestions = emptyList()) }
     }
 

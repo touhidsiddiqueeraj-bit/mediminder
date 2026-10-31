@@ -113,6 +113,7 @@ data class MedicationDraft(
             val frequency = label.frequency
             return MedicationDraft(
                 name = label.name.orEmpty(),
+                genericName = label.genericName.orEmpty(),
                 dosageValue = label.dosageAmount ?: label.strengthValue.orEmpty(),
                 dosageUnit = label.dosageUnit ?: label.strengthUnit.orEmpty(),
                 form = label.form ?: MedicationForm.TABLET,

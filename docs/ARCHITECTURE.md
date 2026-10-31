@@ -16,16 +16,19 @@ The app follows MVVM + Clean Architecture with a strict dependency rule:
 │   models: Medication, Schedule, DoseLog, ParsedLabel          │
 │   engine: DoseGenerationEngine, AdherenceCalculator,          │
 │           LowStockCalculator                                  │
-│   parser: MedicationLabelParser (OCR text → structure)        │
+│   parser: PrescriptionSegmenter, MedicationLabelParser,       │
+│           DrugNameMatcher (OCR text → structured candidates)   │
 │   usecases: AddMedication, MarkDose, Snooze, MarkMissed,      │
-│             ObserveToday, Adherence, LowStock, Export         │
-│   service interfaces: ReminderScheduler, LabelScanner,        │
-│             AdherenceReportGenerator, DoseEventListener       │
+│             ObserveToday, Adherence, LowStock, Export,        │
+│             ExtractMedicationsFromPhoto                        │
+│   service interfaces: ReminderScheduler, OcrProvider,        │
+│             DrugNameIndex, AdherenceReportGenerator,         │
+│             DoseEventListener                                 │
 └───────────────▲──────────────────────────────┬───────────────┘
                 │ implements                   │ uses (Android impls)
 ┌───────────────┴──────────────────────────────▼───────────────┐
 │ data + scheduling + notifications (Android)                   │
-│   Room + SQLCipher · ML Kit scanner · RxNorm (optional)       │
+│   Room + SQLCipher · ML Kit OCR · offline drug dictionary     │
 │   AlarmScheduler · ReminderPlanner · ReminderTrigger          │
 │   DeviceEventReceiver · Maintenance/SafetyNet workers         │
 │   NotificationHelper · PdfReportGenerator · TTS               │
@@ -76,24 +79,51 @@ Sweep (`MarkMissedDosesUseCase`, cutoff = whole chain + 5 min buffer) runs at
 app open, in the maintenance worker and after device events, catching
 anything the alarm chain could not deliver (device off, force-stopped).
 
-## Parsing pipeline (scan flow)
+## Scan & parsing pipeline (photo → confirmed medicine)
+
+Prescriptions commonly contain **several medicines**; one photo yields one
+candidate per line cluster, confirmed by the user one at a time.
 
 ```
-photo (app-private) → MlKitLabelScanner.recognizeText()   [on-device]
-    → MedicationLabelParser.parse(text)
-        1. strength   "500 mg", "10 mcg", "100 units"
-        2. frequency  as-needed > every-N-hours/qNh > bedtime >
-                      N-times-per-day (+ moment refinement) > meals >
-                      every-other-day > morning/afternoon/evening
-        3. dosage     "1 tablet", "two capsules", "take 5 ml"
-        4. instructions  "with food", "on an empty stomach" …
-        5. name       first plausible product line: cut at first
-                      instruction word, strip strength & form words
-        → ParsedLabel with per-field confidence
-    → MedicationDraft.fromParsed() → confirmation screen
-        (photo + every field editable, low-confidence flagged red,
-         optional RxNorm name check, nothing saved before "Save")
+photo (app-private)
+  → OcrImagePreprocessor                     [data/scanner, Android]
+      EXIF-upright · down-sample huge photos · grayscale auto-contrast
+      · if the first pass looks skewed, one deskew/auto-crop retry
+  → OcrProvider.recognize()                 [domain interface]
+      impl: MlKitOcrProvider — on-device ML Kit, returns OcrLine(text,
+      box, confidence) so medication lines can be told apart from
+      doctor names, addresses and dates. Never throws.
+  → PrescriptionSegmenter                    [domain/parser, pure]
+      clusters OCR lines into one candidate per medication
+  → MedicationLabelParser.parse(cluster)     [domain/parser, pure]
+      per cluster: strength → frequency → dosage → instructions →
+      raw name, each with per-field confidence (ParsedLabel)
+  → DrugNameMatcher + DrugNameIndex          [domain/parser + data/scanner]
+      fuzzy-corrects the raw name against the offline dictionary
+      (prefix + trigram index, Levenshtein + OCR-confusion fixes
+      like 0/o, 1/l, 5/s, rn/m)
+  → name confidence bands:
+        score ≥ 0.85  pre-filled with the dictionary name (HIGH)
+        score ≥ 0.60  pre-filled but flagged "please double-check",
+                     top candidates as one-tap chips (MEDIUM)
+        score < 0.60  raw OCR text kept, suggestions offered (LOW)
+  → ExtractedMedication list → ScanViewModel → confirmation screen
+      (photo + every field editable, reviewed one medicine at a time,
+       "We read X — did you mean Y?" is never silent,
+       nothing saved or scheduled before an explicit Save)
 ```
+
+### Offline drug-name dictionary
+
+- `app/src/main/assets/drug_names.jsonl` (~10,000 generic + brand names,
+  ~725 KB) — rebuilt from the openFDA NDC Directory by
+  `tools/rebuild_drug_dictionary.py` (see `tools/README.md`).
+- Copied into the `drug_names` Room table on first use (`DrugNameSeeder`),
+  held in memory by `LocalDrugNameIndex` with a prefix + trigram index.
+- Brand → generic links are stored, which also powers the duplicate
+  active-ingredient warning (`DuplicateMedicationChecker`).
+- Entirely offline: the app has no `INTERNET` permission, so no name check
+  can ever leave the phone.
 
 ## Caregiver support (phase 2)
 

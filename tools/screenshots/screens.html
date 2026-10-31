@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MediMinder screenshot mockups</title>
+<style>
+@font-face {
+  font-family: 'Roboto';
+  src: url('assets/Roboto.ttf');
+  font-weight: 100 900;
+  font-stretch: 75 100;
+}
+:root {
+  --bg:#FFFBFF; --surface:#FFFBFF; --on:#1B1B1F; --onvar:#3F434A;
+  --primary:#00509D; --onprim:#FFFFFF; --primcont:#D3E4FF; --onprimcont:#001D3D;
+  --seccont:#B7F2E4; --onseccont:#00201B;
+  --survar:#E7E8EC; --outline:#5F6368; --outvar:#C4C7CC;
+  --error:#9E1B1B; --errcont:#FFDAD6; --onerrcont:#410002;
+  --taken:#1E6E3C; --takenC:#C8F0D4; --missed:#9E1B1B; --missedC:#FFDAD6;
+  --upcoming:#00509D; --upcomingC:#D3E4FF; --snoozed:#8A5A00; --snoozedC:#FFE9C7;
+  --dbg:#101418; --dsur:#161B20; --don:#E1E3E8; --donvar:#C3C7CF;
+  --dprim:#9CCBFF; --dprimcont:#1D4C85; --donprimcont:#D6E8FF; --dsurvar:#2C3138; --doutvar:#44474E;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { background:#DDE1E6; }
+body { font-family:'Roboto','Noto Sans SC',sans-serif; color:var(--on);
+       -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+.stage { padding:48px; display:flex; flex-wrap:wrap; gap:56px; align-items:flex-start; justify-content:center; }
+svg { display:block; }
+.ic { width:1em; height:1em; fill:currentColor; flex:none; }
+
+/* ============ phone frame ============ */
+.phone { width:412px; height:915px; background:var(--bg); border-radius:30px; overflow:hidden;
+         position:relative; display:flex; flex-direction:column;
+         box-shadow:0 4px 14px rgba(0,0,0,.18), 0 1px 4px rgba(0,0,0,.12); }
+.phone.dark { background:var(--dbg); color:var(--don); }
+.statusbar { height:40px; flex:none; display:flex; justify-content:space-between; align-items:center;
+             padding:2px 24px 0; font-size:15px; font-weight:600; color:var(--on); }
+.phone.dark .statusbar { color:var(--don); }
+.sb-right { display:flex; align-items:center; gap:7px; }
+.scr { flex:1; min-height:0; overflow:hidden; padding:6px 16px 14px; display:flex; flex-direction:column; gap:12px; }
+.scr.scroll { overflow:hidden; }
+.gesturebar { height:22px; flex:none; display:flex; align-items:center; justify-content:center; }
+.gesturebar::after { content:''; width:116px; height:4.5px; border-radius:3px; background:var(--on); opacity:.85; }
+.phone.dark .gesturebar::after { background:var(--don); }
+
+/* bottom navigation */
+.bottomnav { flex:none; background:#EFF0F3; border-top:1px solid #E2E3E7; padding:8px 8px 2px;
+             display:flex; }
+.navitem { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
+           color:var(--onvar); font-size:13.5px; font-weight:600; padding:2px 0 4px; }
+.navpill { width:60px; height:31px; border-radius:16px; display:flex; align-items:center; justify-content:center; }
+.navpill .ic { font-size:24px; }
+.navitem.active { color:var(--primary); }
+.navitem.active .navpill { background:var(--primcont); }
+
+/* ============ shared components ============ */
+.bigbtn { height:64px; border-radius:16px; background:var(--primary); color:var(--onprim);
+          font-size:20px; font-weight:500; display:flex; align-items:center; justify-content:center;
+          gap:12px; flex:none; }
+.bigbtn .ic { font-size:24px; }
+.outbtn { height:64px; border-radius:16px; background:transparent; color:var(--primary);
+          border:1px solid var(--outline); font-size:20px; font-weight:500;
+          display:flex; align-items:center; justify-content:center; gap:12px; flex:none; }
+.outbtn .ic { font-size:24px; }
+.card { background:var(--surface); border:1px solid var(--outvar); border-radius:16px;
+        padding:16px; flex:none; }
+.card-title { font-size:18px; font-weight:500; color:var(--onvar); margin-bottom:12px; }
+.chip { display:inline-block; border-radius:999px; padding:5px 12px; font-size:16px; font-weight:500; }
+.chip.up { background:var(--upcomingC); color:var(--upcoming); }
+.chip.tok { background:var(--takenC); color:var(--taken); }
+.chip.mis { background:var(--missedC); color:var(--missed); }
+.chip.sno { background:var(--snoozedC); color:var(--snoozed); }
+.chip.ski { background:var(--survar); color:var(--onvar); }
+
+/* outlined text field (M3) */
+.field { position:relative; border:1px solid var(--outline); border-radius:6px;
+         height:60px; padding:20px 16px 0; background:transparent; }
+.field label { position:absolute; top:-7px; left:12px; background:var(--surface);
+               font-size:14px; color:var(--onvar); padding:0 4px; }
+.field .val { font-size:20px; line-height:38px; color:var(--on); white-space:nowrap; }
+.field.err { border:2px solid var(--error); }
+.field.err label { color:var(--error); font-weight:500; }
+.support { font-size:14px; color:var(--error); padding:4px 16px 0; }
+
+/* selection card */
+.selcard { display:flex; align-items:center; gap:12px; padding:12px 16px; min-height:64px;
+           border-radius:16px; background:var(--surface); border:1px solid var(--outvar); flex:none; }
+.selcard.on { background:var(--primcont); border:2px solid var(--primary); }
+.selcard .t { font-size:18px; font-weight:500; color:var(--on); }
+.selcard.on .t { color:var(--onprimcont); }
+.selcard .s { font-size:16px; color:var(--onvar); margin-top:1px; }
+.radio { width:20px; height:20px; border-radius:50%; border:2px solid var(--outline); flex:none;
+         display:flex; align-items:center; justify-content:center; }
+.radio.on { border-color:var(--primary); }
+.radio.on::after { content:''; width:10px; height:10px; border-radius:50%; background:var(--primary); }
+
+/* stepper */
+.steprow { display:flex; align-items:center; }
+.steprow .lbl { font-size:18px; color:var(--on); flex:1; }
+.stepbtn { width:48px; height:48px; border-radius:50%; border:none; background:transparent;
+           color:var(--primary); display:flex; align-items:center; justify-content:center; }
+.stepbtn .ic { font-size:26px; }
+.stepval { width:56px; text-align:center; font-size:20px; font-weight:700; }
+
+/* section header (Today) */
+.sec { display:flex; align-items:center; gap:10px; margin-top:4px; flex:none; }
+.sec .ic { font-size:28px; color:var(--primary); }
+.sec .t { font-size:24px; font-weight:600; }
+.sec .c { font-size:18px; color:var(--onvar); margin-top:3px; }
+
+/* dose card */
+.dose { padding:16px; display:flex; flex-direction:column; gap:12px; }
+.dose-top { display:flex; gap:16px; }
+.dose-time { font-size:20px; font-weight:700; margin-bottom:6px; white-space:nowrap; }
+.dose-name { font-size:20px; font-weight:600; }
+.dose-sub { font-size:18px; margin-top:3px; }
+.dose-note { font-size:18px; color:var(--onvar); margin-top:3px; }
+.dose-btns { display:flex; gap:8px; }
+.dose-btns .b1 { flex:1.6; height:56px; border-radius:16px; background:var(--primary); color:#fff;
+                 font-size:16px; font-weight:500; display:flex; align-items:center; justify-content:center; gap:8px; }
+.dose-btns .b1 .ic { font-size:20px; }
+.dose-btns .b2 { flex:1; height:56px; border-radius:16px; border:1px solid var(--outline);
+                 color:var(--primary); font-size:16px; font-weight:500;
+                 display:flex; align-items:center; justify-content:center; }
+.dose-btns .b3 { flex:.8; height:56px; color:var(--primary); font-size:16px; font-weight:500;
+                 display:flex; align-items:center; justify-content:center; }
+
+/* low stock banner */
+.lowstock { background:var(--snoozedC); border-radius:16px; padding:14px 16px; display:flex;
+            align-items:center; gap:12px; flex:none; }
+.lowstock .ic { font-size:28px; color:var(--snoozed); }
+.lowstock .t { font-size:18px; line-height:1.35; color:var(--on); }
+
+/* permission cards */
+.perm { border-radius:16px; padding:14px 16px; display:flex; align-items:center; gap:12px;
+        background:var(--takenC); flex:none; }
+.perm .ic { font-size:28px; color:var(--taken); }
+.perm .t { font-size:18px; font-weight:700; }
+.perm .s { font-size:16px; color:var(--onvar); margin-top:1px; }
+
+/* time field */
+.timefld { display:flex; align-items:center; gap:12px; height:64px; padding:0 16px;
+           border:1px solid var(--outvar); border-radius:16px; background:var(--surface); flex:none; }
+.timefld .ic { font-size:24px; color:var(--primary); }
+.timefld .t { font-size:20px; font-weight:500; flex:1; }
+.timefld .x { color:var(--onvar); font-size:22px; }
+
+/* name chips (scan review) */
+.namechip { background:var(--seccont); color:var(--onseccont); border-radius:16px; min-height:56px;
+            display:flex; align-items:center; padding:0 16px; font-size:20px; flex:none; }
+
+/* ============ banner + logo ============ */
+#banner { width:1280px; height:640px; position:relative; overflow:hidden;
+          background:linear-gradient(135deg,#DCEBFF 0%,#FFFBFF 45%,#EAF9F3 100%);
+          display:flex; align-items:center; padding:0 72px; }
+#banner .glow { position:absolute; width:900px; height:900px; border-radius:50%;
+                background:radial-gradient(circle,rgba(0,80,157,.10),transparent 60%);
+                top:-380px; left:-260px; }
+.b-left { width:660px; position:relative; z-index:2; }
+.b-row { display:flex; align-items:center; gap:24px; }
+.b-title { font-size:72px; font-weight:700; color:#001D3D; letter-spacing:-1px; }
+.b-sub { font-size:26px; color:#1B1B1F; line-height:1.45; margin-top:26px; width:600px; }
+.b-sub b { color:#00509D; }
+.b-pills { display:flex; gap:12px; margin-top:34px; flex-wrap:wrap; }
+.b-pill { background:#fff; border:1.5px solid #B9CCE8; color:#001D3D; font-size:17px; font-weight:500;
+          border-radius:999px; padding:10px 18px; display:flex; align-items:center; gap:9px;
+          box-shadow:0 1px 3px rgba(0,29,61,.08); }
+.b-pill .ic { font-size:20px; color:#00509D; }
+.b-right { position:absolute; right:64px; top:50%; transform:translateY(-50%); z-index:2; }
+.miniwrap { width:246px; height:548px; }
+.mini { transform:scale(.6); transform-origin:top left; box-shadow:0 18px 44px rgba(0,29,61,.24), 0 4px 12px rgba(0,29,61,.14); border-radius:30px; }
+#logo { width:512px; height:512px; }
+
+.mic { display:flex; flex-direction:column; gap:0; }
+</style>
+</head>
+<body>
+
+<!-- ======================= SVG icon defs ======================= -->
+<svg width="0" height="0" style="position:absolute">
+<defs>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM5 6h14v2H5V6zm2 4h2v2H7v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2zm-8 4h2v2H7v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2z"/></symbol>
+<symbol id="i-set" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z"/></symbol>
+<symbol id="i-cam" viewBox="0 0 24 24"><path d="M9 2 7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4z"/></symbol>
+<symbol id="i-camen" viewBox="0 0 24 24"><path d="M9 3 7.6 5H4c-1 .08-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-3.4L15 3H9zm3 15.2c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/><path d="m12 9.2 1.03 2.37L15.4 12.6l-2.37 1.03L12 16l-1.03-2.37L8.6 12.6l2.37-1.03L12 9.2z"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></symbol>
+<symbol id="i-okc" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></symbol>
+<symbol id="i-err" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></symbol>
+<symbol id="i-vol" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></symbol>
+<symbol id="i-pdf" viewBox="0 0 24 24"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm10 5.5h1v-3h-1v3z"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M12.34 2.02C6.59 1.82 2 6.42 2 12c0 5.52 4.48 10 10 10 3.71 0 6.93-2.02 8.66-5.02-7.51-.25-12.09-8.43-8.32-14.96z"/></symbol>
+<symbol id="i-night" viewBox="0 0 24 24"><path d="M12.34 2.02C6.59 1.82 2 6.42 2 12c0 5.52 4.48 10 10 10 3.71 0 6.93-2.02 8.66-5.02-7.51-.25-12.09-8.43-8.32-14.96z"/><path d="m17.9 4.5.68 1.72 1.72.68-1.72.68-.68 1.72-.68-1.72-1.72-.68 1.72-.68.68-1.72z"/></symbol>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></symbol>
+<symbol id="i-add" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></symbol>
+<symbol id="i-rem" viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2z"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></symbol>
+<symbol id="i-chev" viewBox="0 0 24 24"><path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></symbol>
+<symbol id="i-wifi" viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8 3 3 3-3c-1.66-1.66-4.34-1.66-6 0zM5.5 13.5l2 2c2.49-2.49 6.51-2.49 9 0l2-2C15.89 9.89 8.11 9.89 5.5 13.5z"/></symbol>
+<symbol id="i-off" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm5 13.59L16.59 17 12 12.41 7.41 17 6 15.59 10.59 11 6 6.41 7.41 5 12 9.59 16.59 5 18 6.41 13.41 11 18 15.59z"/></symbol>
+</defs>
+</svg>
+
+<div class="stage">
+
+<!-- ======================= 1. TODAY ======================= -->
+<div class="phone" id="shot-today">
+  <div class="statusbar"><span>9:41</span>
+    <span class="sb-right">
+      <svg class="ic" style="font-size:16px"><use href="#i-wifi"/></svg>
+      <svg style="width:24px;height:13px" viewBox="0 0 24 13"><rect x="0.5" y="0.5" width="19" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="2.5" y="2.5" width="13" height="8" rx="1.8" fill="currentColor"/><rect x="21" y="4" width="2.4" height="5" rx="1.2" fill="currentColor"/></svg>
+    </span>
+  </div>
+  <div class="scr">
+    <div>
+      <div style="font-size:18px;color:var(--onvar)">Saturday, 31 October</div>
+      <div style="font-size:28px;font-weight:700;margin-top:2px">Today's medicines</div>
+      <div style="font-size:18px;color:var(--primary);font-weight:600;margin-top:2px">This week: 86% taken</div>
+    </div>
+    <div class="lowstock">
+      <svg class="ic"><use href="#i-clock"/></svg>
+      <div class="t">Only 5 days of Metformin left. Time to get a refill.</div>
+    </div>
+    <div class="bigbtn"><svg class="ic"><use href="#i-cam"/></svg>Scan medicine label</div>
+    <div class="outbtn"><svg class="ic"><use href="#i-edit"/></svg>Type it in myself</div>
+
+    <div class="sec"><svg class="ic"><use href="#i-sun"/></svg><span class="t">Morning</span><span class="c">(2)</span></div>
+    <div class="card dose">
+      <div class="dose-top">
+        <div>
+          <div class="dose-time">8:00 AM</div>
+          <span class="chip up">Upcoming</span>
+        </div>
+        <div>
+          <div class="dose-name">Metformin</div>
+          <div class="dose-sub">500 mg · 1 tablet</div>
+          <div class="dose-note">Take with food</div>
+        </div>
+      </div>
+      <div class="dose-btns">
+        <div class="b1"><svg class="ic"><use href="#i-check"/></svg>Taken</div>
+        <div class="b2">Snooze</div>
+        <div class="b3">Skip</div>
+      </div>
+    </div>
+    <div class="card dose">
+      <div class="dose-top">
+        <div>
+          <div class="dose-time">8:00 AM</div>
+          <span class="chip tok">Taken</span>
+        </div>
+        <div>
+          <div class="dose-name">Lisinopril</div>
+          <div class="dose-sub">10 mg · 1 tablet</div>
+          <div class="dose-note">Taken at 8:06 AM</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:16px;color:var(--onvar);line-height:1.4">MediMinder is a reminder tool. It does not replace advice from your doctor.</div>
+  </div>
+  <div class="bottomnav">
+    <div class="navitem active"><span class="navpill"><svg class="ic"><use href="#i-home"/></svg></span>Today</div>
+    <div class="navitem"><span class="navpill"><svg class="ic"><use href="#i-cal"/></svg></span>History</div>
+    <div class="navitem"><span class="navpill"><svg class="ic"><use href="#i-set"/></svg></span>Settings</div>
+  </div>
+  <div class="gesturebar"></div>
+</div>
+
+<!-- ======================= 2. SCAN CAMERA ======================= -->
+<div class="phone dark" id="shot-camera" style="background:#0E1113">
+  <div class="statusbar"><span>9:41</span>
+    <span class="sb-right">
+      <svg class="ic" style="font-size:16px"><use href="#i-wifi"/></svg>
+      <svg style="width:24px;height:13px" viewBox="0 0 24 13"><rect x="0.5" y="0.5" width="19" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="2.5" y="2.5" width="13" height="8" rx="1.8" fill="currentColor"/><rect x="21" y="4" width="2.4" height="5" rx="1.2" fill="currentColor"/></svg>
+    </span>
+  </div>
+  <div class="scr" style="padding-top:8px">
+    <div style="font-size:24px;font-weight:600;color:var(--don)">Scan the label</div>
+    <div style="font-size:20px;color:var(--donvar);line-height:1.4">Hold the medicine box or label steady and take a clear photo. The words are read on your phone — nothing is sent anywhere.</div>
+    <div style="flex:1;min-height:0;position:relative;border-radius:20px;overflow:hidden;
+                background:linear-gradient(175deg,#2A2E33 0%,#1C1F23 55%,#23262B 100%)">
+      <!-- table surface hint -->
+      <div style="position:absolute;left:0;right:0;bottom:0;height:38%;background:linear-gradient(180deg,rgba(120,100,70,.16),rgba(90,70,45,.28))"></div>
+      <!-- medicine box -->
+      <div style="position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) perspective(700px) rotateY(-16deg) rotateX(3deg);width:196px;height:252px">
+        <div style="position:absolute;inset:0;background:linear-gradient(160deg,#F6F3EC,#E4DFD3);border-radius:8px;box-shadow:14px 18px 34px rgba(0,0,0,.45)"></div>
+        <div style="position:absolute;left:0;right:0;top:0;height:56px;background:linear-gradient(160deg,#0E5FA8,#0B4E8C);border-radius:8px 8px 0 0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;font-weight:700;letter-spacing:2px">MEDIPHARM</div>
+        <div style="position:absolute;left:18px;right:18px;top:76px;color:#1B1B1F">
+          <div style="font-size:21px;font-weight:700">Metformin</div>
+          <div style="font-size:19px;font-weight:500;color:#33383D;margin-top:2px">500 mg tablets</div>
+          <div style="font-size:13px;color:#5F6368;margin-top:12px;line-height:1.5">Take 1 tablet by mouth twice daily<br>Qty: 60 · Dr. R. Ahmed</div>
+        </div>
+        <div style="position:absolute;left:18px;right:18px;bottom:16px;height:26px;
+                    background:repeating-linear-gradient(90deg,#1B1B1F 0 2px,transparent 2px 5px,#1B1B1F 5px 6px,transparent 6px 10px)"></div>
+      </div>
+      <!-- framing brackets -->
+      <div style="position:absolute;left:22px;top:22px;width:34px;height:34px;border-left:4px solid rgba(255,255,255,.75);border-top:4px solid rgba(255,255,255,.75);border-radius:6px 0 0 0"></div>
+      <div style="position:absolute;right:22px;top:22px;width:34px;height:34px;border-right:4px solid rgba(255,255,255,.75);border-top:4px solid rgba(255,255,255,.75);border-radius:0 6px 0 0"></div>
+      <div style="position:absolute;left:22px;bottom:22px;width:34px;height:34px;border-left:4px solid rgba(255,255,255,.75);border-bottom:4px solid rgba(255,255,255,.75);border-radius:0 0 0 6px"></div>
+      <div style="position:absolute;right:22px;bottom:22px;width:34px;height:34px;border-right:4px solid rgba(255,255,255,.75);border-bottom:4px solid rgba(255,255,255,.75);border-radius:0 0 6px 0"></div>
+      <!-- capture button -->
+      <div style="position:absolute;left:50%;bottom:26px;transform:translateX(-50%);width:88px;height:88px;border-radius:50%;
+                  background:var(--primary);display:flex;align-items:center;justify-content:center;
+                  box-shadow:0 0 0 6px rgba(255,255,255,.92), 0 6px 18px rgba(0,0,0,.4)">
+        <svg class="ic" style="font-size:46px;color:#fff"><use href="#i-cam"/></svg>
+      </div>
+    </div>
+  </div>
+  <div class="gesturebar"></div>
+</div>
+
+<!-- ======================= 3. SCAN REVIEW ======================= -->
+<div class="phone" id="shot-review">
+  <div class="statusbar"><span>9:41</span>
+    <span class="sb-right">
+      <svg class="ic" style="font-size:16px"><use href="#i-wifi"/></svg>
+      <svg style="width:24px;height:13px" viewBox="0 0 24 13"><rect x="0.5" y="0.5" width="19" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="2.5" y="2.5" width="13" height="8" rx="1.8" fill="currentColor"/><rect x="21" y="4" width="2.4" height="5" rx="1.2" fill="currentColor"/></svg>
+    </span>
+  </div>
+  <div class="scr">
+    <div>
+      <div style="font-size:24px;font-weight:600">Please check before saving</div>
+      <div style="font-size:18px;color:var(--onvar);line-height:1.4;margin-top:4px">We read the label as best we could. Fields marked in red may be wrong — please check them and fix anything that looks odd.</div>
+      <div style="font-size:20px;font-weight:600;color:var(--primary);margin-top:8px">Medicine 2 of 3 on this label</div>
+      <div style="height:8px;border-radius:4px;background:var(--survar);margin-top:8px;overflow:hidden">
+        <div style="width:66%;height:100%;background:var(--primary);border-radius:4px"></div>
+      </div>
+    </div>
+    <div class="card" style="padding:12px">
+      <div class="card-title" style="margin-bottom:8px">Photo of the label</div>
+      <div style="height:158px;border-radius:8px;overflow:hidden;position:relative;background:#31343A">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,#3A3E44 0%,#4A4438 100%)"></div>
+        <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-1.6deg);width:330px;background:#fff;padding:14px 18px;box-shadow:0 8px 22px rgba(0,0,0,.4)">
+          <div style="font-size:14px;font-weight:700;color:#33383D;letter-spacing:1px">GREENFIELD PHARMACY</div>
+          <div style="font-size:10.5px;color:#5F6368;margin-top:1px">1200 Maple Ave · Tel (555) 012-3456</div>
+          <div style="height:1px;background:#C4C7CC;margin:8px 0"></div>
+          <div style="font-size:17px;font-weight:700">Metformin 500 mg tablets</div>
+          <div style="font-size:13.5px;color:#3F434A;margin-top:2px">Take 1 tablet by mouth twice daily</div>
+          <div style="font-size:11px;color:#5F6368;margin-top:7px">Rx 0029471 · Qty: 60 · Dr. R. Ahmed</div>
+          <div style="font-size:11px;color:#5F6368;margin-top:1px">Refill: 3 · Discard after: 01/2027</div>
+          <div style="margin-top:9px;height:24px;background:repeating-linear-gradient(90deg,#1B1B1F 0 2px,transparent 2px 4px,#1B1B1F 4px 5px,transparent 5px 8px)"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="padding:14px 16px">
+      <div style="font-size:20px">We read: <b style="font-weight:500">"Metf0rmin 500mg"</b>.</div>
+      <div style="font-size:20px;font-weight:600;margin-top:2px">Did you mean: Metformin?</div>
+    </div>
+    <div>
+      <div class="field"><label>Medicine name</label><div class="val">Metformin</div></div>
+    </div>
+    <div>
+      <div style="font-size:18px;font-weight:500;margin-bottom:10px">Not right? Tap the correct name:</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="namechip">Metformin ER</div>
+      </div>
+    </div>
+    <div>
+      <div style="display:flex;gap:12px">
+        <div style="flex:1">
+          <div class="field err"><label>Dose amount</label><div class="val">1</div></div>
+          <div class="support">Please double-check this — it may be wrong</div>
+        </div>
+        <div style="flex:1">
+          <div class="field err"><label>Dose unit</label><div class="val">tablet</div></div>
+          <div class="support">Please double-check this — it may be wrong</div>
+        </div>
+      </div>
+    </div>
+    <div class="bigbtn"><svg class="ic"><use href="#i-camen"/></svg>Save and continue</div>
+  </div>
+  <div class="gesturebar"></div>
+</div>
+
+<!-- ======================= 4. ADD MEDICINE — STEP 2 ======================= -->
+<div class="phone" id="shot-add">
+  <div class="statusbar"><span>9:41</span>
+    <span class="sb-right">
+      <svg class="ic" style="font-size:16px"><use href="#i-wifi"/></svg>
+      <svg style="width:24px;height:13px" viewBox="0 0 24 13"><rect x="0.5" y="0.5" width="19" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="2.5" y="2.5" width="13" height="8" rx="1.8" fill="currentColor"/><rect x="21" y="4" width="2.4" height="5" rx="1.2" fill="currentColor"/></svg>
+    </span>
+  </div>
+  <div class="scr" style="padding-top:4px">
+    <div style="display:flex;align-items:center;gap:8px;margin-left:-12px;flex:none">
+      <div style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;color:var(--onvar)">
+        <svg class="ic" style="font-size:26px"><use href="#i-back"/></svg>
+      </div>
+      <div>
+        <div style="font-size:24px;font-weight:600">Add a medicine</div>
+        <div style="font-size:14px;color:var(--onvar)">Step 2 of 3</div>
+      </div>
+    </div>
+    <div style="font-size:20px;font-weight:600;margin-top:2px">When should we remind you?</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div class="selcard on">
+        <span class="radio on"></span>
+        <div><div class="t">Every day</div><div class="s">At the same times each day</div></div>
+      </div>
+      <div class="selcard">
+        <span class="radio"></span>
+        <div><div class="t">On certain days</div><div class="s">For example: Monday, Wednesday, Friday</div></div>
+      </div>
+      <div class="selcard">
+        <span class="radio"></span>
+        <div><div class="t">Every few hours</div><div class="s">For example: every 8 hours</div></div>
+      </div>
+      <div class="selcard">
+        <span class="radio"></span>
+        <div><div class="t">Only when I need it</div><div class="s">No automatic reminders</div></div>
+      </div>
+    </div>
+    <div style="font-size:18px;font-weight:500;color:var(--onvar)">Reminder times</div>
+    <div class="timefld"><svg class="ic"><use href="#i-clock"/></svg><span class="t">8:00 AM</span><svg class="ic x"><use href="#i-x"/></svg></div>
+    <div class="timefld"><svg class="ic"><use href="#i-clock"/></svg><span class="t">8:00 PM</span><svg class="ic x"><use href="#i-x"/></svg></div>
+    <div style="height:48px;display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:16px;font-weight:500">
+      <span style="display:flex;align-items:center;gap:6px"><svg class="ic" style="font-size:20px"><use href="#i-add"/></svg>Add another time</span>
+    </div>
+    <div class="bigbtn" style="margin-top:auto">Next</div>
+    <div class="outbtn">Back</div>
+  </div>
+  <div class="gesturebar"></div>
+</div>
+
+<!-- ======================= 5. HISTORY ======================= -->
+<div class="phone" id="shot-history">
+  <div class="statusbar"><span>9:41</span>
+    <span class="sb-right">
+      <svg class="ic" style="font-size:16px"><use href="#i-wifi"/></svg>
+      <svg style="width:24px;height:13px" viewBox="0 0 24 13"><rect x="0.5" y="0.5" width="19" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="2.5" y="2.5" width="13" height="8" rx="1.8" fill="currentColor"/><rect x="21" y="4" width="2.4" height="5" rx="1.2" fill="currentColor"/></svg>
+    </span>
+  </div>
+  <div class="scr">
+    <div style="font-size:28px;font-weight:700">History</div>
+    <div class="card">
+      <div class="card-title">This week</div>
+      <div style="font-size:24px;font-weight:600;color:var(--primary)">92% taken</div>
+      <div style="font-size:18px;color:var(--onvar);margin-top:2px">26 of 28 doses taken</div>
+      <div style="display:flex;gap:8px;height:118px;align-items:flex-end;margin-top:14px">
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%">
+          <div style="width:100%;height:90px;background:var(--taken);border-radius:4px"></div><div style="font-size:14px;color:var(--onvar);margin-top:6px">M</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%">
+          <div style="width:100%;height:78px;background:var(--taken);border-radius:4px"></div><div style="font-size:14px;color:var(--onvar);margin-top:6px">T</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%">
+          <div style="width:100%;height:86px;background:var(--taken);border-radius:4px"></div><div style="font-size:14px;color:var(--onvar);margin-top:6px">W</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%">
+          <div style="width:100%;height:90px;background:var(--taken);border-radius:4px"></div><div style="font-size:14px;color:var(--onvar);margin-top:6px">T</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%">
+          <div style="width:100%;height:56px;background:var(--taken);border-radius:4px"></div><div style="font-size:14px;color:var(--onvar);margin-top:6px">F</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%">
+          <div style="width:100%;height:90px;background:var(--taken);border-radius:4px"></div><div style="font-size:14px;color:var(--onvar);margin-top:6px">S</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%">
+          <div style="width:100%;height:76px;background:var(--taken);border-radius:4px"></div><div style="font-size:14px;color:var(--onvar);margin-top:6px">S</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:center;margin-bottom:10px">
+        <div style="font-size:18px;font-weight:500;color:var(--onvar);flex:1;text-align:center">October</div>
+        <svg class="ic" style="font-size:22px;color:var(--onvar);transform:rotate(90deg)"><use href="#i-chev"/></svg>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;font-size:13px;color:var(--onvar);text-align:center;font-weight:600">
+        <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+      </div>
+      <div id="calgrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-top:4px"></div>
+    </div>
+    <div class="bigbtn" style="margin-top:auto"><svg class="ic"><use href="#i-pdf"/></svg>Make a report for my doctor (PDF)</div>
+  </div>
+  <div class="bottomnav">
+    <div class="navitem"><span class="navpill"><svg class="ic"><use href="#i-home"/></svg></span>Today</div>
+    <div class="navitem active"><span class="navpill"><svg class="ic"><use href="#i-cal"/></svg></span>History</div>
+    <div class="navitem"><span class="navpill"><svg class="ic"><use href="#i-set"/></svg></span>Settings</div>
+  </div>
+  <div class="gesturebar"></div>
+</div>
+
+<!-- ======================= 6. SETTINGS ======================= -->
+<div class="phone" id="shot-settings">
+  <div class="statusbar"><span>9:41</span>
+    <span class="sb-right">
+      <svg class="ic" style="font-size:16px"><use href="#i-wifi"/></svg>
+      <svg style="width:24px;height:13px" viewBox="0 0 24 13"><rect x="0.5" y="0.5" width="19" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="2.5" y="2.5" width="13" height="8" rx="1.8" fill="currentColor"/><rect x="21" y="4" width="2.4" height="5" rx="1.2" fill="currentColor"/></svg>
+    </span>
+  </div>
+  <div class="scr">
+    <div style="font-size:28px;font-weight:700">Settings</div>
+    <div class="card" style="display:flex;flex-direction:column;gap:8px">
+      <div class="card-title" style="margin-bottom:2px">Reminders</div>
+      <div class="steprow"><span class="lbl">Snooze length</span>
+        <span class="stepbtn"><svg class="ic"><use href="#i-rem"/></svg></span><span class="stepval">10 min</span><span class="stepbtn"><svg class="ic"><use href="#i-add"/></svg></span></div>
+      <div class="steprow"><span class="lbl">Wait between reminders</span>
+        <span class="stepbtn"><svg class="ic"><use href="#i-rem"/></svg></span><span class="stepval">10 min</span><span class="stepbtn"><svg class="ic"><use href="#i-add"/></svg></span></div>
+      <div class="steprow"><span class="lbl">How many reminders in total</span>
+        <span class="stepbtn"><svg class="ic"><use href="#i-rem"/></svg></span><span class="stepval">3</span><span class="stepbtn"><svg class="ic"><use href="#i-add"/></svg></span></div>
+    </div>
+    <div class="card" style="background:var(--surface)">
+      <div class="card-title">Important for reliable reminders</div>
+      <div style="font-size:16px;color:var(--onvar);line-height:1.4;margin-bottom:12px">Please make sure all of these show a green tick. If a reminder is ever missed, it is almost always one of these.</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="perm"><svg class="ic"><use href="#i-okc"/></svg>
+          <div><div class="t">Notifications</div><div class="s">On — reminders can be shown</div></div></div>
+        <div class="perm"><svg class="ic"><use href="#i-okc"/></svg>
+          <div><div class="t">Exact alarms</div><div class="s">On — reminders arrive on time</div></div></div>
+        <div class="perm"><svg class="ic"><use href="#i-okc"/></svg>
+          <div><div class="t">Battery saving</div><div class="s">This app is exempt — reminders always fire</div></div></div>
+        <div class="perm"><svg class="ic"><use href="#i-okc"/></svg>
+          <div><div class="t">Full-screen reminder</div><div class="s">On — reminders show over the lock screen</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="bottomnav">
+    <div class="navitem"><span class="navpill"><svg class="ic"><use href="#i-home"/></svg></span>Today</div>
+    <div class="navitem"><span class="navpill"><svg class="ic"><use href="#i-cal"/></svg></span>History</div>
+    <div class="navitem active"><span class="navpill"><svg class="ic"><use href="#i-set"/></svg></span>Settings</div>
+  </div>
+  <div class="gesturebar"></div>
+</div>
+
+<!-- ======================= 7. NOTIFICATION (lock screen) ======================= -->
+<div class="phone dark" id="shot-notification"
+     style="background:linear-gradient(170deg,#13233C 0%,#0F1B2E 46%,#12293B 100%)">
+  <div class="statusbar"><span>8:00</span>
+    <span class="sb-right">
+      <svg class="ic" style="font-size:15px"><use href="#i-wifi"/></svg>
+      <svg class="ic" style="font-size:15px"><use href="#i-lock"/></svg>
+      <svg style="width:24px;height:13px" viewBox="0 0 24 13"><rect x="0.5" y="0.5" width="19" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="2.5" y="2.5" width="13" height="8" rx="1.8" fill="currentColor"/><rect x="21" y="4" width="2.4" height="5" rx="1.2" fill="currentColor"/></svg>
+    </span>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;padding:30px 18px 12px">
+    <div style="display:flex;justify-content:center;margin-bottom:18px">
+      <svg class="ic" style="font-size:22px;color:#9FB3CC"><use href="#i-lock"/></svg>
+    </div>
+    <div style="text-align:center;color:var(--don)">
+      <div style="font-size:84px;font-weight:500;line-height:1;letter-spacing:-1px">8:00</div>
+      <div style="font-size:19px;color:#C6D2E2;margin-top:10px">Saturday, 31 October</div>
+    </div>
+    <div style="margin-top:34px;background:rgba(22,27,32,.92);border:1px solid #2C3138;border-radius:26px;padding:14px 18px 10px;
+                box-shadow:0 10px 30px rgba(0,0,0,.35)">
+      <div style="display:flex;align-items:center;gap:10px;color:var(--don)">
+        <div style="width:26px;height:26px;border-radius:8px;background:var(--primary);display:flex;align-items:center;justify-content:center;flex:none">
+          <svg viewBox="0 0 108 108" style="width:18px;height:18px">
+            <g transform="rotate(45 54 54)">
+              <path fill="#FFF" d="M54,34 A12,12 0 0 1 66,46 L66,62 A12,12 0 0 1 54,74 A12,12 0 0 1 42,62 L42,46 A12,12 0 0 1 54,34 Z"/>
+              <path fill="#EAF3FF" opacity=".8" d="M42,54 L42,46 A12,12 0 0 1 54,34 A12,12 0 0 1 66,46 L66,54 Z"/>
+            </g>
+          </svg>
+        </div>
+        <span style="font-size:14.5px;font-weight:600">MediMinder</span>
+        <span style="flex:1"></span>
+        <span style="font-size:13px;color:#C3C7CF">now</span>
+        <svg class="ic" style="font-size:19px;color:#C3C7CF"><use href="#i-chev"/></svg>
+      </div>
+      <div style="font-size:23px;font-weight:600;color:var(--don);margin-top:10px;line-height:1.25">Time to take Metformin</div>
+      <div style="font-size:16.5px;color:#C3C7CF;margin-top:4px;line-height:1.45">500 mg · 1 tablet · Take with food<br>Tap "Taken" once you have taken it.</div>
+      <div style="height:1px;background:var(--doutvar);margin:12px -4px 4px"></div>
+      <div style="display:flex">
+        <div style="flex:1;height:46px;display:flex;align-items:center;justify-content:center;color:var(--dprim);font-size:15.5px;font-weight:600">Taken</div>
+        <div style="flex:1.6;height:46px;display:flex;align-items:center;justify-content:center;color:var(--dprim);font-size:15.5px;font-weight:600">Snooze 10 min</div>
+        <div style="flex:1;height:46px;display:flex;align-items:center;justify-content:center;color:var(--dprim);font-size:15.5px;font-weight:600">Skip</div>
+      </div>
+    </div>
+    <div style="flex:1"></div>
+    <div style="text-align:center;color:#8D939B;font-size:13.5px;margin-bottom:10px">Swipe up to unlock</div>
+  </div>
+  <div class="gesturebar"></div>
+</div>
+
+<!-- ======================= 8. BANNER ======================= -->
+<div id="banner">
+  <div class="glow"></div>
+  <div class="b-left">
+    <div class="b-row">
+      <svg viewBox="0 0 108 108" style="width:104px;height:104px">
+        <rect width="108" height="108" rx="26" fill="#00509D"/>
+        <g transform="rotate(45 54 54)">
+          <path fill="#FFF" d="M54,34 A12,12 0 0 1 66,46 L66,62 A12,12 0 0 1 54,74 A12,12 0 0 1 42,62 L42,46 A12,12 0 0 1 54,34 Z"/>
+          <path fill="#EAF3FF" opacity=".85" d="M42,54 L42,46 A12,12 0 0 1 54,34 A12,12 0 0 1 66,46 L66,54 Z"/>
+        </g>
+      </svg>
+      <div class="b-title">MediMinder</div>
+    </div>
+    <div class="b-sub">A reliable medication reminder app designed for <b>older adults</b>.
+      Scan a label, confirm the details, and never miss a dose.</div>
+    <div class="b-pills">
+      <span class="b-pill"><svg class="ic"><use href="#i-cam"/></svg>On-device OCR — no internet permission</span>
+      <span class="b-pill"><svg class="ic"><use href="#i-clock"/></svg>Exact alarms + safety nets</span>
+      <span class="b-pill"><svg class="ic"><use href="#i-lock"/></svg>SQLCipher-encrypted data</span>
+    </div>
+  </div>
+  <div class="b-right">
+    <div class="miniwrap">
+      <div class="mini phone" id="banner-phone" style="width:412px;height:915px">
+        <div class="statusbar" style="color:var(--on)"><span>9:41</span>
+          <span class="sb-right">
+            <svg class="ic" style="font-size:16px"><use href="#i-wifi"/></svg>
+            <svg style="width:24px;height:13px" viewBox="0 0 24 13"><rect x="0.5" y="0.5" width="19" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="2.5" y="2.5" width="13" height="8" rx="1.8" fill="currentColor"/><rect x="21" y="4" width="2.4" height="5" rx="1.2" fill="currentColor"/></svg>
+          </span>
+        </div>
+        <div class="scr" style="background:var(--bg);color:var(--on)">
+          <div>
+            <div style="font-size:18px;color:var(--onvar)">Saturday, 31 October</div>
+            <div style="font-size:28px;font-weight:700;margin-top:2px">Today's medicines</div>
+            <div style="font-size:18px;color:var(--primary);font-weight:600;margin-top:2px">This week: 86% taken</div>
+          </div>
+          <div class="bigbtn"><svg class="ic"><use href="#i-cam"/></svg>Scan medicine label</div>
+          <div class="outbtn"><svg class="ic"><use href="#i-edit"/></svg>Type it in myself</div>
+          <div class="sec"><svg class="ic"><use href="#i-sun"/></svg><span class="t">Morning</span><span class="c">(1)</span></div>
+          <div class="card dose">
+            <div class="dose-top">
+              <div>
+                <div class="dose-time">8:00 AM</div>
+                <span class="chip up">Upcoming</span>
+              </div>
+              <div>
+                <div class="dose-name">Metformin</div>
+                <div class="dose-sub">500 mg · 1 tablet</div>
+                <div class="dose-note">Take with food</div>
+              </div>
+            </div>
+            <div class="dose-btns">
+              <div class="b1"><svg class="ic"><use href="#i-check"/></svg>Taken</div>
+              <div class="b2">Snooze</div>
+              <div class="b3">Skip</div>
+            </div>
+          </div>
+          <div class="sec"><svg class="ic"><use href="#i-moon"/></svg><span class="t">Evening</span><span class="c">(1)</span></div>
+          <div class="card dose">
+            <div class="dose-top">
+              <div>
+                <div class="dose-time">9:00 PM</div>
+                <span class="chip up">Upcoming</span>
+              </div>
+              <div>
+                <div class="dose-name">Atorvastatin</div>
+                <div class="dose-sub">20 mg · 1 tablet</div>
+              </div>
+            </div>
+            <div class="dose-btns">
+              <div class="b1"><svg class="ic"><use href="#i-check"/></svg>Taken</div>
+              <div class="b2">Snooze</div>
+              <div class="b3">Skip</div>
+            </div>
+          </div>
+        </div>
+        <div class="bottomnav">
+          <div class="navitem active"><span class="navpill"><svg class="ic"><use href="#i-home"/></svg></span>Today</div>
+          <div class="navitem"><span class="navpill"><svg class="ic"><use href="#i-cal"/></svg></span>History</div>
+          <div class="navitem"><span class="navpill"><svg class="ic"><use href="#i-set"/></svg></span>Settings</div>
+        </div>
+        <div class="gesturebar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= 9. LOGO ======================= -->
+<div id="logo" style="background:#fff;display:flex;align-items:center;justify-content:center">
+  <svg viewBox="0 0 512 512" style="width:512px;height:512px">
+    <defs>
+      <linearGradient id="logobg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#0A5EA8"/>
+        <stop offset="1" stop-color="#003B75"/>
+      </linearGradient>
+    </defs>
+    <rect width="512" height="512" rx="112" fill="url(#logobg)"/>
+    <g transform="rotate(45 256 256)">
+      <rect x="176" y="116" width="160" height="280" rx="80" fill="#FFFFFF"/>
+      <path d="M176 256 L176 196 A80 80 0 0 1 256 116 A80 80 0 0 1 336 196 L336 256 Z" fill="#EAF3FF" opacity=".9"/>
+    </g>
+  </svg>
+</div>
+
+</div>
+
+<script>
+// Build the October calendar grid for the History screenshot.
+// Green = all doses taken, red = some missed, gray = no data, ring = today.
+(function () {
+  const grid = document.getElementById('calgrid');
+  // October 2026: the 1st is a Thursday (Sunday-first column index 4).
+  const cells = [];
+  for (let i = 0; i < 4; i++) cells.push(null);
+  for (let d = 1; d <= 31; d++) cells.push(d);
+  while (cells.length % 7) cells.push(null);
+  const marks = {
+    1: 'missed', 2: 'ok', 3: 'ok', 6: 'ok', 7: 'ok', 8: 'ok', 9: 'missed',
+    10: 'ok', 13: 'ok', 14: 'ok', 15: 'missed', 16: 'ok', 17: 'ok', 20: 'ok',
+    21: 'ok', 22: 'ok', 23: 'ok', 24: 'missed', 27: 'ok', 28: 'ok', 29: 'ok', 30: 'ok'
+  };
+  const today = 31;
+  for (const d of cells) {
+    if (d === null) {
+      grid.insertAdjacentHTML('beforeend', '<div style="height:38px"></div>');
+      continue;
+    }
+    let inner;
+    if (marks[d] === 'ok') {
+      inner = `<div style="width:30px;height:30px;border-radius:50%;background:var(--takenC);display:flex;align-items:center;justify-content:center"><div style="width:15px;height:15px;border-radius:50%;background:var(--taken)"></div></div>`;
+    } else if (marks[d] === 'missed') {
+      inner = `<div style="width:30px;height:30px;border-radius:50%;background:var(--missedC);display:flex;align-items:center;justify-content:center"><div style="width:15px;height:15px;border-radius:50%;background:var(--missed)"></div></div>`;
+    } else {
+      inner = `<div style="font-size:15px;color:var(--on)">${d}</div>`;
+    }
+    if (d === today) {
+      inner = `<div style="width:33px;height:33px;border-radius:50%;border:2.5px solid var(--primary);display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:16px;font-weight:700">${d}</div>`;
+    }
+    grid.insertAdjacentHTML('beforeend',
+      `<div style="height:40px;display:flex;align-items:center;justify-content:center">${inner}</div>`);
+  }
+})();
+</script>
+</body>
+</html>

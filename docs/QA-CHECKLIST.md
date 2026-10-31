@@ -24,11 +24,13 @@ Legend: ☐ unchecked · ✅ pass criteria
 ## 3. Add medicine by photo
 - ☐ Camera permission denied → explanation + "Type it in myself" fallback works.
 - ☐ Photo of a printed label (e.g. "Metformin 500 mg / Take 1 tablet by mouth twice daily") → confirmation screen with photo, name, strength, dosage, times prefilled.
+- ☐ Photo of a prescription listing **several medicines** → "Medicine X of Y on this label" stepper; "Save and continue" advances to the next one; "Skip this medicine" leaves it out; nothing from a later medicine is saved with an earlier one.
+- ☐ OCR typo (e.g. "Metf0rmin") → "We read … Did you mean: Metformin?" card; score band 0.60–0.85 highlights the field and shows one-tap candidate chips; a wrong pick can still be corrected by editing the field.
+- ☐ Very weak match (< 0.60) → field left on the raw OCR text with suggestions offered, "Use exactly what we read" chip available.
 - ☐ Low-confidence fields are red with "Please double-check this".
 - ☐ Every field is editable on the confirmation screen.
+- ☐ "Check the name" button works fully offline (offline dictionary; the app has no INTERNET permission at all).
 - ☐ Blurry/unreadable photo → "We could not read that label" + retry + manual fallback **with the photo attached**.
-- ☐ Airplane mode: scan flow fully works; "Check the name online" returns no suggestions but never crashes.
-- ☐ With network: "Check the name online" suggests standardized names (RxNorm).
 - ☐ "Delete photo after saving" ON → photo file is gone after save (check app files).
 - ☐ Adding a medicine whose name matches an existing one (e.g. "Metformin" vs "Metformin ER") → duplicate-ingredient warning; "Save anyway" works.
 
@@ -81,7 +83,8 @@ adb shell dumpsys deviceidle unforce
 - ☐ Switch access or large-text mode does not break the 3-step add flow.
 
 ## 12. Data & privacy
-- ☐ Airplane mode for a full session: every feature except the RxNorm check works.
+- ☐ Airplane mode for a full session: every feature works — the app has no
+      internet permission, so nothing should behave differently at all.
 - ☐ "Delete all my data" (Settings) requires confirm and empties Today/History.
 - ☐ `adb backup`/cloud backup contains no app data (`allowBackup=false`).
 - ☐ App-private photo directory contains no leftover label photos when deletion is enabled.

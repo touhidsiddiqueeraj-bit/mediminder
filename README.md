@@ -1,4 +1,15 @@
-# MediMinder �💊
+<p align="center">
+  <img src="docs/screenshots/banner.png" alt="MediMinder — a reliable medication reminder app for older adults" width="820">
+</p>
+
+<p align="center">
+  <a href="https://github.com/touhidsiddiqueeraj-bit/mediminder/actions/workflows/ci.yml"><img src="https://github.com/touhidsiddiqueeraj-bit/mediminder/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/touhidsiddiqueeraj-bit/mediminder/actions/workflows/release.yml"><img src="https://github.com/touhidsiddiqueeraj-bit/mediminder/actions/workflows/release.yml/badge.svg" alt="Release"></a>
+  <img src="https://img.shields.io/badge/Kotlin-2.0-7F52FF?logo=kotlin" alt="Kotlin 2.0">
+  <img src="https://img.shields.io/badge/Android-API%2026%2B-3DDC84?logo=android" alt="Android API 26+">
+  <img src="https://img.shields.io/badge/privacy-100%25%20offline-00509D" alt="100% offline">
+  <img src="https://img.shields.io/badge/PRs-welcome-1E6E3C" alt="PRs welcome">
+</p>
 
 **A reliable medication reminder app designed for older adults.**
 
@@ -12,6 +23,8 @@ text, and keeps a shareable adherence history.
 ---
 
 ## Contents
+- [Screenshots](#screenshots)
+- [How label scanning works](#how-label-scanning-works)
 - [Features](#features)
 - [Tech stack](#tech-stack)
 - [Project structure](#project-structure)
@@ -23,8 +36,57 @@ text, and keeps a shareable adherence history.
 - [Privacy](#privacy)
 - [Accessibility](#accessibility)
 - [Roadmap](#roadmap--phase-2-caregiver-support)
+- [Manual QA](#manual-qa)
 
 ---
+
+## Screenshots
+
+| Today's medicines | Scan the label | Confirm before saving |
+| :---: | :---: | :---: |
+| <img src="docs/screenshots/today.png" width="270" alt="Today screen: doses grouped Morning/Afternoon/Evening/Night with one-tap Taken, snooze and skip"> | <img src="docs/screenshots/scan-camera.png" width="270" alt="Camera screen framing a medicine box, capture button"> | <img src="docs/screenshots/scan-review.png" width="270" alt="Confirmation screen with the label photo, extracted fields, fuzzy-corrected name and candidate chips"> |
+| One tap to mark a dose **Taken**, **Snooze** or **Skip**; low-stock banners warn before you run out. | Point at the box or prescription — text is read **on the phone**, nothing is uploaded. | Every field is editable; uncertain values are flagged red with one-tap dictionary candidates. |
+
+| Add manually — step 2 of 3 | History & reports | Reliability dashboard |
+| :---: | :---: | :---: |
+| <img src="docs/screenshots/add-medication.png" width="270" alt="Add medicine wizard, schedule step with frequency cards and reminder times"> | <img src="docs/screenshots/history.png" width="270" alt="History screen with weekly bar chart, month calendar and PDF export button"> | <img src="docs/screenshots/settings.png" width="270" alt="Settings screen with reminder steppers and green permission status cards"> |
+| Big radio cards and time pickers — no fiddly dropdowns. | Weekly adherence, a month calendar, and a **PDF report** to share with the doctor. | Every permission that could delay a reminder, with a green tick when healthy. |
+
+<p align="center">
+  <img src="docs/screenshots/notification.png" width="300" alt="Lock screen showing the MediMinder reminder notification with Taken, Snooze 10 min and Skip actions"><br>
+  <sub>The reminder itself: big text, a gentle chime, and <b>Taken / Snooze 10 min / Skip</b> right from the lock screen — or full-screen when the phone is locked.</sub>
+</p>
+
+> The images above are high-fidelity mockups rendered from the app's actual
+> Compose layouts and Material 3 theme (see [`docs/SCREENSHOTS.md`](docs/SCREENSHOTS.md)
+> for how they are produced and how to replace them with real device captures).
+
+## How label scanning works
+
+Prescriptions often list **several** medicines. One photo is segmented into
+one cluster per medicine, each fuzzy-matched against an offline dictionary,
+and each confirmed separately. Everything runs on the phone.
+
+```mermaid
+flowchart TD
+    A["Photo (app-private)"] --> B["Pre-processing<br/>EXIF upright, down-sample,<br/>grayscale auto-contrast, deskew retry"]
+    B --> C["ML Kit OCR (on-device)<br/>text lines + boxes + confidence"]
+    C --> D["PrescriptionSegmenter<br/>one cluster per medication"]
+    D --> E["MedicationLabelParser<br/>strength, frequency, dosage, notes"]
+    E --> F["DrugNameMatcher<br/>prefix + trigram index over<br/>~10,000 offline names"]
+    F --> G{"Name score"}
+    G -->|"at least 0.85"| H["Pre-filled"]
+    G -->|"0.60 - 0.85"| I["Highlighted + one-tap candidates"]
+    G -->|"below 0.60"| J["Raw OCR text offered"]
+    H --> K["Confirmation screen<br/>photo shown, every field editable,<br/>nothing saved until Save"]
+    I --> K
+    J --> K
+```
+
+When OCR misreads a name ("Metf0rmin"), the fix is never silent: the screen
+shows *We read: "Metf0rmin" — Did you mean: Metformin?* and the user taps the
+right one. If a photo cannot be read at all, the app falls back to the manual
+form **with the photo attached**.
 
 ## Features
 
@@ -119,7 +181,10 @@ The parser test suite covers the label formats named in the spec
 ("Take 1 tablet by mouth twice daily", "500mg every 8 hours") plus sig
 abbreviations (b.i.d./t.i.d./q.i.d./q8h), word numbers ("two tablets"),
 ranges ("every 4–6 hours"), PRN medicines, bedtime/morning/evening phrasing,
-bottle-size vs dose disambiguation, and pharmacy-header noise.
+bottle-size vs dose disambiguation, pharmacy-header noise, OCR-confusion
+variants ("Metf0rmin 500mg", "Tab. Atorvastatln 10mg OD") and — critically —
+**non-medication lines** (doctor names, addresses, dates) that must *not*
+match any dictionary entry.
 
 ## CI/CD
 

@@ -5,15 +5,20 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
+import android.text.Layout
+import android.text.StaticLayout
+import android.text.TextPaint
 import com.mediminder.app.R
 import com.mediminder.app.di.IoDispatcher
 import com.mediminder.app.domain.engine.AdherenceCalculator
 import com.mediminder.app.domain.model.DoseStatus
 import com.mediminder.app.domain.repository.DoseLogRepository
 import com.mediminder.app.domain.repository.MedicationRepository
+import com.mediminder.app.domain.repository.SettingsRepository
 import com.mediminder.app.domain.service.AdherenceReportGenerator
 import com.mediminder.app.domain.service.ClockProvider
 import com.mediminder.app.domain.service.ReportFile
+import com.mediminder.app.util.withAppLanguage
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -21,18 +26,24 @@ import java.io.File
 import java.io.FileOutputStream
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
  * Builds a simple, printer-friendly PDF adherence report the user can share
  * with their doctor (via the system share sheet).
+ *
+ * All text is drawn through [StaticLayout] rather than plain Canvas.drawText:
+ * Bangla, Hindi and Arabic need proper text shaping (conjuncts, ligatures),
+ * which drawText cannot do.
  */
 @Singleton
 class PdfReportGenerator @Inject constructor(
     @ApplicationContext private val context: Context,
     private val doseLogRepository: DoseLogRepository,
     private val medicationRepository: MedicationRepository,
+    private val settingsRepository: SettingsRepository,
     private val calculator: AdherenceCalculator,
     private val clockProvider: ClockProvider,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -56,7 +67,7 @@ class PdfReportGenerator @Inject constructor(
     }
 
     /** Draws onto pages, creating a new page automatically near the bottom. */
-    private inner class PdfWriter {
+    private inner class PdfWriter(private val strings: Context) {
         private val document = PdfDocument()
         private var pageCount = 1
         private var page: PdfDocument.Page =
@@ -66,8 +77,18 @@ class PdfReportGenerator @Inject constructor(
 
         fun drawText(text: String, paint: Paint, x: Float = MARGIN.toFloat()) {
             newPageIfNeeded(paint.textSize + 5f)
-            canvas.drawText(text, x, y, paint)
-            y += paint.textSize + 5f
+            y += drawStaticLine(text, paint, x)
+            y += 5f
+        }
+
+        /** Draws several cells of one table row on the same baseline. */
+        fun drawRow(cells: List<Pair<Float, String>>, paint: Paint) {
+            newPageIfNeeded(paint.textSize + 5f)
+            var height = 0f
+            for ((x, text) in cells) {
+                height = maxOf(height, drawStaticLine(text, paint, x))
+            }
+            y += height + 5f
         }
 
         fun drawDivider() {
@@ -76,19 +97,16 @@ class PdfReportGenerator @Inject constructor(
             y += 14f
         }
 
+        /** Word-wrapping paragraph (StaticLayout wraps and shapes correctly). */
         fun drawWrapped(text: String, paint: Paint) {
-            val maxWidth = (PAGE_W - 2 * MARGIN).toFloat()
-            val words = text.split(' ')
-            val line = StringBuilder()
-            for (word in words) {
-                val candidate = if (line.isEmpty()) word else "$line $word"
-                if (paint.measureText(candidate) > maxWidth && line.isNotEmpty()) {
-                    drawText(line.toString(), paint)
-                    line.clear()
-                }
-                if (line.isEmpty()) line.append(word) else line.append(' ').append(word)
-            }
-            if (line.isNotEmpty()) drawText(line.toString(), paint)
+            val width = (PAGE_W - 2 * MARGIN).toFloat()
+            val layout = staticLayout(text, paint, width)
+            newPageIfNeeded(layout.height + 2f)
+            canvas.save()
+            canvas.translate(MARGIN.toFloat(), y)
+            layout.draw(canvas)
+            canvas.restore()
+            y += layout.height + 6f
         }
 
         fun drawSpacer(height: Float) {
@@ -106,6 +124,25 @@ class PdfReportGenerator @Inject constructor(
             document.close()
             return file
         }
+
+        /** Draws a single shaped line starting at (x, y); returns its height. */
+        private fun drawStaticLine(text: String, paint: Paint, x: Float): Float {
+            val width = ((PAGE_W - MARGIN) - x).coerceAtLeast(1f)
+            val layout = staticLayout(text, paint, width)
+            canvas.save()
+            canvas.translate(x, y)
+            layout.draw(canvas)
+            canvas.restore()
+            return layout.height.toFloat()
+        }
+
+        private fun staticLayout(text: String, paint: Paint, width: Float): StaticLayout =
+            StaticLayout.Builder
+                .obtain(text, 0, text.length, TextPaint(paint), width.toInt())
+                .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                .setLineSpacing(0f, 1.15f)
+                .setIncludePad(false)
+                .build()
 
         private fun newPageIfNeeded(needed: Float) {
             if (y + needed > PAGE_H - MARGIN) {
@@ -130,6 +167,13 @@ class PdfReportGenerator @Inject constructor(
         )
         if (logs.isEmpty()) return@withContext null
 
+        // The report runs on the application context, which on Android 8–12
+        // does not follow the per-app language — re-apply it for every string.
+        val languageTag = settingsRepository.current().languageTag
+        val strings = context.withAppLanguage(languageTag)
+        val locale = if (languageTag.isBlank()) Locale.getDefault() else Locale.forLanguageTag(languageTag)
+        val dateFormat = DateTimeFormatter.ofPattern("d MMM uuuu", locale)
+
         val medications = medicationRepository.getAllMedications()
         val perMedication = calculator.perMedication(logs, medications)
             .filter { it.taken + it.missed + it.skipped > 0 }
@@ -143,15 +187,15 @@ class PdfReportGenerator @Inject constructor(
         val adherencePercent: Int? =
             if (takenTotal + missedTotal > 0) takenTotal * 100 / (takenTotal + missedTotal) else null
 
-        val writer = PdfWriter()
-        writer.drawText(context.getString(R.string.report_title), Styles.title)
+        val writer = PdfWriter(strings)
+        writer.drawText(strings.getString(R.string.report_title), Styles.title)
         writer.drawSpacer(4f)
         writer.drawText(
-            context.getString(R.string.report_generated, now.format(dateFormat)),
+            strings.getString(R.string.report_generated, now.format(dateFormat)),
             Styles.muted,
         )
         writer.drawText(
-            context.getString(
+            strings.getString(
                 R.string.report_period,
                 fromDate.format(dateFormat),
                 today.format(dateFormat),
@@ -160,7 +204,7 @@ class PdfReportGenerator @Inject constructor(
         )
         writer.drawDivider()
         writer.drawText(
-            context.getString(
+            strings.getString(
                 R.string.report_summary,
                 takenTotal,
                 missedTotal,
@@ -172,54 +216,74 @@ class PdfReportGenerator @Inject constructor(
         writer.drawSpacer(12f)
 
         if (perMedication.isNotEmpty()) {
-            writer.drawText(context.getString(R.string.report_by_medicine), Styles.header)
+            writer.drawText(strings.getString(R.string.report_by_medicine), Styles.header)
             writer.drawDivider()
-            writer.drawText(context.getString(R.string.report_col_medicine), Styles.columnHeader)
-            writer.drawText(context.getString(R.string.report_col_taken), Styles.columnHeader, x = 340f)
-            writer.drawText(context.getString(R.string.report_col_missed), Styles.columnHeader, x = 410f)
-            writer.drawText(context.getString(R.string.report_col_skipped), Styles.columnHeader, x = 480f)
-            writer.drawText(context.getString(R.string.report_col_adherence), Styles.columnHeader, x = 540f)
+            writer.drawRow(
+                listOf(
+                    MARGIN.toFloat() to strings.getString(R.string.report_col_medicine),
+                    340f to strings.getString(R.string.report_col_taken),
+                    410f to strings.getString(R.string.report_col_missed),
+                    480f to strings.getString(R.string.report_col_skipped),
+                    540f to strings.getString(R.string.report_col_adherence),
+                ),
+                Styles.columnHeader,
+            )
             writer.drawSpacer(2f)
             for (row in perMedication) {
-                writer.drawText(ellipsize(row.name, 40), Styles.body)
-                writer.drawText(row.taken.toString(), Styles.body, x = 344f)
-                writer.drawText(row.missed.toString(), Styles.body, x = 414f)
-                writer.drawText(row.skipped.toString(), Styles.body, x = 484f)
-                writer.drawText(row.adherencePercent?.let { "$it%" } ?: "-", Styles.body, x = 540f)
+                writer.drawRow(
+                    listOf(
+                        MARGIN.toFloat() to ellipsizeToWidth(
+                            row.name,
+                            Styles.body,
+                            340f - MARGIN - 8f,
+                        ),
+                        344f to row.taken.toString(),
+                        414f to row.missed.toString(),
+                        484f to row.skipped.toString(),
+                        540f to (row.adherencePercent?.let { "$it%" } ?: "-"),
+                    ),
+                    Styles.body,
+                )
                 writer.drawSpacer(2f)
             }
             writer.drawSpacer(12f)
         }
 
-        writer.drawText(context.getString(R.string.report_by_day), Styles.header)
+        writer.drawText(strings.getString(R.string.report_by_day), Styles.header)
         writer.drawDivider()
-        val dayFormatter = DateTimeFormatter.ofPattern("EEE d MMM")
+        val dayFormatter = DateTimeFormatter.ofPattern("EEE d MMM", locale)
         for (day in last14Days.asReversed()) {
-            writer.drawText(day.date.format(dayFormatter), Styles.body)
-            writer.drawText(
-                context.getString(
-                    R.string.report_day_counts,
-                    day.taken,
-                    day.missed,
-                    day.skipped,
-                    day.adherencePercent?.let { "$it%" } ?: "-",
+            writer.drawRow(
+                listOf(
+                    MARGIN.toFloat() to day.date.format(dayFormatter),
+                    170f to strings.getString(
+                        R.string.report_day_counts,
+                        day.taken,
+                        day.missed,
+                        day.skipped,
+                        day.adherencePercent?.let { "$it%" } ?: "-",
+                    ),
                 ),
                 Styles.body,
-                x = 170f,
             )
             writer.drawSpacer(2f)
         }
         writer.drawSpacer(14f)
-        writer.drawWrapped(context.getString(R.string.report_disclaimer), Styles.muted)
+        writer.drawWrapped(strings.getString(R.string.report_disclaimer), Styles.muted)
 
         val file = writer.finish(now)
         ReportFile(file, file.name)
     }
 
-    private fun ellipsize(text: String, max: Int): String =
-        if (text.length <= max) text else text.take(max - 1) + "…"
-
-    private val dateFormat = DateTimeFormatter.ofPattern("d MMM uuuu")
+    /** Truncates with an ellipsis so the text fits [maxWidth] at the paint's size. */
+    private fun ellipsizeToWidth(text: String, paint: Paint, maxWidth: Float): String {
+        if (paint.measureText(text) <= maxWidth) return text
+        var trimmed = text
+        while (trimmed.isNotEmpty() && paint.measureText(trimmed + "…") > maxWidth) {
+            trimmed = trimmed.dropLast(1)
+        }
+        return trimmed + "…"
+    }
 
     companion object {
         // A4 at 72 dpi

@@ -29,7 +29,7 @@ import com.mediminder.app.ui.model.MedicationDraft
 import java.time.DayOfWeek
 import java.time.LocalTime
 import java.time.format.TextStyle
-import java.util.Locale
+import com.mediminder.app.util.appLocale
 
 /**
  * Frequency + reminder times editor, shared by the manual wizard (step 2)
@@ -80,7 +80,7 @@ fun ScheduleEditor(
                     modifier = Modifier.horizontalScroll(rememberScrollState()),
                 ) {
                     DayOfWeek.entries.forEach { day ->
-                        val short = day.getDisplayName(TextStyle.SHORT, Locale.getDefault())
+                        val short = day.getDisplayName(TextStyle.SHORT, appLocale())
                         FilterChip(
                             selected = day in draft.selectedDays,
                             onClick = {
@@ -179,5 +179,5 @@ private fun ReminderTimesEditor(
 @Composable
 private fun formatTime(time: LocalTime?): String =
     time?.let {
-        java.time.format.DateTimeFormatter.ofPattern("h:mm a").withLocale(Locale.getDefault()).format(it)
+        java.time.format.DateTimeFormatter.ofPattern("h:mm a").withLocale(appLocale()).format(it)
     } ?: ""

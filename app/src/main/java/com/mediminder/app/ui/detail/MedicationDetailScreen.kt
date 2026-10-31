@@ -38,7 +38,7 @@ import com.mediminder.app.ui.components.Stepper
 import com.mediminder.app.ui.components.timeFormatter
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.Locale
+import com.mediminder.app.util.appLocale
 
 @Composable
 fun MedicationDetailScreen(
@@ -228,6 +228,6 @@ private fun DetailRow(label: String, value: String) {
 
 @Composable
 private fun formatTimes(schedule: com.mediminder.app.domain.model.Schedule): String {
-    val formatter = java.time.format.DateTimeFormatter.ofPattern("h:mm a")
+    val formatter = java.time.format.DateTimeFormatter.ofPattern("h:mm a", appLocale())
     return schedule.times.joinToString(", ") { it.format(formatter) }
 }

@@ -18,6 +18,7 @@ import com.mediminder.app.domain.repository.ThemeMode
 import com.mediminder.app.domain.service.ReminderScheduler
 import com.mediminder.app.notifications.NotificationHelper
 import com.mediminder.app.scheduling.AlarmScheduler
+import com.mediminder.app.ui.settings.AppLanguage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -106,6 +107,16 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch { settingsRepository.setThemeMode(mode) }
     }
 
+    /**
+     * Switches the app language. The choice is stored in settings as well so
+     * that notifications and reports (application context) can use it on
+     * Android 8–12, where per-app locales only apply to activity contexts.
+     */
+    fun setLanguage(language: AppLanguage) {
+        viewModelScope.launch { settingsRepository.setLanguageTag(language.tag ?: "") }
+        language.select()
+    }
+
     fun setDeletePhotosAfterScan(enabled: Boolean) {
         viewModelScope.launch { settingsRepository.setDeletePhotosAfterScan(enabled) }
     }
@@ -170,4 +181,22 @@ fun openAppSettings(context: Context) {
         Uri.parse("package:${context.packageName}"),
     ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     runCatching { context.startActivity(intent) }
+}
+
+/**
+ * Opens the system screen where text-to-speech voices are managed. There is
+ * no public Settings constant for it, so try the well-known action first and
+ * fall back to the related voice settings pages.
+ */
+fun openVoiceSettings(context: Context) {
+    val ttsSettings = Intent("com.android.settings.TTS_SETTINGS")
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    val voiceInput = Intent(Settings.ACTION_VOICE_INPUT_SETTINGS)
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    val allSettings = Intent(Settings.ACTION_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    runCatching { context.startActivity(ttsSettings) }
+        .onFailure {
+            runCatching { context.startActivity(voiceInput) }
+                .onFailure { runCatching { context.startActivity(allSettings) } }
+        }
 }

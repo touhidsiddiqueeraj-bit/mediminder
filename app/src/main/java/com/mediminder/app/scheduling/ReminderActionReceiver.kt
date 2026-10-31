@@ -64,7 +64,10 @@ class ReminderActionReceiver : BroadcastReceiver() {
                 val medication = dose?.let { medicationRepository.getMedication(it.medicationId) }
                 if (medication != null) {
                     // Quiet confirmation so the user knows the tap worked.
-                    notificationHelper.showTakenFeedback(doseId, medication.name)
+                    // Language tag keeps the text in the app language even
+                    // though the app process was never opened.
+                    val languageTag = settingsRepository.current().languageTag
+                    notificationHelper.showTakenFeedback(doseId, medication.name, languageTag)
                 }
             }
             ACTION_SNOOZE -> {

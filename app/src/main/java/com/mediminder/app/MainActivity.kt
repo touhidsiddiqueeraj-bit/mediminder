@@ -4,10 +4,10 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModel
@@ -21,6 +21,7 @@ import com.mediminder.app.domain.repository.ThemeMode
 import com.mediminder.app.ui.navigation.MediMinderNavHost
 import com.mediminder.app.ui.theme.MediMinderTheme
 import com.mediminder.app.tts.ReminderSpeaker
+import com.mediminder.app.util.appLocale
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +51,7 @@ class MainViewModel @Inject constructor(
 }
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -71,6 +72,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         speaker = ReminderSpeaker(this)
+        // Warm the engine up at once: reminder speech must not race the
+        // text-to-speech service binding when a reminder opens the app.
+        speaker.language(appLocale())
+        speaker.init()
         handleReminderIntent(intent)
 
         setContent {
@@ -126,6 +131,7 @@ class MainActivity : ComponentActivity() {
                 val dose = doseLogRepository.getDose(doseId)
                 dose?.let { medicationRepository.getMedication(it.medicationId) }?.name
             }
+            speaker.language(appLocale())
             speaker.init()
             val text = if (medicationName != null) {
                 getString(R.string.tts_reminder_with_name, medicationName)

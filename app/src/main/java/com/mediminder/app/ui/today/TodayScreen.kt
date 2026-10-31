@@ -35,6 +35,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -59,9 +60,11 @@ import com.mediminder.app.ui.components.EmptyStateCard
 import com.mediminder.app.ui.components.InfoBanner
 import com.mediminder.app.ui.components.timeFormatter
 import com.mediminder.app.tts.ReminderSpeaker
+import com.mediminder.app.tts.SpeakerState
+import com.mediminder.app.ui.settings.openVoiceSettings
+import com.mediminder.app.util.appLocale
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.Locale
 
 @Composable
 fun TodayScreen(
@@ -73,12 +76,19 @@ fun TodayScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val dateFormatter = remember {
-        DateTimeFormatter.ofPattern("EEEE, d MMMM").withLocale(Locale.getDefault())
+        DateTimeFormatter.ofPattern("EEEE, d MMMM").withLocale(appLocale())
     }
     val timeFormatter = remember { timeFormatter() }
     val speaker = remember(context) { ReminderSpeaker(context) }
+    val speakerState by speaker.state.collectAsStateWithLifecycle()
     DisposableEffect(speaker) {
         onDispose { speaker.shutdown() }
+    }
+    // Warm the text-to-speech engine up while the user is still browsing, so
+    // the read-aloud button speaks instantly instead of racing engine init.
+    LaunchedEffect(speaker) {
+        speaker.language(appLocale())
+        speaker.init()
     }
 
     LazyColumn(
@@ -172,29 +182,47 @@ fun TodayScreen(
 
         item(key = "read_aloud") {
             if (state.doses.isNotEmpty()) {
-                BigOutlinedButton(
-                    text = stringResource(R.string.read_aloud_button),
-                    leadingIcon = Icons.Filled.VolumeUp,
-                    onClick = {
-                        val text = buildString {
-                            append(context.getString(R.string.tts_today_intro))
-                            state.doses
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    BigOutlinedButton(
+                        text = stringResource(R.string.read_aloud_button),
+                        leadingIcon = Icons.Filled.VolumeUp,
+                        onClick = {
+                            val upcoming = state.doses
                                 .filter { it.displayStatus == DoseDisplayStatus.UPCOMING }
-                                .forEach { dose ->
-                                    append(" ")
-                                    append(
-                                        context.getString(
-                                            R.string.tts_dose_line,
-                                            dose.medication.name,
-                                            dose.dose.scheduledTime.format(timeFormatter),
-                                        ),
-                                    )
+                            val text = if (upcoming.isEmpty()) {
+                                context.getString(R.string.tts_today_none_left)
+                            } else {
+                                buildString {
+                                    append(context.getString(R.string.tts_today_intro))
+                                    upcoming.forEach { dose ->
+                                        append(" ")
+                                        append(
+                                            context.getString(
+                                                R.string.tts_dose_line,
+                                                dose.medication.name,
+                                                dose.dose.scheduledTime.format(timeFormatter),
+                                            ),
+                                        )
+                                    }
                                 }
-                        }
-                        speaker.init()
-                        speaker.speak(text)
-                    },
-                )
+                            }
+                            speaker.speak(text)
+                        },
+                    )
+                    // If reading aloud cannot work, say so and offer the fix
+                    // instead of leaving a button that silently does nothing.
+                    when (speakerState) {
+                        SpeakerState.LANGUAGE_MISSING -> VoiceHint(
+                            text = stringResource(R.string.tts_voice_missing),
+                            onOpenSettings = { openVoiceSettings(context) },
+                        )
+                        SpeakerState.FAILED -> VoiceHint(
+                            text = stringResource(R.string.tts_engine_missing),
+                            onOpenSettings = { openVoiceSettings(context) },
+                        )
+                        else -> Unit
+                    }
+                }
             }
         }
         item(key = "disclaimer") {
@@ -204,6 +232,18 @@ fun TodayScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
+    }
+}
+
+@Composable
+private fun VoiceHint(text: String, onOpenSettings: () -> Unit) {
+    Text(
+        text,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.error,
+    )
+    TextButton(onClick = onOpenSettings) {
+        Text(stringResource(R.string.tts_open_voice_settings))
     }
 }
 

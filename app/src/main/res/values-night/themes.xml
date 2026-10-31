@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.MediMinder" parent="android:Theme.Material.NoActionBar" />
+    <!-- Same AppCompat DayNight parent as values/themes.xml; the day/night
+         variant is resolved by the parent itself, this file only mirrors it. -->
+    <style name="Theme.MediMinder" parent="Theme.AppCompat.DayNight.NoActionBar" />
+
+    <style name="Theme.MediMinder.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.MediMinder</item>
+    </style>
 </resources>

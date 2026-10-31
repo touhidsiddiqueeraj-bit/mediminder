@@ -60,7 +60,7 @@ import com.mediminder.app.ui.theme.LocalStatusColors
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.Locale
+import com.mediminder.app.util.appLocale
 
 // ---------------------------------------------------------------------------
 // Buttons — 64dp tall, 20sp labels: easy to see and easy to hit.
@@ -566,4 +566,4 @@ fun PermissionStatusCard(
 }
 
 fun timeFormatter(): DateTimeFormatter =
-    DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(Locale.getDefault())
+    DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(appLocale())

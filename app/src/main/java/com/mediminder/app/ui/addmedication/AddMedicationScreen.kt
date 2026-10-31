@@ -60,7 +60,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.Locale
+import com.mediminder.app.util.appLocale
 
 /**
  * Add or edit a medicine in 3 linear steps: Medicine -> Schedule -> Finish.
@@ -295,7 +295,7 @@ private fun StepSchedule(state: AddMedicationUiState, viewModel: AddMedicationVi
 private fun StepFinish(state: AddMedicationUiState, viewModel: AddMedicationViewModel) {
     val draft = state.draft
     val dateDisplay = remember {
-        DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.getDefault())
+        DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(appLocale())
     }
     var showStartDatePicker by remember { mutableStateOf(false) }
     var showEndDatePicker by remember { mutableStateOf(false) }

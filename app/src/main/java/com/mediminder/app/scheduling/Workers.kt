@@ -9,6 +9,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.mediminder.app.domain.repository.DoseLogRepository
+import com.mediminder.app.domain.repository.SettingsRepository
 import com.mediminder.app.domain.service.ClockProvider
 import com.mediminder.app.domain.service.ReminderScheduler
 import com.mediminder.app.domain.usecase.CheckLowStockUseCase
@@ -31,6 +32,7 @@ class MaintenanceWorker @AssistedInject constructor(
     private val reminderScheduler: ReminderScheduler,
     private val markMissedDosesUseCase: MarkMissedDosesUseCase,
     private val checkLowStockUseCase: CheckLowStockUseCase,
+    private val settingsRepository: SettingsRepository,
     private val notificationHelper: NotificationHelper,
 ) : CoroutineWorker(appContext, workerParameters) {
 
@@ -38,7 +40,8 @@ class MaintenanceWorker @AssistedInject constructor(
         return try {
             markMissedDosesUseCase()
             reminderScheduler.rescheduleAllAlarms()
-            checkLowStockUseCase().forEach(notificationHelper::showLowStock)
+            val languageTag = settingsRepository.current().languageTag
+            checkLowStockUseCase().forEach { notificationHelper.showLowStock(it, languageTag) }
             Result.success()
         } catch (e: Exception) {
             if (runAttemptCount < 3) Result.retry() else Result.success()

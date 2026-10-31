@@ -16,6 +16,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -64,6 +65,39 @@ fun SettingsScreen(
     ) {
         item(key = "title") {
             Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.headlineMedium)
+        }
+
+        // ---- Language ----
+        item(key = "language") {
+            SectionCard(title = stringResource(R.string.settings_language_title)) {
+                val selectedLanguage = remember { AppLanguage.current() }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.horizontalScroll(rememberScrollState()),
+                ) {
+                    AppLanguage.entries.forEach { language ->
+                        FilterChip(
+                            selected = language == selectedLanguage,
+                            onClick = { viewModel.setLanguage(language) },
+                            label = {
+                                Text(
+                                    if (language == AppLanguage.SYSTEM) {
+                                        stringResource(R.string.language_system)
+                                    } else {
+                                        language.nativeName
+                                    },
+                                )
+                            },
+                            modifier = Modifier.heightIn(min = 48.dp),
+                        )
+                    }
+                }
+                Text(
+                    stringResource(R.string.language_change_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
 
         // ---- Reminders ----

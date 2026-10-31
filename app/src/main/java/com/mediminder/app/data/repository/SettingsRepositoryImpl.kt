@@ -31,6 +31,7 @@ class SettingsRepositoryImpl @Inject constructor(
         val ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
         val DELETE_PHOTOS = booleanPreferencesKey("delete_photos_after_scan")
         val THEME_MODE = stringPreferencesKey("theme_mode")
+        val LANGUAGE_TAG = stringPreferencesKey("language_tag")
     }
 
     override val settings: Flow<ReminderSettings> = context.dataStore.data.map { prefs ->
@@ -47,6 +48,7 @@ class SettingsRepositoryImpl @Inject constructor(
                 ThemeMode.DARK.name -> ThemeMode.DARK
                 else -> ThemeMode.SYSTEM
             },
+            languageTag = prefs[Keys.LANGUAGE_TAG] ?: "",
         )
     }
 
@@ -78,6 +80,10 @@ class SettingsRepositoryImpl @Inject constructor(
 
     override suspend fun setThemeMode(mode: ThemeMode) {
         context.dataStore.edit { it[Keys.THEME_MODE] = mode.name }
+    }
+
+    override suspend fun setLanguageTag(tag: String) {
+        context.dataStore.edit { it[Keys.LANGUAGE_TAG] = tag }
     }
 
     private companion object {

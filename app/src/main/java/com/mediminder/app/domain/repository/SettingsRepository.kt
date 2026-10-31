@@ -20,6 +20,13 @@ data class ReminderSettings(
     val onboardingCompleted: Boolean = false,
     val deletePhotosAfterScan: Boolean = true,
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    /**
+     * BCP-47 tag of the app language chosen in Settings ("" = follow the
+     * phone). Kept in sync with the per-app locale so notifications and
+     * reports — which use the application context — can be localized on
+     * Android 8–12, where per-app locales only apply to activity contexts.
+     */
+    val languageTag: String = "",
 )
 
 interface SettingsRepository {
@@ -41,4 +48,6 @@ interface SettingsRepository {
     suspend fun setDeletePhotosAfterScan(enabled: Boolean)
 
     suspend fun setThemeMode(mode: ThemeMode)
+
+    suspend fun setLanguageTag(tag: String)
 }

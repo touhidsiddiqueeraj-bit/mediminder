@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
+    <string name="next">Avançar</string>
+    <string name="back">Voltar</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="saving">Salvando…</string>
+    <string name="minutes_n">%1$d min</string>
+    <string name="decrease">Menos</string>
+    <string name="increase">Mais</string>
+    <string name="pick_time">Escolher um horário</string>
+    <string name="remove_time">Remover este horário</string>
+    <string name="check_this_field">Isso pode estar errado — confira, por favor</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_today">Hoje</string>
+    <string name="nav_history">Histórico</string>
+    <string name="nav_settings">Ajustes</string>
+
+    <!-- Status -->
+    <string name="status_upcoming">A seguir</string>
+    <string name="status_taken">Tomado</string>
+    <string name="status_missed">Perdido</string>
+    <string name="status_skipped">Ignorado</string>
+    <string name="status_snoozed">Adiado</string>
+
+    <!-- Today screen -->
+    <string name="today_title">Remédios de hoje</string>
+    <string name="this_week_adherence">Esta semana: %1$d%% tomados</string>
+    <string name="scan_label_button">Escanear a etiqueta do remédio</string>
+    <string name="type_manually_button">Digitar eu mesmo</string>
+    <string name="no_medicines_today">Nenhum remédio hoje</string>
+    <string name="no_medicines_today_hint">Adicione um remédio com os botões acima e ele aparecerá aqui.</string>
+    <string name="read_aloud_button">Ler em voz alta o plano de hoje</string>
+    <string name="time_morning">Manhã</string>
+    <string name="time_afternoon">Tarde</string>
+    <string name="time_evening">Noite</string>
+    <string name="time_night">Madrugada</string>
+    <string name="section_count">(%1$d)</string>
+    <string name="taken_at">Tomado às %1$s</string>
+    <string name="open_details">Abrir detalhes de %1$s</string>
+    <string name="action_taken">Tomei</string>
+    <string name="action_snooze_short">Depois</string>
+    <string name="action_skip">Pular</string>
+    <string name="low_stock_banner">Restam apenas %2$d dias de %1$s. Está na hora de comprar mais.</string>
+
+    <!-- Disclaimer -->
+    <string name="disclaimer_short">O MediMinder é um auxílio de memória. Ele não substitui o conselho do seu médico.</string>
+    <string name="disclaimer_long">O MediMinder ajuda você a lembrar dos seus remédios. Ele não é conselho médico e nunca vai dizer para você mudar a dose. Siga sempre as instruções do seu médico ou farmacêutico.</string>
+
+    <!-- Add / edit medication -->
+    <string name="add_title">Adicionar um remédio</string>
+    <string name="edit_title">Editar remédio</string>
+    <string name="step_of">Passo %1$d de %2$d</string>
+    <string name="field_medication_name">Nome do remédio</string>
+    <string name="field_dosage_amount">Quantidade da dose (ex.: 1 ou 500)</string>
+    <string name="field_dosage_unit">Unidade da dose (ex.: comprimido ou mg)</string>
+    <string name="field_form">Que tipo de remédio é?</string>
+    <string name="field_instructions">Observações (ex.: tomar com comida)</string>
+    <string name="form_tablet">Comprimido</string>
+    <string name="form_capsule">Cápsula</string>
+    <string name="form_liquid">Líquido</string>
+    <string name="form_drops">Gotas</string>
+    <string name="form_injection">Injeção</string>
+    <string name="check_name_button">Conferir o nome</string>
+    <string name="checking_name">Conferindo…</string>
+    <string name="dates_title">Começo e fim</string>
+    <string name="start_date">Data de início</string>
+    <string name="end_date">Data de fim</string>
+    <string name="no_end_date">Este remédio tem data de fim</string>
+    <string name="review_title">Confira tudo, por favor</string>
+    <string name="stock_title">Comprimidos restantes</string>
+    <string name="track_stock_title">Contar meus comprimidos</string>
+    <string name="track_stock_subtitle">Avisar quando restar pouco</string>
+    <string name="pills_remaining">Comprimidos ou doses restantes</string>
+    <string name="stock_not_tracked">Você não está contando os comprimidos deste remédio.</string>
+    <string name="save_medicine">Salvar este remédio</string>
+    <string name="save_anyway">Salvar mesmo assim</string>
+    <string name="invalid_name">Digite o nome do remédio, por favor.</string>
+    <string name="invalid_no_schedule">Escolha quando tomá-lo, por favor.</string>
+    <string name="invalid_no_times">Adicione pelo menos um horário de lembrete.</string>
+    <string name="duplicate_warning_title">Possível remédio repetido</string>
+    <string name="duplicate_warning_text">“%1$s” pode conter o mesmo princípio ativo de um remédio que você já adicionou. Tomar o mesmo princípio ativo duas vezes pode fazer mal. Pergunte ao seu médico ou farmacêutico se tiver dúvida.</string>
+    <string name="delete_photo_after_save">Apagar a foto depois de salvar</string>
+    <string name="scanned_photo">Foto da etiqueta</string>
+    <string name="scanned_photo_note">Esta foto fica somente no seu telefone.</string>
+
+    <!-- Schedule editor -->
+    <string name="freq_daily_title">Todos os dias</string>
+    <string name="freq_daily_subtitle">Nos mesmos horários todos os dias</string>
+    <string name="freq_specific_days_title">Em certos dias</string>
+    <string name="freq_specific_days_subtitle">Por exemplo: segunda, quarta e sexta</string>
+    <string name="freq_interval_title">A cada poucas horas</string>
+    <string name="freq_interval_subtitle">Por exemplo: a cada 8 horas</string>
+    <string name="freq_as_needed_title">Só quando eu precisar</string>
+    <string name="freq_as_needed_subtitle">Sem lembretes automáticos</string>
+    <string name="freq_as_needed_note">Não vamos lembrar você deste remédio. Mesmo assim, você pode marcá-lo como tomado na tela de Hoje.</string>
+    <string name="freq_pick_days">Quais dias?</string>
+    <string name="freq_pick_days_error">Escolha pelo menos um dia, por favor.</string>
+    <string name="freq_reminder_times">Horários de lembrete</string>
+    <string name="freq_every_day">Todos os dias</string>
+    <string name="freq_every_n_days">A cada %1$d dias</string>
+    <string name="freq_every_n_hours">A cada %1$d horas</string>
+    <string name="freq_first_dose_at">Primeira dose do dia às %1$s</string>
+    <string name="add_time">Adicionar outro horário</string>
+
+    <!-- Scan flow -->
+    <string name="scan_title">Escanear a etiqueta</string>
+    <string name="scan_instructions">Segure firme a caixa ou a etiqueta do remédio e tire uma foto nítida. As palavras são lidas no seu telefone — nada é enviado para lugar nenhum.</string>
+    <string name="camera_permission_title">A câmera precisa da sua permissão</string>
+    <string name="camera_permission_message">Para ler uma etiqueta, o MediMinder precisa usar a câmera uma vez. A foto fica no seu telefone.</string>
+    <string name="camera_allow_button">Permitir câmera</string>
+    <string name="take_photo">Tirar foto</string>
+    <string name="scan_processing">Lendo a etiqueta…</string>
+    <string name="scan_processing_note">Isto leva alguns segundos. Sua foto fica no seu telefone.</string>
+    <string name="scan_review_title">Confira antes de salvar</string>
+    <string name="scan_review_subtitle">Lemos a etiqueta o melhor que pudemos. Os campos marcados em vermelho podem estar errados — confira e corrija qualquer coisa estranha.</string>
+    <string name="scan_progress_of">Remédio %1$d de %2$d nesta etiqueta</string>
+    <string name="scan_we_read">Lemos: “%1$s”.</string>
+    <string name="scan_did_you_mean">Você quis dizer: %1$s?</string>
+    <string name="scan_candidates_title">Não é isso? Toque no nome certo:</string>
+    <string name="scan_use_read_name">Usar exatamente o que lemos: %1$s</string>
+    <string name="scan_candidate_with_generic">%1$s (genérico: %2$s)</string>
+    <string name="scan_check_name_again">Conferir o nome</string>
+    <string name="scan_save_and_continue">Salvar e continuar</string>
+    <string name="scan_skip_medicine">Pular este remédio</string>
+    <string name="scan_confirm_schedule">Quando devemos lembrar você?</string>
+    <string name="scan_failed_title">Não conseguimos ler essa etiqueta</string>
+    <string name="scan_failed_message">A letra pode estar pequena demais ou embaçada. Tente de novo com mais luz, ou digite você mesmo os dados.</string>
+    <string name="scan_try_again">Tentar de novo</string>
+
+    <!-- History -->
+    <string name="history_title">Histórico</string>
+    <string name="weekly_summary_title">Esta semana</string>
+    <string name="weekly_percent">%1$d%% tomados</string>
+    <string name="weekly_no_data">Nenhuma dose registrada ainda</string>
+    <string name="weekly_taken_of">%1$d de %2$d doses tomadas</string>
+    <string name="calendar_day_a11y">%1$s: %2$d tomadas, %3$d perdidas</string>
+    <string name="calendar_day_no_doses">%1$s: sem remédios</string>
+    <string name="day_empty_title">Nada neste dia</string>
+    <string name="day_empty_message">Não havia remédios programados neste dia.</string>
+    <string name="export_report">Criar um relatório para o meu médico (PDF)</string>
+
+    <!-- Medication detail -->
+    <string name="detail_info_title">Sobre este remédio</string>
+    <string name="detail_generic_name">Nome genérico</string>
+    <string name="detail_dosage">Dose</string>
+    <string name="detail_form">Tipo</string>
+    <string name="detail_instructions">Observações</string>
+    <string name="detail_active">Lembretes ativados</string>
+    <string name="detail_schedule_title">Lembretes</string>
+    <string name="detail_adherence_title">Últimos 30 dias</string>
+    <string name="detail_adherence_value">%1$d%% tomados</string>
+    <string name="detail_adherence_counts">Tomados: %1$d · Perdidos: %2$d · Ignorados: %3$d</string>
+    <string name="detail_edit">Editar este remédio</string>
+    <string name="detail_stop">Parar os lembretes</string>
+    <string name="detail_restart">Ativar os lembretes de novo</string>
+    <string name="detail_delete">Excluir este remédio</string>
+    <string name="detail_delete_confirm_title">Excluir este remédio?</string>
+    <string name="detail_delete_confirm_text">Isto remove o remédio e todo o histórico dele do MediMinder. Não dá para desfazer.</string>
+    <string name="schedule_daily">Todos os dias às %1$s</string>
+    <string name="schedule_every_n_days">A cada %1$d dias às %2$s</string>
+    <string name="schedule_specific_days">Nos dias escolhidos às %1$s</string>
+    <string name="schedule_interval">A cada %1$d horas, começando às %2$s</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_language_title">Idioma</string>
+    <string name="language_system">O idioma do meu telefone</string>
+    <string name="language_change_hint">O aplicativo inteiro muda na hora.</string>
+    <string name="settings_reminders_title">Lembretes</string>
+    <string name="setting_snooze_minutes">Duração do adiamento</string>
+    <string name="setting_snooze_hint">“Depois” espera esse tempo antes de lembrar você de novo.</string>
+    <string name="setting_re_remind_interval">Espera entre lembretes</string>
+    <string name="setting_max_re_reminds">Quantos lembretes no total</string>
+    <string name="settings_voice_title">Voz</string>
+    <string name="setting_tts_title">Ler os lembretes em voz alta</string>
+    <string name="setting_tts_subtitle">Falar o nome do remédio quando um lembrete abrir</string>
+    <string name="settings_appearance_title">Aparência</string>
+    <string name="theme_system">Seguir o ajuste do meu telefone</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Escuro</string>
+    <string name="settings_permissions_title">Importante para lembretes confiáveis</string>
+    <string name="settings_permissions_hint">Certifique-se de que todos mostram um visto verde. Se algum lembrete não chega, quase sempre é por causa de um destes.</string>
+    <string name="perm_notifications_title">Notificações</string>
+    <string name="perm_notifications_ok">Ativadas — os lembretes podem aparecer</string>
+    <string name="perm_notifications_missing">Desativadas — você não verá os lembretes</string>
+    <string name="perm_exact_alarms_title">Alarmes exatos</string>
+    <string name="perm_exact_alarms_ok">Ativados — os lembretes chegam na hora</string>
+    <string name="perm_exact_alarms_missing">Desativados — os lembretes podem atrasar alguns minutos</string>
+    <string name="perm_battery_title">Economia de bateria</string>
+    <string name="perm_battery_ok">Este app está isento — os lembretes sempre tocam</string>
+    <string name="perm_battery_missing">A economia de bateria pode atrasar os lembretes</string>
+    <string name="perm_fullscreen_title">Lembrete em tela cheia</string>
+    <string name="perm_fullscreen_ok">Ativado — os lembretes aparecem sobre a tela de bloqueio</string>
+    <string name="perm_fullscreen_missing">Desativado — os lembretes aparecem só como um aviso pequeno</string>
+    <string name="perm_allow">Permitir</string>
+    <string name="perm_open_settings">Abrir ajustes</string>
+    <string name="settings_privacy_title">Privacidade</string>
+    <string name="setting_delete_photos_title">Apagar as fotos de etiquetas depois de salvar</string>
+    <string name="setting_delete_photos_subtitle">As fotos são lidas no seu telefone e podem ser apagadas logo em seguida</string>
+    <string name="privacy_policy_button">Ler a política de privacidade</string>
+    <string name="settings_data_title">Dados</string>
+    <string name="delete_all_data">Apagar todos os meus dados</string>
+    <string name="delete_all_confirm_title">Apagar tudo?</string>
+    <string name="delete_all_confirm_text">Isto remove todos os remédios e todo o histórico do MediMinder. Não dá para desfazer.</string>
+    <string name="delete_all_confirm_button">Apagar tudo</string>
+    <string name="settings_about_title">Sobre o MediMinder</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_skip">Pular</string>
+    <string name="onboarding_start">Começar a usar o MediMinder</string>
+    <string name="onboarding_welcome_title">Nunca mais esqueça seu remédio</string>
+    <string name="onboarding_welcome_message">O MediMinder avisa na hora exata, com letras grandes e bem claras. Sua lista de remédios fica no seu telefone.</string>
+    <string name="onboarding_how_title">Adicionar um remédio é fácil</string>
+    <string name="onboarding_how_message">Tire uma foto da etiqueta, confira os dados e a gente cuida do resto. Você também pode digitar tudo sozinho.</string>
+    <string name="onboarding_permissions_title">Dois ajustes rápidos</string>
+    <string name="onboarding_permissions_message">Essas duas chaves garantem que os lembretes cheguem sempre, mesmo com o telefone dormindo.</string>
+    <string name="onboarding_done_title">Você está pronto</string>
+    <string name="onboarding_done_message">Adicione seu primeiro remédio pela tela de Hoje. Se algum dia precisar de ajuda, tudo pode ser mudado nos Ajustes.</string>
+
+    <!-- Notifications -->
+    <string name="channel_reminders_name">Lembretes de remédios</string>
+    <string name="channel_reminders_desc">Mostra o lembrete quando é hora de tomar um remédio</string>
+    <string name="channel_low_stock_name">Pouco remédio restante</string>
+    <string name="channel_low_stock_desc">Avisa quando resta pouco de um remédio</string>
+    <string name="channel_feedback_name">Confirmações</string>
+    <string name="channel_feedback_desc">Confirmações discretas depois de tocar em Tomei</string>
+    <string name="notif_reminder_title">Está na hora de tomar %1$s</string>
+    <string name="notif_reminder_fallback_text">Toque em “Tomei” assim que tomar.</string>
+    <string name="action_snooze">Depois de %1$d min</string>
+    <string name="notif_taken_title">Marcado como tomado</string>
+    <string name="notif_taken_text">%1$s — muito bem.</string>
+    <string name="notif_low_stock_title">O remédio está acabando</string>
+    <string name="notif_low_stock_text">Resta apenas %2$s de %1$s.</string>
+    <plurals name="notif_low_stock_days">
+        <item quantity="one">%1$d dia</item>
+        <item quantity="many">%1$d dias</item>
+        <item quantity="other">%1$d dias</item>
+    </plurals>
+
+    <!-- Text to speech -->
+    <string name="tts_reminder_with_name">Está na hora de tomar %1$s.</string>
+    <string name="tts_reminder_generic">Está na hora de tomar o seu remédio.</string>
+    <string name="tts_today_intro">Seus remédios de hoje:</string>
+    <string name="tts_dose_line">%1$s às %2$s.</string>
+    <string name="tts_today_none_left">Você não tem mais nenhum remédio para tomar hoje.</string>
+    <string name="tts_voice_missing">Ainda não há voz instalada para este idioma no seu telefone, então a leitura em voz alta pode ficar em silêncio.</string>
+    <string name="tts_engine_missing">Não é possível ler em voz alta neste telefone — nenhum sistema de fala foi encontrado.</string>
+    <string name="tts_open_voice_settings">Abrir ajustes de voz</string>
+
+    <!-- PDF report -->
+    <string name="report_title">Relatório de remédios do MediMinder</string>
+    <string name="report_generated">Gerado em: %1$s</string>
+    <string name="report_period">Período: %1$s a %2$s</string>
+    <string name="report_summary">Tomados: %1$d · Perdidos: %2$d · Ignorados: %3$d · Adesão: %4$s</string>
+    <string name="report_by_medicine">Por remédio</string>
+    <string name="report_by_day">Últimos 14 dias</string>
+    <string name="report_col_medicine">Remédio</string>
+    <string name="report_col_taken">Tomados</string>
+    <string name="report_col_missed">Perdidos</string>
+    <string name="report_col_skipped">Ignorados</string>
+    <string name="report_col_adherence">Adesão</string>
+    <string name="report_day_counts">tomados %1$d · perdidos %2$d · ignorados %3$d · %4$s</string>
+    <string name="report_disclaimer">Este relatório foi criado pelo MediMinder a partir dos lembretes que o usuário marcou como tomados, perdidos ou ignorados. É apenas um registro, não um conselho médico. Doses marcadas como “só quando precisar” não estão incluídas.</string>
+
+    <!-- Privacy policy screen -->
+    <string name="privacy_title">Política de privacidade</string>
+    <string name="privacy_intro">Fizemos o MediMinder para que as suas informações de saúde sejam suas. Aqui está, em linguagem simples, o que acontece com os seus dados.</string>
+    <string name="privacy_local_title">Seus dados ficam no seu telefone</string>
+    <string name="privacy_local_body">Seus remédios, lembretes e histórico ficam guardados somente neste telefone, num banco de dados criptografado. Não temos servidores que recebam os seus dados de saúde.</string>
+    <string name="privacy_ocr_title">As fotos de etiquetas são lidas no seu telefone</string>
+    <string name="privacy_ocr_body">Quando você escaneia uma etiqueta ou uma receita, a foto e o reconhecimento do texto acontecem no seu telefone. Uma foto pode conter vários remédios — você confirma cada um separadamente e pode pedir que a foto seja apagada logo depois de salvar os dados.</string>
+    <string name="privacy_encryption_title">Seus dados são criptografados</string>
+    <string name="privacy_encryption_body">O banco de dados de remédios é criptografado com uma chave guardada com segurança pelo módulo de segurança de hardware do seu telefone.</string>
+    <string name="privacy_network_title">Nenhuma internet, de forma alguma</string>
+    <string name="privacy_network_body">O MediMinder não tem permissão de internet, então ele não consegue enviar nada — seus remédios, fotos ou histórico — para ninguém. A lista de nomes de remédios que ajuda a corrigir os nomes escaneados vem dentro do aplicativo e funciona totalmente sem conexão.</string>
+    <string name="privacy_no_tracking_title">Sem propaganda e sem rastreamento</string>
+    <string name="privacy_no_tracking_body">O MediMinder não contém anúncios, análises de uso nem rastreadores de terceiros. Ninguém está olhando o que você faz.</string>
+    <string name="privacy_backup_title">Sem backup automático na nuvem</string>
+    <string name="privacy_backup_body">Seus dados não são copiados para nenhum serviço de nuvem, a menos que você mesmo exporte. Se apagar o aplicativo, os dados vão junto — guarde a sua própria cópia se isso te preocupa.</string>
+    <string name="privacy_disclaimer_title">Um auxílio de memória, não um médico</string>
+    <string name="privacy_disclaimer_body">O MediMinder não dá conselhos médicos e nunca vai dizer para você mudar a dose. Para perguntas sobre os seus remédios, consulte sempre o seu médico ou farmacêutico.</string>
+</resources>

@@ -51,7 +51,7 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle as JavaTextStyle
-import java.util.Locale
+import com.mediminder.app.util.appLocale
 
 @Composable
 fun HistoryScreen(viewModel: HistoryViewModel = hiltViewModel()) {
@@ -105,12 +105,12 @@ fun HistoryScreen(viewModel: HistoryViewModel = hiltViewModel()) {
                             val barDescription = if (day.adherencePercent == null) {
                                 stringResource(
                                     R.string.calendar_day_no_doses,
-                                    day.date.dayOfWeek.getDisplayName(JavaTextStyle.FULL, Locale.getDefault()),
+                                    day.date.dayOfWeek.getDisplayName(JavaTextStyle.FULL, appLocale()),
                                 )
                             } else {
                                 stringResource(
                                     R.string.calendar_day_a11y,
-                                    day.date.dayOfWeek.getDisplayName(JavaTextStyle.FULL, Locale.getDefault()),
+                                    day.date.dayOfWeek.getDisplayName(JavaTextStyle.FULL, appLocale()),
                                     day.taken,
                                     day.missed,
                                 )
@@ -138,7 +138,7 @@ fun HistoryScreen(viewModel: HistoryViewModel = hiltViewModel()) {
                                     ) {}
                                 }
                                 Text(
-                                    day.date.dayOfWeek.getDisplayName(JavaTextStyle.NARROW, Locale.getDefault()),
+                                    day.date.dayOfWeek.getDisplayName(JavaTextStyle.NARROW, appLocale()),
                                     style = MaterialTheme.typography.labelSmall,
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier.fillMaxWidth(),
@@ -151,7 +151,7 @@ fun HistoryScreen(viewModel: HistoryViewModel = hiltViewModel()) {
         }
 
         item(key = "calendar") {
-            SectionCard(title = state.month.month.getDisplayName(JavaTextStyle.FULL, Locale.getDefault())) {
+            SectionCard(title = state.month.month.getDisplayName(JavaTextStyle.FULL, appLocale())) {
                 MonthCalendar(
                     month = state.month,
                     daySummaries = state.daySummaries,
@@ -165,7 +165,7 @@ fun HistoryScreen(viewModel: HistoryViewModel = hiltViewModel()) {
         state.selectedDay?.let { day ->
             item(key = "day_header") {
                 Text(
-                    day.format(DateTimeFormatter.ofPattern("EEEE, d MMMM").withLocale(Locale.getDefault())),
+                    day.format(DateTimeFormatter.ofPattern("EEEE, d MMMM").withLocale(appLocale())),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
                 )
@@ -262,7 +262,7 @@ private fun MonthCalendar(
 ) {
     val colors = LocalStatusColors.current
     val weekDayLabels = remember {
-        java.time.DayOfWeek.entries.map { it.getDisplayName(JavaTextStyle.NARROW, Locale.getDefault()) }
+        java.time.DayOfWeek.entries.map { it.getDisplayName(JavaTextStyle.NARROW, appLocale()) }
     }
     val firstDayOffset = month.atDay(1).dayOfWeek.value - 1 // Monday-first grid
     val daysInMonth = month.lengthOfMonth()

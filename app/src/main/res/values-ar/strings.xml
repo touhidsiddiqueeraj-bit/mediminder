@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Common -->
+    <string name="ok">حسنًا</string>
+    <string name="cancel">إلغاء</string>
+    <string name="next">التالي</string>
+    <string name="back">رجوع</string>
+    <string name="yes">نعم</string>
+    <string name="no">لا</string>
+    <string name="saving">جارٍ الحفظ…</string>
+    <string name="minutes_n">%1$d دقيقة</string>
+    <string name="decrease">أقل</string>
+    <string name="increase">أكثر</string>
+    <string name="pick_time">اختر وقتًا</string>
+    <string name="remove_time">إزالة هذا الوقت</string>
+    <string name="check_this_field">قد يكون هذا خطأ — يُرجى التحقق منه مرة أخرى</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_today">اليوم</string>
+    <string name="nav_history">السجل</string>
+    <string name="nav_settings">الإعدادات</string>
+
+    <!-- Status -->
+    <string name="status_upcoming">قادم</string>
+    <string name="status_taken">تم تناوله</string>
+    <string name="status_missed">فات وقته</string>
+    <string name="status_skipped">تم تخطّيه</string>
+    <string name="status_snoozed">تم تأجيله</string>
+
+    <!-- Today screen -->
+    <string name="today_title">أدوية اليوم</string>
+    <string name="this_week_adherence">هذا الأسبوع: تم تناول %1$d%%</string>
+    <string name="scan_label_button">مسح ملصق الدواء</string>
+    <string name="type_manually_button">سأكتبه بنفسي</string>
+    <string name="no_medicines_today">لا توجد أدوية اليوم</string>
+    <string name="no_medicines_today_hint">أضف دواءً بالأزرار أعلاه وسيظهر هنا.</string>
+    <string name="read_aloud_button">اقرأ خطة اليوم بصوت عالٍ</string>
+    <string name="time_morning">الصباح</string>
+    <string name="time_afternoon">الظهرة</string>
+    <string name="time_evening">المساء</string>
+    <string name="time_night">الليل</string>
+    <string name="section_count">(%1$d)</string>
+    <string name="taken_at">تم تناوله في %1$s</string>
+    <string name="open_details">فتح تفاصيل %1$s</string>
+    <string name="action_taken">تناولته</string>
+    <string name="action_snooze_short">لاحقًا</string>
+    <string name="action_skip">تخطٍ</string>
+    <string name="low_stock_banner">لم يتبقَّ من %1$s سوى %2$d يومًا. حان وقت شراء عبوة جديدة.</string>
+
+    <!-- Disclaimer -->
+    <string name="disclaimer_short">ميدي مايندر أداة للتذكير فقط، وهي ليست بديلًا عن نصيحة طبيبك.</string>
+    <string name="disclaimer_long">يساعدك ميدي مايندر على تذكّر أدويتك. وهو ليس نصيحة طبية ولا يطلب منك أبدًا تغيير جرعتك. اتبع دائمًا تعليمات طبيبك أو الصيدلي.</string>
+
+    <!-- Add / edit medication -->
+    <string name="add_title">إضافة دواء</string>
+    <string name="edit_title">تعديل الدواء</string>
+    <string name="step_of">الخطوة %1$d من %2$d</string>
+    <string name="field_medication_name">اسم الدواء</string>
+    <string name="field_dosage_amount">كمية الجرعة (مثل 1 أو 500)</string>
+    <string name="field_dosage_unit">وحدة الجرعة (مثل قرص أو ملغ)</string>
+    <string name="field_form">ما نوع هذا الدواء؟</string>
+    <string name="field_instructions">ملاحظات (مثل: يتناول مع الطعام)</string>
+    <string name="form_tablet">قرص</string>
+    <string name="form_capsule">كبسولة</string>
+    <string name="form_liquid">سائل</string>
+    <string name="form_drops">قطرات</string>
+    <string name="form_injection">حقنة</string>
+    <string name="check_name_button">تحقق من الاسم</string>
+    <string name="checking_name">جارٍ التحقق…</string>
+    <string name="dates_title">البداية والنهاية</string>
+    <string name="start_date">تاريخ البداية</string>
+    <string name="end_date">تاريخ النهاية</string>
+    <string name="no_end_date">لهذا الدواء تاريخ نهاية</string>
+    <string name="review_title">يُرجى التحقق من كل شيء</string>
+    <string name="stock_title">الأقراص المتبقية</string>
+    <string name="track_stock_title">عدّ أقراصي</string>
+    <string name="track_stock_subtitle">نبّهني عندما يتبقى القليل فقط</string>
+    <string name="pills_remaining">عدد الأقراص أو الجرعات المتبقية</string>
+    <string name="stock_not_tracked">أنت لا تعدّ أقراص هذا الدواء.</string>
+    <string name="save_medicine">حفظ هذا الدواء</string>
+    <string name="save_anyway">حفظ على أي حال</string>
+    <string name="invalid_name">يُرجى كتابة اسم الدواء.</string>
+    <string name="invalid_no_schedule">يُرجى اختيار موعد تناوله.</string>
+    <string name="invalid_no_times">يُرجى إضافة وقت تذكير واحد على الأقل.</string>
+    <string name="duplicate_warning_title">قد يكون الدواء مكررًا</string>
+    <string name="duplicate_warning_text">قد يحتوي “%1$s” على نفس المادة الفعالة الموجودة في دواء أضفته سابقًا. تناول المادة نفسها مرتين قد يكون ضارًا. استشر طبيبك أو الصيدلي إن لم تكن متأكدًا.</string>
+    <string name="delete_photo_after_save">حذف الصورة بعد الحفظ</string>
+    <string name="scanned_photo">صورة الملصق</string>
+    <string name="scanned_photo_note">تبقى هذه الصورة على هاتفك فقط.</string>
+
+    <!-- Schedule editor -->
+    <string name="freq_daily_title">كل يوم</string>
+    <string name="freq_daily_subtitle">في الأوقات نفسها كل يوم</string>
+    <string name="freq_specific_days_title">في أيام معينة</string>
+    <string name="freq_specific_days_subtitle">مثل: الاثنين والأربعاء والجمعة</string>
+    <string name="freq_interval_title">كل بضع ساعات</string>
+    <string name="freq_interval_subtitle">مثل: كل 8 ساعات</string>
+    <string name="freq_as_needed_title">عند الحاجة فقط</string>
+    <string name="freq_as_needed_subtitle">من دون تذكير تلقائي</string>
+    <string name="freq_as_needed_note">لن نذكّرك بهذا الدواء، لكن يمكنك مع ذلك وضع علامة “تناولته” من شاشة اليوم.</string>
+    <string name="freq_pick_days">أي الأيام؟</string>
+    <string name="freq_pick_days_error">يُرجى اختيار يوم واحد على الأقل.</string>
+    <string name="freq_reminder_times">أوقات التذكير</string>
+    <string name="freq_every_day">كل يوم</string>
+    <string name="freq_every_n_days">كل %1$d أيام</string>
+    <string name="freq_every_n_hours">كل %1$d ساعات</string>
+    <string name="freq_first_dose_at">أول جرعة في اليوم عند %1$s</string>
+    <string name="add_time">إضافة وقت آخر</string>
+
+    <!-- Scan flow -->
+    <string name="scan_title">امسح الملصق</string>
+    <string name="scan_instructions">أمسك علبة الدواء أو الملصق بثبات والتقط صورة واضحة. تتم قراءة الكلمات على هاتفك — ولا يُرسل شيء إلى أي مكان.</string>
+    <string name="camera_permission_title">تحتاج الكاميرا إلى موافقتك</string>
+    <string name="camera_permission_message">لقراءة ملصق الدواء، يحتاج ميدي مايندر إلى استخدام الكاميرا مرة واحدة. تبقى الصورة على هاتفك.</string>
+    <string name="camera_allow_button">السماح بالكاميرا</string>
+    <string name="take_photo">التقاط صورة</string>
+    <string name="scan_processing">جارٍ قراءة الملصق…</string>
+    <string name="scan_processing_note">يستغرق هذا بضع ثوانٍ. تبقى صورتك على هاتفك.</string>
+    <string name="scan_review_title">يُرجى التحقق قبل الحفظ</string>
+    <string name="scan_review_subtitle">قرأنا الملصق قدر استطاعتنا. الحقول المميزة باللون الأحمر قد تكون خاطئة — يُرجى مراجعتها وتصحيح ما يبدو غريبًا.</string>
+    <string name="scan_progress_of">الدواء %1$d من %2$d على هذا الملصق</string>
+    <string name="scan_we_read">قرأنا: “%1$s”.</string>
+    <string name="scan_did_you_mean">هل تقصد: %1$s؟</string>
+    <string name="scan_candidates_title">غير صحيح؟ المس الاسم الصحيح:</string>
+    <string name="scan_use_read_name">استخدام ما قرأناه حرفيًا: %1$s</string>
+    <string name="scan_candidate_with_generic">%1$s (الاسم العلمي: %2$s)</string>
+    <string name="scan_check_name_again">تحقق من الاسم</string>
+    <string name="scan_save_and_continue">حفظ ومتابعة</string>
+    <string name="scan_skip_medicine">تخطّي هذا الدواء</string>
+    <string name="scan_confirm_schedule">متى نذكّرك؟</string>
+    <string name="scan_failed_title">لم نتمكن من قراءة هذا الملصق</string>
+    <string name="scan_failed_message">قد تكون الكتابة صغيرة جدًا أو غير واضحة. حاول مرة أخرى بإضاءة أفضل، أو اكتب التفاصيل بنفسك.</string>
+    <string name="scan_try_again">المحاولة مرة أخرى</string>
+
+    <!-- History -->
+    <string name="history_title">السجل</string>
+    <string name="weekly_summary_title">هذا الأسبوع</string>
+    <string name="weekly_percent">تم تناول %1$d%%</string>
+    <string name="weekly_no_data">لا جرعات مسجلة بعد</string>
+    <string name="weekly_taken_of">تم تناول %1$d من أصل %2$d جرعة</string>
+    <string name="calendar_day_a11y">%1$s: تم تناول %2$d، فات %3$d</string>
+    <string name="calendar_day_no_doses">%1$s: لا أدوية</string>
+    <string name="day_empty_title">لا شيء في هذا اليوم</string>
+    <string name="day_empty_message">لم تكن هناك أدوية مجدولة في هذا اليوم.</string>
+    <string name="export_report">إنشاء تقرير لطبيبي (PDF)</string>
+
+    <!-- Medication detail -->
+    <string name="detail_info_title">عن هذا الدواء</string>
+    <string name="detail_generic_name">الاسم العلمي</string>
+    <string name="detail_dosage">الجرعة</string>
+    <string name="detail_form">الشكل</string>
+    <string name="detail_instructions">ملاحظات</string>
+    <string name="detail_active">التذكير مفعّل</string>
+    <string name="detail_schedule_title">التذكيرات</string>
+    <string name="detail_adherence_title">آخر 30 يومًا</string>
+    <string name="detail_adherence_value">تم تناول %1$d%%</string>
+    <string name="detail_adherence_counts">تم تناوله: %1$d · فات: %2$d · تم تخطّيه: %3$d</string>
+    <string name="detail_edit">تعديل هذا الدواء</string>
+    <string name="detail_stop">إيقاف التذكير</string>
+    <string name="detail_restart">إعادة تشغيل التذكير</string>
+    <string name="detail_delete">حذف هذا الدواء</string>
+    <string name="detail_delete_confirm_title">حذف هذا الدواء؟</string>
+    <string name="detail_delete_confirm_text">سيؤدي هذا إلى إزالة الدواء وكل سجله من ميدي مايندر. لا يمكن التراجع عنه.</string>
+    <string name="schedule_daily">كل يوم في %1$s</string>
+    <string name="schedule_every_n_days">كل %1$d أيام في %2$s</string>
+    <string name="schedule_specific_days">في الأيام المختارة في %1$s</string>
+    <string name="schedule_interval">كل %1$d ساعات، بدءًا من %2$s</string>
+
+    <!-- Settings -->
+    <string name="settings_title">الإعدادات</string>
+    <string name="settings_language_title">اللغة</string>
+    <string name="language_system">لغة هاتفي</string>
+    <string name="language_change_hint">يتغيّر التطبيق بأكمله في الحال.</string>
+    <string name="settings_reminders_title">التذكيرات</string>
+    <string name="setting_snooze_minutes">مدة التأجيل</string>
+    <string name="setting_snooze_hint">ينتظر “لاحقًا” هذه المدة قبل أن يذكّرك مجددًا.</string>
+    <string name="setting_re_remind_interval">الانتظار بين التذكيرات</string>
+    <string name="setting_max_re_reminds">عدد التذكيرات الإجمالي</string>
+    <string name="settings_voice_title">الصوت</string>
+    <string name="setting_tts_title">قراءة التذكيرات بصوت عالٍ</string>
+    <string name="setting_tts_subtitle">ينطق اسم الدواء عند ظهور التذكير</string>
+    <string name="settings_appearance_title">المظهر</string>
+    <string name="theme_system">بحسب إعداد هاتفي</string>
+    <string name="theme_light">فاتح</string>
+    <string name="theme_dark">داكن</string>
+    <string name="settings_permissions_title">مهم لتفعيل تذكيرات موثوقة</string>
+    <string name="settings_permissions_hint">يُرجى التأكد من أن كل هذه البنود تظهر بعلامة خضراء. إذا فاتك أي تذكير، فالسبب تقريبًا دائمًا واحد منها.</string>
+    <string name="perm_notifications_title">الإشعارات</string>
+    <string name="perm_notifications_ok">مفعّلة — يمكن عرض التذكيرات</string>
+    <string name="perm_notifications_missing">معطّلة — لن ترى التذكيرات</string>
+    <string name="perm_exact_alarms_title">المنبّهات الدقيقة</string>
+    <string name="perm_exact_alarms_ok">مفعّلة — تصل التذكيرات في وقتها</string>
+    <string name="perm_exact_alarms_missing">معطّلة — قد تتأخر التذكيرات دقائق قليلة</string>
+    <string name="perm_battery_title">توفير البطارية</string>
+    <string name="perm_battery_ok">هذا التطبيق مستثنى — تُطلق التذكيرات دائمًا</string>
+    <string name="perm_battery_missing">قد يؤدي توفير البطارية إلى تأخير التذكيرات</string>
+    <string name="perm_fullscreen_title">تذكير بملء الشاشة</string>
+    <string name="perm_fullscreen_ok">مفعّل — يظهر التذكير فوق شاشة القفل</string>
+    <string name="perm_fullscreen_missing">معطّل — يظهر التذكير كشريط صغير فقط</string>
+    <string name="perm_allow">السماح</string>
+    <string name="perm_open_settings">فتح الإعدادات</string>
+    <string name="settings_privacy_title">الخصوصية</string>
+    <string name="setting_delete_photos_title">حذف صور الملصقات بعد الحفظ</string>
+    <string name="setting_delete_photos_subtitle">تُقرأ الصور على هاتفك ويمكن حذفها فورًا</string>
+    <string name="privacy_policy_button">اقرأ سياسة الخصوصية</string>
+    <string name="settings_data_title">البيانات</string>
+    <string name="delete_all_data">حذف جميع بياناتي</string>
+    <string name="delete_all_confirm_title">حذف كل شيء؟</string>
+    <string name="delete_all_confirm_text">سيؤدي هذا إلى إزالة كل الأدوية وكل السجل من ميدي مايندر. لا يمكن التراجع عنه.</string>
+    <string name="delete_all_confirm_button">حذف كل شيء</string>
+    <string name="settings_about_title">عن ميدي مايندر</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_skip">تخطٍ</string>
+    <string name="onboarding_start">ابدأ استخدام ميدي مايندر</string>
+    <string name="onboarding_welcome_title">لن تنسى دواءك أبدًا</string>
+    <string name="onboarding_welcome_message">يذكّرك ميدي مايندر في الوقت المحدد تمامًا، وبأحرف كبيرة واضحة. تبقى قائمة أدويتك على هاتفك.</string>
+    <string name="onboarding_how_title">إضافة دواء أمر سهل</string>
+    <string name="onboarding_how_message">التقط صورة للملصق، وتحقق من التفاصيل، ونحن نتكفل بالباقي. ويمكنك أيضًا كتابة كل شيء بنفسك.</string>
+    <string name="onboarding_permissions_title">زرّان صغيران</string>
+    <string name="onboarding_permissions_message">يضمن هذان الزران وصول التذكيرات دائمًا، حتى عندما يكون الهاتف نائمًا.</string>
+    <string name="onboarding_done_title">أنت جاهز</string>
+    <string name="onboarding_done_message">أضف دواءك الأول من شاشة اليوم. وإذا احتجت يومًا إلى المساعدة، فكل شيء يمكن تغييره من الإعدادات.</string>
+
+    <!-- Notifications -->
+    <string name="channel_reminders_name">تذكيرات الأدوية</string>
+    <string name="channel_reminders_desc">يعرض التذكير عند حلول موعد تناول الدواء</string>
+    <string name="channel_low_stock_name">نقص مخزون الدواء</string>
+    <string name="channel_low_stock_desc">يحذّرك عندما يتبقى القليل من دواء ما</string>
+    <string name="channel_feedback_name">التأكيدات</string>
+    <string name="channel_feedback_desc">تأكيدات صامتة بعد الضغط على “تناولته”</string>
+    <string name="notif_reminder_title">حان وقت تناول %1$s</string>
+    <string name="notif_reminder_fallback_text">اضغط “تناولته” بعد أن تتناوله.</string>
+    <string name="action_snooze">بعد %1$d دقيقة</string>
+    <string name="notif_taken_title">تم وضع علامة “تم تناوله”</string>
+    <string name="notif_taken_text">%1$s — أحسنت.</string>
+    <string name="notif_low_stock_title">الدواء على وشك النفاد</string>
+    <string name="notif_low_stock_text">لم يتبقَّ من %1$s سوى %2$s.</string>
+    <plurals name="notif_low_stock_days">
+        <item quantity="zero">%1$d يوم</item>
+        <item quantity="one">يوم واحد</item>
+        <item quantity="two">يومان</item>
+        <item quantity="few">%1$d أيام</item>
+        <item quantity="many">%1$d يومًا</item>
+        <item quantity="other">%1$d يوم</item>
+    </plurals>
+
+    <!-- Text to speech -->
+    <string name="tts_reminder_with_name">حان وقت تناول %1$s.</string>
+    <string name="tts_reminder_generic">حان وقت تناول دوائك.</string>
+    <string name="tts_today_intro">أدويتك اليوم:</string>
+    <string name="tts_dose_line">%1$s في الساعة %2$s.</string>
+    <string name="tts_today_none_left">لم يتبقَّ لديك أي دواء لتناوله اليوم.</string>
+    <string name="tts_voice_missing">لم يُثبَّت صوت لهذه اللغة على هاتفك بعد، فقد تبقى القراءة الصوتية صامتة.</string>
+    <string name="tts_engine_missing">القراءة بصوت عالٍ غير ممكنة على هذا الهاتف — لم يُعثر على أي محرك نطق.</string>
+    <string name="tts_open_voice_settings">فتح إعدادات الصوت</string>
+
+    <!-- PDF report -->
+    <string name="report_title">تقرير أدوية ميدي مايندر</string>
+    <string name="report_generated">تاريخ الإنشاء: %1$s</string>
+    <string name="report_period">الفترة: من %1$s إلى %2$s</string>
+    <string name="report_summary">تم تناوله: %1$d · فات: %2$d · تم تخطّيه: %3$d · الالتزام: %4$s</string>
+    <string name="report_by_medicine">حسب الدواء</string>
+    <string name="report_by_day">آخر 14 يومًا</string>
+    <string name="report_col_medicine">الدواء</string>
+    <string name="report_col_taken">تم تناوله</string>
+    <string name="report_col_missed">فات</string>
+    <string name="report_col_skipped">تم تخطّيه</string>
+    <string name="report_col_adherence">الالتزام</string>
+    <string name="report_day_counts">تم تناول %1$d · فات %2$d · تم تخطّي %3$d · %4$s</string>
+    <string name="report_disclaimer">أنشأ ميدي مايندر هذا التقرير اعتمادًا على التذكيرات التي وضع لها المستخدم علامات “تم تناوله” أو “فات” أو “تم تخطّيه”. إنه سجل فقط وليس نصيحة طبية. الجرعات الموسومة بـ“عند الحاجة” غير مشمولة فيه.</string>
+
+    <!-- Privacy policy screen -->
+    <string name="privacy_title">سياسة الخصوصية</string>
+    <string name="privacy_intro">صممنا ميدي مايندر بحيث تبقى معلوماتك الصحية ملكًا لك. إليك بلغة بسيطة ما يحدث لبياناتك بالضبط.</string>
+    <string name="privacy_local_title">تبقى بياناتك على هاتفك</string>
+    <string name="privacy_local_body">تُخزَّن أدويتك وتذكيراتك وسجلك على هذا الهاتف فقط، في قاعدة بيانات مشفّرة. لا تمتلك أجهزتنا أي خوادم تستقبل بياناتك الصحية.</string>
+    <string name="privacy_ocr_title">تُقرأ صور الملصقات على هاتفك</string>
+    <string name="privacy_ocr_body">عند مسح ملصق دواء أو روشتة، تتم عملية التقاط الصورة والتعرف على النص كلتاهما على هاتفك. قد تحتوي الصورة الواحدة على عدة أدوية — تؤكد كل دواء على حدة، ويمكنك حذف الصورة فور حفظ التفاصيل.</string>
+    <string name="privacy_encryption_title">بياناتك مشفّرة</string>
+    <string name="privacy_encryption_body">قاعدة بيانات الأدوية مشفّرة بمفتاح يحفظه بأمان وحدة الأمان الموجودة في عتاد هاتفك.</string>
+    <string name="privacy_network_title">لا اتصال بالإنترنت إطلاقًا</string>
+    <string name="privacy_network_body">لا يملك ميدي مايندر إذن الوصول إلى الإنترنت، فهو لا يستطيع إرسال أي شيء — أدويتك أو صورك أو سجلك — إلى أي جهة. أما قائمة أسماء الأدوية التي تساعد في تصحيح الأسماء الممسوحة فمضمنة داخل التطبيق وتعمل دون اتصال تمامًا.</string>
+    <string name="privacy_no_tracking_title">لا إعلانات ولا تتبّع</string>
+    <string name="privacy_no_tracking_body">لا يحتوي ميدي مايندر على أي إعلانات أو تحليلات استخدام أو أدوات تتبّع من أطراف ثالثة. لا أحد يراقب ما تفعله.</string>
+    <string name="privacy_backup_title">لا نسخ احتياطي تلقائي على السحابة</string>
+    <string name="privacy_backup_body">لا تُنسخ بياناتك احتياطيًا إلى أي خدمة سحابية ما لم تصدّرها بنفسك. إذا حذفت التطبيق فستذهب بياناته معه — احتفظ بنسختك المصدّرة إن كان ذلك يقلقك.</string>
+    <string name="privacy_disclaimer_title">أداة تذكير، لا طبيب</string>
+    <string name="privacy_disclaimer_body">لا يقدم ميدي مايندر نصائح طبية ولن يطلب منك أبدًا تغيير جرعتك. لأي سؤال يتعلق بأدويتك، استشر دائمًا طبيبك أو الصيدلي.</string>
+</resources>

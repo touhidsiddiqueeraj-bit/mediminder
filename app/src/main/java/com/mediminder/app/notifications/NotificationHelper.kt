@@ -20,6 +20,7 @@ import com.mediminder.app.domain.model.LowStockInfo
 import com.mediminder.app.domain.model.Medication
 import com.mediminder.app.domain.repository.ReminderSettings
 import com.mediminder.app.scheduling.ReminderActionReceiver
+import com.mediminder.app.util.withAppLanguage
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -47,7 +48,13 @@ class NotificationHelper @Inject constructor(
     // Channels
     // ------------------------------------------------------------------
 
-    fun ensureChannels() {
+    /**
+     * Creates the notification channels. Channel names are a snapshot taken
+     * at creation (Android ignores later renames), so a language change does
+     * not retro-translate them — only fresh installs pick the new language.
+     */
+    fun ensureChannels(languageTag: String = "") {
+        val strings = context.withAppLanguage(languageTag)
         val chime = Uri.parse("android.resource://${context.packageName}/${R.raw.reminder_chime}")
         val audio = AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_NOTIFICATION)
@@ -56,10 +63,10 @@ class NotificationHelper @Inject constructor(
 
         val reminders = NotificationChannel(
             CHANNEL_REMINDERS,
-            context.getString(R.string.channel_reminders_name),
+            strings.getString(R.string.channel_reminders_name),
             NotificationManager.IMPORTANCE_HIGH,
         ).apply {
-            description = context.getString(R.string.channel_reminders_desc)
+            description = strings.getString(R.string.channel_reminders_desc)
             enableVibration(true)
             vibrationPattern = longArrayOf(0, 400, 250, 400)
             setSound(chime, audio)
@@ -70,19 +77,19 @@ class NotificationHelper @Inject constructor(
 
         val lowStock = NotificationChannel(
             CHANNEL_LOW_STOCK,
-            context.getString(R.string.channel_low_stock_name),
+            strings.getString(R.string.channel_low_stock_name),
             NotificationManager.IMPORTANCE_DEFAULT,
         ).apply {
-            description = context.getString(R.string.channel_low_stock_desc)
+            description = strings.getString(R.string.channel_low_stock_desc)
         }
         notificationManager.createNotificationChannel(lowStock)
 
         val feedback = NotificationChannel(
             CHANNEL_FEEDBACK,
-            context.getString(R.string.channel_feedback_name),
+            strings.getString(R.string.channel_feedback_name),
             NotificationManager.IMPORTANCE_LOW,
         ).apply {
-            description = context.getString(R.string.channel_feedback_desc)
+            description = strings.getString(R.string.channel_feedback_desc)
             setShowBadge(false)
         }
         notificationManager.createNotificationChannel(feedback)
@@ -93,14 +100,17 @@ class NotificationHelper @Inject constructor(
     // ------------------------------------------------------------------
 
     fun showDoseReminder(dose: DoseLog, medication: Medication, settings: ReminderSettings) {
-        ensureChannels()
+        ensureChannels(settings.languageTag)
         if (!hasPostNotifications()) return
 
+        // Localized strings: on Android 8–12 the application context does not
+        // follow the per-app language, so re-apply the chosen one.
+        val strings = context.withAppLanguage(settings.languageTag)
         val doseId = dose.id
-        val title = context.getString(R.string.notif_reminder_title, medication.name)
+        val title = strings.getString(R.string.notif_reminder_title, medication.name)
         val details = listOfNotNull(medication.dosageText, medication.instructions)
             .joinToString(separator = "  ·  ")
-            .ifBlank { context.getString(R.string.notif_reminder_fallback_text) }
+            .ifBlank { strings.getString(R.string.notif_reminder_fallback_text) }
 
         val openIntent = Intent(context, MainActivity::class.java).apply {
             action = MainActivity.ACTION_OPEN_REMINDER
@@ -140,13 +150,13 @@ class NotificationHelper @Inject constructor(
             .setAutoCancel(true)
             .setOnlyAlertOnce(false) // every re-remind should alert again
             .setContentIntent(contentPi)
-            .addAction(0, context.getString(R.string.action_taken), takenPi)
+            .addAction(0, strings.getString(R.string.action_taken), takenPi)
             .addAction(
                 0,
-                context.getString(R.string.action_snooze, settings.snoozeMinutes),
+                strings.getString(R.string.action_snooze, settings.snoozeMinutes),
                 snoozePi,
             )
-            .addAction(0, context.getString(R.string.action_skip), skipPi)
+            .addAction(0, strings.getString(R.string.action_skip), skipPi)
 
         if (fullScreenIntentGranted()) {
             builder.setFullScreenIntent(fullScreenPi, true)
@@ -176,32 +186,34 @@ class NotificationHelper @Inject constructor(
     // Feedback + low stock
     // ------------------------------------------------------------------
 
-    fun showTakenFeedback(doseId: Long, medicationName: String) {
-        ensureChannels()
+    fun showTakenFeedback(doseId: Long, medicationName: String, languageTag: String = "") {
+        ensureChannels(languageTag)
         if (!hasPostNotifications()) return
+        val strings = context.withAppLanguage(languageTag)
         val builder = NotificationCompat.Builder(context, CHANNEL_FEEDBACK)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle(context.getString(R.string.notif_taken_title))
-            .setContentText(context.getString(R.string.notif_taken_text, medicationName))
+            .setContentTitle(strings.getString(R.string.notif_taken_title))
+            .setContentText(strings.getString(R.string.notif_taken_text, medicationName))
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setAutoCancel(true)
         safelyNotify((NOTIF_TAKEN_BASE + doseId).toInt(), builder)
     }
 
-    fun showLowStock(info: LowStockInfo) {
-        ensureChannels()
+    fun showLowStock(info: LowStockInfo, languageTag: String = "") {
+        ensureChannels(languageTag)
         if (!hasPostNotifications()) return
+        val strings = context.withAppLanguage(languageTag)
         val days = info.daysRemaining
-        val quantityText = context.resources.getQuantityString(
+        val quantityText = strings.resources.getQuantityString(
             R.plurals.notif_low_stock_days,
             days,
             days,
         )
         val builder = NotificationCompat.Builder(context, CHANNEL_LOW_STOCK)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle(context.getString(R.string.notif_low_stock_title))
+            .setContentTitle(strings.getString(R.string.notif_low_stock_title))
             .setContentText(
-                context.getString(
+                strings.getString(
                     R.string.notif_low_stock_text,
                     info.medicationName,
                     quantityText,
@@ -209,7 +221,7 @@ class NotificationHelper @Inject constructor(
             )
             .setStyle(
                 NotificationCompat.BigTextStyle().bigText(
-                    context.getString(
+                    strings.getString(
                         R.string.notif_low_stock_text,
                         info.medicationName,
                         quantityText,

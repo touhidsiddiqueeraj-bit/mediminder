@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App -->
-    <string name="app_name">MediMinder</string>
+    <string name="app_name" translatable="false">MediMinder</string>
 
     <!-- Common -->
     <string name="ok">OK</string>
@@ -171,6 +171,9 @@
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
+    <string name="settings_language_title">Language</string>
+    <string name="language_system">My phone\'s language</string>
+    <string name="language_change_hint">The whole app changes right away.</string>
     <string name="settings_reminders_title">Reminders</string>
     <string name="setting_snooze_minutes">Snooze length</string>
     <string name="setting_snooze_hint">"Snooze" waits this long before reminding you again.</string>
@@ -246,6 +249,10 @@
     <string name="tts_reminder_generic">It is time to take your medicine.</string>
     <string name="tts_today_intro">Your medicines today:</string>
     <string name="tts_dose_line">%1$s at %2$s.</string>
+    <string name="tts_today_none_left">You have no more medicines to take today.</string>
+    <string name="tts_voice_missing">No voice for this language is installed on your phone yet, so reading aloud may stay silent.</string>
+    <string name="tts_engine_missing">Reading aloud is not possible on this phone — no speech engine was found.</string>
+    <string name="tts_open_voice_settings">Open voice settings</string>
 
     <!-- PDF report -->
     <string name="report_title">MediMinder medicine report</string>

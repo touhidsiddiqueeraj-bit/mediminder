@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Common -->
+    <string name="ok">ठीक है</string>
+    <string name="cancel">रद्द करें</string>
+    <string name="next">आगे</string>
+    <string name="back">पीछे</string>
+    <string name="yes">हाँ</string>
+    <string name="no">नहीं</string>
+    <string name="saving">सहेजा जा रहा है…</string>
+    <string name="minutes_n">%1$d मिनट</string>
+    <string name="decrease">कम करें</string>
+    <string name="increase">बढ़ाएँ</string>
+    <string name="pick_time">समय चुनें</string>
+    <string name="remove_time">यह समय हटाएँ</string>
+    <string name="check_this_field">यह गलत हो सकता है — कृपया एक बार फिर देख लें</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_today">आज</string>
+    <string name="nav_history">इतिहास</string>
+    <string name="nav_settings">सेटिंग</string>
+
+    <!-- Status -->
+    <string name="status_upcoming">आने वाला</string>
+    <string name="status_taken">लिया गया</string>
+    <string name="status_missed">छूट गया</string>
+    <string name="status_skipped">छोड़ दिया गया</string>
+    <string name="status_snoozed">टाला गया</string>
+
+    <!-- Today screen -->
+    <string name="today_title">आज की दवाएँ</string>
+    <string name="this_week_adherence">इस हफ़्ते: %1$d%% लिए गए</string>
+    <string name="scan_label_button">दवा का लेबल स्कैन करें</string>
+    <string name="type_manually_button">खुद लिखूँगा</string>
+    <string name="no_medicines_today">आज कोई दवा नहीं</string>
+    <string name="no_medicines_today_hint">ऊपर के बटन से दवा जोड़ें, वह यहीं दिखेगी।</string>
+    <string name="read_aloud_button">आज की सूची पढ़कर सुनाएँ</string>
+    <string name="time_morning">सुबह</string>
+    <string name="time_afternoon">दोपहर</string>
+    <string name="time_evening">शाम</string>
+    <string name="time_night">रात</string>
+    <string name="section_count">(%1$d)</string>
+    <string name="taken_at">%1$s बजे लिया गया</string>
+    <string name="open_details">%1$s की पूरी जानकारी देखें</string>
+    <string name="action_taken">ले लिया</string>
+    <string name="action_snooze_short">बाद में</string>
+    <string name="action_skip">छोड़ें</string>
+    <string name="low_stock_banner">%1$s की सिर्फ़ %2$d दिन की दवा बची है। नई दवा मंगाने का समय हो गया है।</string>
+
+    <!-- Disclaimer -->
+    <string name="disclaimer_short">मेडीमाइंडर सिर्फ़ याद दिलाने वाला साथी है। यह डॉक्टर की सलाह का विकल्प नहीं है।</string>
+    <string name="disclaimer_long">मेडीमाइंडर आपको दवाएँ याद दिलाने में मदद करता है। यह कोई चिकित्सा सलाह नहीं है और कभी भी खुराक बदलने की सलाह नहीं देता। हमेशा अपने डॉक्टर या केमिस्ट के निर्देश मानें।</string>
+
+    <!-- Add / edit medication -->
+    <string name="add_title">दवा जोड़ें</string>
+    <string name="edit_title">दवा बदलें</string>
+    <string name="step_of">चरण %1$d/%2$d</string>
+    <string name="field_medication_name">दवा का नाम</string>
+    <string name="field_dosage_amount">मात्रा (जैसे 1 या 500)</string>
+    <string name="field_dosage_unit">मात्रा की इकाई (जैसे टैबलेट या मि.ग्रा.)</string>
+    <string name="field_form">कैसी दवा है?</string>
+    <string name="field_instructions">टिप्पणी (जैसे खाने के साथ लें)</string>
+    <string name="form_tablet">टैबलेट</string>
+    <string name="form_capsule">कैप्सूल</string>
+    <string name="form_liquid">लिक्विड</string>
+    <string name="form_drops">बूँदें</string>
+    <string name="form_injection">इंजेक्शन</string>
+    <string name="check_name_button">नाम जाँचें</string>
+    <string name="checking_name">जाँच हो रही है…</string>
+    <string name="dates_title">शुरुआत और अंत</string>
+    <string name="start_date">शुरू की तारीख़</string>
+    <string name="end_date">ख़त्म होने की तारीख़</string>
+    <string name="no_end_date">इस दवा की एक अंतिम तारीख़ है</string>
+    <string name="review_title">सब कुछ देख लें</string>
+    <string name="stock_title">बची हुई दवा</string>
+    <string name="track_stock_title">मेरी दवा का हिसाब रखें</string>
+    <string name="track_stock_subtitle">थोड़ी बचने पर बता देंगे</string>
+    <string name="pills_remaining">बची हुई गोलियाँ या खुराकें</string>
+    <string name="stock_not_tracked">आप इस दवा का हिसाब नहीं रख रहे हैं।</string>
+    <string name="save_medicine">यह दवा सहेजें</string>
+    <string name="save_anyway">फिर भी सहेजें</string>
+    <string name="invalid_name">कृपया दवा का नाम लिखें।</string>
+    <string name="invalid_no_schedule">कृपया चुनें कि कब लेनी है।</string>
+    <string name="invalid_no_times">कृपया कम से कम एक समय जोड़ें।</string>
+    <string name="duplicate_warning_title">एक ही दवा दो बार हो सकती है</string>
+    <string name="duplicate_warning_text">“%1$s” में वही तत्व हो सकता है जो आपकी पहले से जोड़ी हुई किसी दवा में है। एक ही तत्व दो बार लेना नुक़सानदेह हो सकता है। पक्का न हो तो डॉक्टर या केमिस्ट से पूछें।</string>
+    <string name="delete_photo_after_save">सहेजने के बाद फ़ोटो मिटा दें</string>
+    <string name="scanned_photo">लेबल की फ़ोटो</string>
+    <string name="scanned_photo_note">यह फ़ोटो सिर्फ़ आपके फ़ोन पर रहेगी।</string>
+
+    <!-- Schedule editor -->
+    <string name="freq_daily_title">हर रोज़</string>
+    <string name="freq_daily_subtitle">हर दिन एक ही समय पर</string>
+    <string name="freq_specific_days_title">ख़ास दिनों में</string>
+    <string name="freq_specific_days_subtitle">जैसे: सोमवार, बुधवार, शुक्रवार</string>
+    <string name="freq_interval_title">कुछ घंटों के बाद</string>
+    <string name="freq_interval_subtitle">जैसे: हर 8 घंटे में</string>
+    <string name="freq_as_needed_title">ज़रूरत पड़ने पर</string>
+    <string name="freq_as_needed_subtitle">कोई अपने-आप रिमाइंडर नहीं</string>
+    <string name="freq_as_needed_note">इस दवा के लिए हम याद नहीं दिलाएँगे। फिर भी आज के पेज़ से इसे ले लिया चिह्नित कर सकते हैं।</string>
+    <string name="freq_pick_days">किन-किन दिनों में?</string>
+    <string name="freq_pick_days_error">कृपया कम से कम एक दिन चुनें।</string>
+    <string name="freq_reminder_times">रिमाइंडर के समय</string>
+    <string name="freq_every_day">हर रोज़</string>
+    <string name="freq_every_n_days">हर %1$d दिन में</string>
+    <string name="freq_every_n_hours">हर %1$d घंटे में</string>
+    <string name="freq_first_dose_at">दिन की पहली खुराक %1$s बजे</string>
+    <string name="add_time">एक और समय जोड़ें</string>
+
+    <!-- Scan flow -->
+    <string name="scan_title">लेबल स्कैन करें</string>
+    <string name="scan_instructions">दवा की पट्टी या लेबल को स्थिर रखकर साफ़ फ़ोटो लें। लिखे हुए शब्द आपके फ़ोन पर ही पढ़े जाते हैं — कहीं भेजे नहीं जाते।</string>
+    <string name="camera_permission_title">कैमरे की अनुमति चाहिए</string>
+    <string name="camera_permission_message">लेबल पढ़ने के लिए मेडीमाइंडर को एक बार कैमरे की अनुमति चाहिए। फ़ोटो आपके फ़ोन पर ही रहेगी।</string>
+    <string name="camera_allow_button">कैमरे की अनुमति दें</string>
+    <string name="take_photo">फ़ोटो लें</string>
+    <string name="scan_processing">लेबल पढ़ा जा रहा है…</string>
+    <string name="scan_processing_note">इसमें कुछ सेकंड लगेंगे। आपकी फ़ोटो फ़ोन में ही रहेगी।</string>
+    <string name="scan_review_title">सहेजने से पहले देख लें</string>
+    <string name="scan_review_subtitle">हमने लेबल को जितना पढ़ सके, पढ़ा है। लाल रंग वाले खाने ग़लत हो सकते हैं — कृपया जाँच कर ठीक कर लें।</string>
+    <string name="scan_progress_of">इस लेबल पर दवा %1$d/%2$d</string>
+    <string name="scan_we_read">हमने पढ़ा: “%1$s”।</string>
+    <string name="scan_did_you_mean">क्या आपका मतलब है: %1$s?</string>
+    <string name="scan_candidates_title">ठीक नहीं? सही नाम पर टैप करें:</string>
+    <string name="scan_use_read_name">जो पढ़ा जाए वही इस्तेमाल करें: %1$s</string>
+    <string name="scan_candidate_with_generic">%1$s (सामान्य नाम: %2$s)</string>
+    <string name="scan_check_name_again">नाम फिर जाँचें</string>
+    <string name="scan_save_and_continue">सहेजें और आगे बढ़ें</string>
+    <string name="scan_skip_medicine">यह दवा छोड़ें</string>
+    <string name="scan_confirm_schedule">कब याद दिलाएँ?</string>
+    <string name="scan_failed_title">लेबल पढ़ा नहीं जा सका</string>
+    <string name="scan_failed_message">शायद लिखाई बहुत छोटी या धुँधली है। रोशनी बढ़ाकर फिर कोशिश करें, या जानकारी खुद लिख लें।</string>
+    <string name="scan_try_again">फिर कोशिश करें</string>
+
+    <!-- History -->
+    <string name="history_title">इतिहास</string>
+    <string name="weekly_summary_title">इस हफ़्ते</string>
+    <string name="weekly_percent">%1$d%% लिए गए</string>
+    <string name="weekly_no_data">अभी कोई खुराक दर्ज नहीं हुई</string>
+    <string name="weekly_taken_of">%2$d में से %1$d खुराक ली गईं</string>
+    <string name="calendar_day_a11y">%1$s: %2$d ली गईं, %3$d छूटीं</string>
+    <string name="calendar_day_no_doses">%1$s: कोई दवा नहीं</string>
+    <string name="day_empty_title">इस दिन कुछ नहीं</string>
+    <string name="day_empty_message">इस दिन कोई दवा तय नहीं थी।</string>
+    <string name="export_report">डॉक्टर के लिए रिपोर्ट बनाएँ (PDF)</string>
+
+    <!-- Medication detail -->
+    <string name="detail_info_title">इस दवा के बारे में</string>
+    <string name="detail_generic_name">सामान्य (जेनेरिक) नाम</string>
+    <string name="detail_dosage">खुराक</string>
+    <string name="detail_form">प्रकार</string>
+    <string name="detail_instructions">टिप्पणी</string>
+    <string name="detail_active">रिमाइंडर चालू</string>
+    <string name="detail_schedule_title">रिमाइंडर</string>
+    <string name="detail_adherence_title">पिछले 30 दिन</string>
+    <string name="detail_adherence_value">%1$d%% लिए गए</string>
+    <string name="detail_adherence_counts">लिए: %1$d · छूटे: %2$d · छोड़े: %3$d</string>
+    <string name="detail_edit">यह दवा बदलें</string>
+    <string name="detail_stop">रिमाइंडर बंद करें</string>
+    <string name="detail_restart">रिमाइंडर फिर चालू करें</string>
+    <string name="detail_delete">यह दवा मिटाएँ</string>
+    <string name="detail_delete_confirm_title">यह दवा मिटा दें?</string>
+    <string name="detail_delete_confirm_text">इससे दवा और उसका पूरा इतिहास मेडीमाइंडर से हट जाएगा। इसे वापस नहीं लाया जा सकता।</string>
+    <string name="schedule_daily">हर रोज़ %1$s बजे</string>
+    <string name="schedule_every_n_days">हर %1$d दिन में, %2$s बजे</string>
+    <string name="schedule_specific_days">चुने हुए दिनों में, %1$s बजे</string>
+    <string name="schedule_interval">हर %1$d घंटे में, शुरुआत %2$s बजे से</string>
+
+    <!-- Settings -->
+    <string name="settings_title">सेटिंग</string>
+    <string name="settings_language_title">भाषा</string>
+    <string name="language_system">मेरे फ़ोन की भाषा</string>
+    <string name="language_change_hint">पूरा ऐप तुरंत बदल जाता है।</string>
+    <string name="settings_reminders_title">रिमाइंडर</string>
+    <string name="setting_snooze_minutes">टालने की अवधि</string>
+    <string name="setting_snooze_hint">“बाद में” दबाने पर इतनी देर बाद फिर याद दिलाया जाएगा।</string>
+    <string name="setting_re_remind_interval">रिमाइंडर के बीच कितना इंतज़ार</string>
+    <string name="setting_max_re_reminds">कुल कितनी बार याद दिलाएँ</string>
+    <string name="settings_voice_title">आवाज़</string>
+    <string name="setting_tts_title">रिमाइंडर पढ़कर सुनाएँ</string>
+    <string name="setting_tts_subtitle">रिमाइंडर खुलने पर दवा का नाम बोलकर बताया जाएगा</string>
+    <string name="settings_appearance_title">रूप-रंग</string>
+    <string name="theme_system">फ़ोन की सेटिंग के अनुसार</string>
+    <string name="theme_light">हल्का</string>
+    <string name="theme_dark">गहरा</string>
+    <string name="settings_permissions_title">भरोसेमंद रिमाइंडर के लिए ज़रूरी</string>
+    <string name="settings_permissions_hint">कृपया देख लें कि इन सब पर हरा निशान है। कोई रिमाइंडर छूटे तो वजह लगभग हमेशा इन्हीं में होती है।</string>
+    <string name="perm_notifications_title">सूचनाएँ</string>
+    <string name="perm_notifications_ok">चालू — रिमाइंडर दिखेंगे</string>
+    <string name="perm_notifications_missing">बंद — रिमाइंडर नहीं दिखेंगे</string>
+    <string name="perm_exact_alarms_title">पक्के अलार्म</string>
+    <string name="perm_exact_alarms_ok">चालू — रिमाइंडर ठीक समय पर आएँगे</string>
+    <string name="perm_exact_alarms_missing">बंद — रिमाइंडर कुछ मिनट देर से आ सकते हैं</string>
+    <string name="perm_battery_title">बैटरी बचाव</string>
+    <string name="perm_battery_ok">ऐप छूटा हुआ है — रिमाइंडर हमेशा बजेंगे</string>
+    <string name="perm_battery_missing">बैटरी बचाव रिमाइंडर को देर कर सकता है</string>
+    <string name="perm_fullscreen_title">पूरी स्क्रीन वाला रिमाइंडर</string>
+    <string name="perm_fullscreen_ok">चालू — लॉक स्क्रीन पर भी रिमाइंडर दिखेगा</string>
+    <string name="perm_fullscreen_missing">बंद — रिमाइंडर सिर्फ़ छोटे बैनर में दिखेगा</string>
+    <string name="perm_allow">अनुमति दें</string>
+    <string name="perm_open_settings">सेटिंग खोलें</string>
+    <string name="settings_privacy_title">निजता</string>
+    <string name="setting_delete_photos_title">सहेजने के बाद लेबल की फ़ोटो मिटाएँ</string>
+    <string name="setting_delete_photos_subtitle">फ़ोटो आपके फ़ोन पर ही पढ़ी जाती है, तुरंत मिटाई जा सकती है</string>
+    <string name="privacy_policy_button">निजता नीति पढ़ें</string>
+    <string name="settings_data_title">डेटा</string>
+    <string name="delete_all_data">मेरा सारा डेटा मिटा दें</string>
+    <string name="delete_all_confirm_title">सब कुछ मिटा दें?</string>
+    <string name="delete_all_confirm_text">इससे मेडीमाइंडर से हर दवा और पूरा इतिहास हट जाएगा। इसे वापस नहीं लाया जा सकता।</string>
+    <string name="delete_all_confirm_button">सब कुछ मिटा दें</string>
+    <string name="settings_about_title">मेडीमाइंडर के बारे में</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_skip">छोड़ें</string>
+    <string name="onboarding_start">मेडीमाइंडर इस्तेमाल शुरू करें</string>
+    <string name="onboarding_welcome_title">दवा फिर कभी न भूलें</string>
+    <string name="onboarding_welcome_message">मेडीमाइंडर बिल्कुल सही समय पर, बड़े और साफ़ अक्षरों में याद दिलाता है। आपकी दवाओं की सूची फ़ोन में ही रहती है।</string>
+    <string name="onboarding_how_title">दवा जोड़ना आसान है</string>
+    <string name="onboarding_how_message">लेबल की फ़ोटो लें, जानकारी देख लें, बाक़ी काम हम कर देते हैं। चाहें तो सब कुछ खुद भी लिख सकते हैं।</string>
+    <string name="onboarding_permissions_title">दो छोटे स्विच</string>
+    <string name="onboarding_permissions_message">ये दो स्विच भरोसा दिलाते हैं कि फ़ोन सो रहा हो तब भी रिमाइंडर पहुँचेगा।</string>
+    <string name="onboarding_done_title">आप तैयार हैं</string>
+    <string name="onboarding_done_message">आज के पेज़ से पहली दवा जोड़ें। कभी मदद चाहिए हो तो सब कुछ सेटिंग से बदला जा सकता है।</string>
+
+    <!-- Notifications -->
+    <string name="channel_reminders_name">दवा के रिमाइंडर</string>
+    <string name="channel_reminders_desc">दवा लेने का समय होने पर रिमाइंडर दिखाता है</string>
+    <string name="channel_low_stock_name">दवा कम बची है</string>
+    <string name="channel_low_stock_desc">कोई दवा थोड़ी बचने पर बताता है</string>
+    <string name="channel_feedback_name">पक्का होना</string>
+    <string name="channel_feedback_desc">“ले लिया” दबाने पर चुपचाप पक्का करना</string>
+    <string name="notif_reminder_title">%1$s लेने का समय हुआ</string>
+    <string name="notif_reminder_fallback_text">ले लेने के बाद “ले लिया” दबाएँ।</string>
+    <string name="action_snooze">%1$d मिनट बाद</string>
+    <string name="notif_taken_title">लिया गया चिह्नित</string>
+    <string name="notif_taken_text">%1$s — बहुत बढ़िया।</string>
+    <string name="notif_low_stock_title">दवा ख़त्म होने वाली है</string>
+    <string name="notif_low_stock_text">%1$s सिर्फ़ %2$s बचा है।</string>
+    <plurals name="notif_low_stock_days">
+        <item quantity="one">%1$d दिन</item>
+        <item quantity="other">%1$d दिन</item>
+    </plurals>
+
+    <!-- Text to speech -->
+    <string name="tts_reminder_with_name">%1$s लेने का समय हुआ है।</string>
+    <string name="tts_reminder_generic">आपकी दवा लेने का समय हुआ है।</string>
+    <string name="tts_today_intro">आज आपकी दवाएँ:</string>
+    <string name="tts_dose_line">%1$s, %2$s बजे।</string>
+    <string name="tts_today_none_left">आज अब कोई दवा बाक़ी नहीं है।</string>
+    <string name="tts_voice_missing">आपके फ़ोन में इस भाषा की आवाज़ अभी नहीं है, इसलिए पढ़कर सुनाना चुप रह सकता है।</string>
+    <string name="tts_engine_missing">इस फ़ोन पर पढ़कर सुनाना संभव नहीं — कोई स्पीच इंजन नहीं मिला।</string>
+    <string name="tts_open_voice_settings">आवाज़ की सेटिंग खोलें</string>
+
+    <!-- PDF report -->
+    <string name="report_title">मेडीमाइंडर दवा रिपोर्ट</string>
+    <string name="report_generated">बनी: %1$s</string>
+    <string name="report_period">अवधि: %1$s से %2$s</string>
+    <string name="report_summary">लिए: %1$d · छूटे: %2$d · छोड़े: %3$d · पालन: %4$s</string>
+    <string name="report_by_medicine">दवा के हिसाब से</string>
+    <string name="report_by_day">पिछले 14 दिन</string>
+    <string name="report_col_medicine">दवा</string>
+    <string name="report_col_taken">लिए</string>
+    <string name="report_col_missed">छूटे</string>
+    <string name="report_col_skipped">छोड़े</string>
+    <string name="report_col_adherence">पालन</string>
+    <string name="report_day_counts">लिए %1$d · छूटे %2$d · छोड़े %3$d · %4$s</string>
+    <string name="report_disclaimer">यह रिपोर्ट मेडीमाइंडर ने बनाई है — उन रिमाइंडर से जिन्हें उपयोगकर्ता ने लिया, छूटा या छोड़ा गया चिह्नित किया। यह सिर्फ़ एक रिकॉर्ड है, चिकित्सा सलाह नहीं। “ज़रूरत पड़ने पर” चिह्नित खुराकें इसमें शामिल नहीं हैं।</string>
+
+    <!-- Privacy policy screen -->
+    <string name="privacy_title">निजता नीति</string>
+    <string name="privacy_intro">मेडीमाइंडर ऐसे बनाया गया है कि आपकी सेहत की जानकारी आपकी ही रहे। आपके डेटा का क्या होता है, वह आसान भाषा में यहाँ लिखा है।</string>
+    <string name="privacy_local_title">आपका डेटा आपके फ़ोन में ही रहता है</string>
+    <string name="privacy_local_body">आपकी दवाएँ, रिमाइंडर और इतिहास सिर्फ़ इसी फ़ोन में, एक कोडबद्ध (एन्क्रिप्टेड) डेटाबेस में रहते हैं। आपकी सेहत की जानकारी लेने वाला कोई सर्वर हमारे पास नहीं है।</string>
+    <string name="privacy_ocr_title">लेबल की फ़ोटो फ़ोन पर ही पढ़ी जाती है</string>
+    <string name="privacy_ocr_body">लेबल या पर्चा स्कैन करने पर फ़ोटो लेना और लिखाई पढ़ना — दोनों आपके फ़ोन पर ही होता है। एक फ़ोटो में कई दवाएँ हो सकती हैं — हर एक को अलग से पक्का करें, और चाहें तो जानकारी सहेजने के बाद फ़ोटो तुरंत मिटा सकते हैं।</string>
+    <string name="privacy_encryption_title">आपका डेटा कोडबद्ध है</string>
+    <string name="privacy_encryption_body">दवाओं का डेटाबेस एन्क्रिप्टेड है, जिसकी चाबी आपके फ़ोन का हार्डवेयर सिक्योरिटी मॉड्यूल सुरक्षित रखता है।</string>
+    <string name="privacy_network_title">बिल्कुल इंटरनेट नहीं</string>
+    <string name="privacy_network_body">मेडीमाइंडर को इंटरनेट की अनुमति ही नहीं है, इसलिए यह आपकी दवाएँ, फ़ोटो या इतिहास — कुछ भी किसी को नहीं भेज सकता। स्कैन किए नाम ठीक करने वाली दवाओं की सूची ऐप के अंदर ही रहती है और पूरी तरह ऑफ़लाइन काम करती है।</string>
+    <string name="privacy_no_tracking_title">न विज्ञापन, न ट्रैकिंग</string>
+    <string name="privacy_no_tracking_body">मेडीमाइंडर में कोई विज्ञापन, एनालिटिक्स या तीसरे पक्ष का ट्रैकर नहीं है। कोई नहीं देख रहा कि आप क्या कर रहे हैं।</string>
+    <string name="privacy_backup_title">अपने-आप क्लाउड बैकअप नहीं</string>
+    <string name="privacy_backup_body">जब तक आप खुद निर्यात न करें, आपका डेटा किसी क्लाउड पर बैकअप नहीं होता। ऐप मिटाने पर डेटा भी चला जाएगा — चिंता हो तो अपनी निर्यातित फ़ाइल संभालकर रखें।</string>
+    <string name="privacy_disclaimer_title">याद दिलाने वाला साथी, डॉक्टर नहीं</string>
+    <string name="privacy_disclaimer_body">मेडीमाइंडर चिकित्सा सलाह नहीं देता और कभी खुराक बदलने की बात नहीं कहता। दवाओं के किसी भी सवाल के लिए हमेशा डॉक्टर या केमिस्ट से पूछें।</string>
+</resources>

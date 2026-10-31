@@ -31,20 +31,33 @@ class Converters {
     fun dayOfWeekSetToString(value: Set<DayOfWeek>?): String? =
         value?.joinToString(",") { it.name }
 
+    /**
+     * Never returns null: the schedule entity declares `daysOfWeek` as a
+     * non-null set (schedules like EVERY_DAY or AS_NEEDED have none). A null
+     * result would crash Room's relation mapping with
+     * "Expected NON-NULL 'java.util.Set<java.time.DayOfWeek>'".
+     */
     @TypeConverter
-    fun stringToDayOfWeekSet(value: String?): Set<DayOfWeek>? =
+    fun stringToDayOfWeekSet(value: String?): Set<DayOfWeek> =
         value?.takeIf { it.isNotBlank() }
             ?.split(",")
-            ?.map { DayOfWeek.valueOf(it.trim()) }
+            ?.mapNotNull { token ->
+                runCatching { DayOfWeek.valueOf(token.trim()) }.getOrNull()
+            }
             ?.toSet()
+            ?: emptySet()
 
     @TypeConverter
     fun localTimeListToString(value: List<LocalTime>?): String? =
         value?.joinToString(",") { it.toString() }
 
+    /** Never returns null — see [stringToDayOfWeekSet]. */
     @TypeConverter
-    fun stringToLocalTimeList(value: String?): List<LocalTime>? =
+    fun stringToLocalTimeList(value: String?): List<LocalTime> =
         value?.takeIf { it.isNotBlank() }
             ?.split(",")
-            ?.map { LocalTime.parse(it.trim()) }
+            ?.mapNotNull { token ->
+                runCatching { LocalTime.parse(token.trim()) }.getOrNull()
+            }
+            ?: emptyList()
 }

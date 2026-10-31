@@ -89,6 +89,38 @@ adb shell dumpsys deviceidle unforce
 - ☐ `adb backup`/cloud backup contains no app data (`allowBackup=false`).
 - ☐ App-private photo directory contains no leftover label photos when deletion is enabled.
 
-## 13. Regression quick-pass
+## 13. Languages
+- ☐ Settings → Language → বাংলা: the whole app (nav, Today, add wizard, scan
+      flow, settings, dialogs) switches instantly, no restart needed. ✅ no
+      English left anywhere (except brand "MediMinder" and "PDF").
+- ☐ Same for हिन्दी, Español, Français, العربية, Português, and back to
+      "My phone's language".
+- ☐ Arabic: the layout mirrors right-to-left (icons, back arrow, chips),
+      text is right-aligned, nothing overlaps.
+- ☐ Kill the app process, let a reminder fire: the **notification** is in the
+      chosen language on Android 8–12 too (adb: `adb shell am kill com.mediminder.app`).
+- ☐ After switching language, dates ("Friday, 31 October"), times and the
+      History calendar show in the app language.
+- ☐ PDF report exports with correctly shaped text in Bangla/Hindi/Arabic
+      (conjuncts/ligatures render, no boxes), and the table columns align.
+- ☐ `python3 tools/check_translations.py` → "All translations consistent."
+- ☐ Known limitation: notification channel names in Android Settings keep
+      the language of the very first launch (Android ignores channel renames).
+
+## 14. Read aloud (text-to-speech)
+- ☐ Today screen → "Read today's plan aloud": engine is pre-warmed, speech
+      starts immediately and lists upcoming doses with times. ✅ speaks on the
+      first tap, not the second.
+- ☐ All doses already taken → the button says "no more medicines to take
+      today" instead of staying silent.
+- ☐ With the app in Bangla (and a bn voice installed): speech is Bangla.
+- ☐ With the app in Bangla but **no** bn voice installed: a short red hint
+      appears under the button with "Open voice settings" (no crash, no
+      silence). ✅ the hint disappears after installing the voice and returning.
+- ☐ Settings → "Read reminders aloud" ON → open a reminder from the
+      notification: the medicine name is spoken.
+- ☐ Airplane mode: TTS works fully offline (system voices are on-device).
+
+## 15. Regression quick-pass
 - ☐ `./gradlew :app:testDebugUnitTest :app:lintDebug` green.
 - ☐ Rotate/force-stop/resume during the add flow does not lose entered data (Process Death not covered by VM state persistence is a known gap — verify acceptable).

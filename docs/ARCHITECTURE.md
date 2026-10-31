@@ -79,6 +79,34 @@ Sweep (`MarkMissedDosesUseCase`, cutoff = whole chain + 5 min buffer) runs at
 app open, in the maintenance worker and after device events, catching
 anything the alarm chain could not deliver (device off, force-stopped).
 
+## Localization & the reminder text
+
+Per-app language (7 locales, `values-*/strings.xml`) is applied with
+`AppCompatDelegate.setApplicationLocales` and stored both by AppCompat
+(`autoStoreLocales`) and in DataStore (`ReminderSettings.languageTag`).
+
+Two Android quirks drive the design:
+
+- On API < 33 the **application context does not follow per-app locales**, so
+  everything outside the Activity — notification receivers, workers, the PDF
+  report — resolves strings through `Context.withAppLanguage(languageTag)`
+  (`util/AppLocales.kt`). `ReminderTrigger` / `ReminderActionReceiver` /
+  `MaintenanceWorker` load the tag from DataStore before showing anything,
+  which is why reminders arrive in the chosen language even when the app
+  process cold-starts from an alarm.
+- On API < 33 `Locale.getDefault()` is the *system* locale, so all UI-facing
+  date/time formatters go through `appLocale()` instead.
+
+Text-to-speech (`tts/ReminderSpeaker.kt`) is created when the Today screen
+appears (not on the first tap — engines bind asynchronously and speaking too
+early silently fails), always calls `setLanguage(appLocale())`, retries the
+first utterance once, and exposes a `SpeakerState` flow
+(READY / LANGUAGE_MISSING / FAILED) that the Today screen surfaces as a hint
+with a shortcut to the system voice settings.
+
+The PDF report draws through `StaticLayout` (not `Canvas.drawText`), because
+Bangla, Hindi and Arabic require text shaping for conjuncts and ligatures.
+
 ## Scan & parsing pipeline (photo → confirmed medicine)
 
 Prescriptions commonly contain **several medicines**; one photo yields one

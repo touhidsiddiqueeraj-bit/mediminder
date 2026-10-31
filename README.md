@@ -26,6 +26,7 @@ text, and keeps a shareable adherence history.
 - [Screenshots](#screenshots)
 - [How label scanning works](#how-label-scanning-works)
 - [Features](#features)
+- [Languages](#languages)
 - [Tech stack](#tech-stack)
 - [Project structure](#project-structure)
 - [Getting started](#getting-started)
@@ -49,8 +50,8 @@ text, and keeps a shareable adherence history.
 
 | Add manually — step 2 of 3 | History & reports | Reliability dashboard |
 | :---: | :---: | :---: |
-| <img src="docs/screenshots/add-medication.png" width="270" alt="Add medicine wizard, schedule step with frequency cards and reminder times"> | <img src="docs/screenshots/history.png" width="270" alt="History screen with weekly bar chart, month calendar and PDF export button"> | <img src="docs/screenshots/settings.png" width="270" alt="Settings screen with reminder steppers and green permission status cards"> |
-| Big radio cards and time pickers — no fiddly dropdowns. | Weekly adherence, a month calendar, and a **PDF report** to share with the doctor. | Every permission that could delay a reminder, with a green tick when healthy. |
+| <img src="docs/screenshots/add-medication.png" width="270" alt="Add medicine wizard, schedule step with frequency cards and reminder times"> | <img src="docs/screenshots/history.png" width="270" alt="History screen with weekly bar chart, month calendar and PDF export button"> | <img src="docs/screenshots/settings.png" width="270" alt="Settings screen with language chips, reminder steppers and green permission status cards"> |
+| Big radio cards and time pickers — no fiddly dropdowns. | Weekly adherence, a month calendar, and a **PDF report** to share with the doctor. | Seven languages, one tap away — plus every permission that could delay a reminder, with a green tick when healthy. |
 
 <p align="center">
   <img src="docs/screenshots/notification.png" width="300" alt="Lock screen showing the MediMinder reminder notification with Taken, Snooze 10 min and Skip actions"><br>
@@ -99,7 +100,36 @@ form **with the photo attached**.
 | **Today screen** | Doses grouped Morning/Afternoon/Evening/Night with status chips and one-tap "Taken". Low-stock banners ("Only 3 days of Metformin left"). Optional voice read-out (TTS). |
 | **History & reports** | Month calendar with per-day adherence, weekly summary, per-medicine stats, and an exportable **PDF report** for the doctor. |
 | **Safety** | Warns when a new medicine shares an active ingredient with an existing one. Visible disclaimer everywhere. |
+| **Languages** | The whole app speaks **English, বাংলা (Bangla), हिन्दी (Hindi), Español, Français, العربية (Arabic) and Português** — switchable in Settings with instant effect. The read-aloud voice follows the chosen language. |
 | **Privacy** | All data in an **encrypted** database (SQLCipher + Android Keystore). Photos stay on the device and can be deleted right after extraction. No analytics, no tracking, no cloud backup by default. |
+
+## Languages
+
+MediMinder ships full translations (every screen, notification and spoken
+sentence) for seven languages:
+
+| Code | Language | Native name |
+| --- | --- | --- |
+| `en` | English | English (default) |
+| `bn` | Bangla | বাংলা |
+| `hi` | Hindi | हिन्दी |
+| `es` | Spanish | Español |
+| `fr` | French | Français |
+| `ar` | Arabic (RTL) | العربية |
+| `pt` | Portuguese | Português |
+
+**How to switch:** Settings → Language → tap a chip. The whole app changes
+immediately (on Android 13+ the language can also be set from the system's
+per-app language picker, and Arabic mirrors the entire layout right-to-left).
+
+Implementation notes:
+
+- Per-app languages are applied with **AndroidX `AppCompatDelegate.setApplicationLocales`** — one code path for Android 8–12 (AppCompat backport) and Android 13+ (framework `LocaleManager`).
+- The choice is also stored in DataStore, because on Android 8–12 the application context (used by notification receivers, workers and the PDF report) does **not** follow per-app locales — `Context.withAppLanguage()` re-applies it there, so reminders arrive in the user's language even when the app process was never opened.
+- Date/time formatting goes through `appLocale()` (`util/AppLocales.kt`) for the same reason.
+- Text-to-speech sets its language explicitly; if no voice is installed for the chosen language, the Today screen shows a hint with a shortcut to the system voice settings instead of failing silently.
+- Notification **channel names** are a snapshot taken at creation (an Android limitation) — they keep the language of the first launch until the app is reinstalled; everything else re-translates instantly.
+- Consistency of all translation files (key parity, format arguments, plural rules, apostrophe escaping) is machine-checked: `python3 tools/check_translations.py`.
 
 ## Tech stack
 
@@ -109,7 +139,8 @@ form **with the photo attached**.
 - **CameraX** + **ML Kit Text Recognition** (on-device, bundled Latin model)
 - **AlarmManager** (exact) + **WorkManager** fallback, **NotificationCompat**
 - **DataStore** preferences, **kotlinx.serialization** (dictionary asset)
-- **Coil** for photo display, custom **PdfDocument** report generator
+- **Coil** for photo display, custom **PdfDocument** report generator (StaticLayout-based, so Bangla/Hindi/Arabic text renders correctly in the PDF)
+- **AndroidX AppCompat** per-app language backport (7 UI languages, RTL support)
 
 ## Project structure
 
@@ -134,7 +165,8 @@ app/src/main/java/com/mediminder/app/
 ├── scheduling/                # AlarmScheduler, ReminderPlanner, ReminderTrigger,
 │                              # Boot/Timezone/Update receiver, Maintenance + SafetyNet workers
 ├── notifications/             # channels + NotificationHelper
-├── tts/                       # optional voice readout
+├── tts/                       # optional voice readout (language-aware, failure-surfacing)
+├── util/                      # appLocale(), withAppLanguage() context helper
 ├── ui/                        # Compose: theme, components, navigation, screens
 └── di/                        # Hilt modules
 ```
@@ -175,6 +207,9 @@ offline-first.
 
 # Static analysis
 ./gradlew :app:lintDebug
+
+# Translation consistency (key parity, format args, plurals, escaping)
+python3 tools/check_translations.py
 ```
 
 The parser test suite covers the label formats named in the spec

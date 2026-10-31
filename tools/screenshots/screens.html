@@ -494,9 +494,19 @@ svg { display:block; }
       <svg style="width:24px;height:13px" viewBox="0 0 24 13"><rect x="0.5" y="0.5" width="19" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="2.5" y="2.5" width="13" height="8" rx="1.8" fill="currentColor"/><rect x="21" y="4" width="2.4" height="5" rx="1.2" fill="currentColor"/></svg>
     </span>
   </div>
-  <div class="scr">
-    <div style="font-size:28px;font-weight:700">Settings</div>
-    <div class="card" style="display:flex;flex-direction:column;gap:8px">
+  <div class="scr" style="gap:10px">
+    <div style="font-size:26px;font-weight:700">Settings</div>
+    <div class="card" style="display:flex;flex-direction:column;gap:8px;padding:12px 16px">
+      <div class="card-title" style="margin-bottom:0">Language</div>
+      <div style="display:flex;gap:8px">
+        <span style="border:2px solid var(--primary);border-radius:10px;padding:7px 11px;font-size:15px;font-weight:600;background:var(--primcont);color:var(--onprimcont);white-space:nowrap">English</span>
+        <span style="border:1px solid var(--outvar);border-radius:10px;padding:7px 11px;font-size:15px;color:var(--on);white-space:nowrap">বাংলা</span>
+        <span style="border:1px solid var(--outvar);border-radius:10px;padding:7px 11px;font-size:15px;color:var(--on);white-space:nowrap">हिन्दी</span>
+        <span style="border:1px solid var(--outvar);border-radius:10px;padding:7px 11px;font-size:15px;color:var(--on);white-space:nowrap">Español</span>
+      </div>
+      <div style="font-size:14px;color:var(--onvar)">The whole app changes right away.</div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:7px">
       <div class="card-title" style="margin-bottom:2px">Reminders</div>
       <div class="steprow"><span class="lbl">Snooze length</span>
         <span class="stepbtn"><svg class="ic"><use href="#i-rem"/></svg></span><span class="stepval">10 min</span><span class="stepbtn"><svg class="ic"><use href="#i-add"/></svg></span></div>
@@ -507,7 +517,7 @@ svg { display:block; }
     </div>
     <div class="card" style="background:var(--surface)">
       <div class="card-title">Important for reliable reminders</div>
-      <div style="font-size:16px;color:var(--onvar);line-height:1.4;margin-bottom:12px">Please make sure all of these show a green tick. If a reminder is ever missed, it is almost always one of these.</div>
+      <div style="font-size:15px;color:var(--onvar);line-height:1.4;margin-bottom:8px">All of these should show a green tick.</div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <div class="perm"><svg class="ic"><use href="#i-okc"/></svg>
           <div><div class="t">Notifications</div><div class="s">On — reminders can be shown</div></div></div>
@@ -515,8 +525,6 @@ svg { display:block; }
           <div><div class="t">Exact alarms</div><div class="s">On — reminders arrive on time</div></div></div>
         <div class="perm"><svg class="ic"><use href="#i-okc"/></svg>
           <div><div class="t">Battery saving</div><div class="s">This app is exempt — reminders always fire</div></div></div>
-        <div class="perm"><svg class="ic"><use href="#i-okc"/></svg>
-          <div><div class="t">Full-screen reminder</div><div class="s">On — reminders show over the lock screen</div></div></div>
       </div>
     </div>
   </div>

@@ -21,8 +21,8 @@ from pathlib import Path
 
 RES = Path(__file__).resolve().parents[1] / "app/src/main/res"
 
-# Keys that are intentionally not translated (brand name).
-SKIP_KEYS = {"app_name"}
+# Keys that are intentionally not translated (brand name, brand + version line).
+SKIP_KEYS = {"app_name", "settings_version_line"}
 
 # Valid Android plural categories.
 VALID_CATEGORIES = {"zero", "one", "two", "few", "many", "other"}

@@ -42,6 +42,7 @@ import com.mediminder.app.ui.components.ConfirmDialog
 import com.mediminder.app.ui.components.PermissionStatusCard
 import com.mediminder.app.ui.components.SectionCard
 import com.mediminder.app.ui.components.SelectionCard
+import android.content.pm.PackageManager
 import com.mediminder.app.ui.components.Stepper
 import androidx.lifecycle.Lifecycle
 
@@ -251,11 +252,30 @@ fun SettingsScreen(
                     stringResource(R.string.disclaimer_long),
                     style = MaterialTheme.typography.bodyMedium,
                 )
-                Text(
-                    "MediMinder 1.0.0",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+                // Read from PackageManager so this line can never drift from the
+                // version the user actually has installed.
+                val versionName = remember(context) {
+                    val pm = context.packageManager
+                    val info = runCatching {
+                        if (android.os.Build.VERSION.SDK_INT >= 33) {
+                            pm.getPackageInfo(
+                                context.packageName,
+                                PackageManager.PackageInfoFlags.of(0),
+                            )
+                        } else {
+                            @Suppress("DEPRECATION")
+                            pm.getPackageInfo(context.packageName, 0)
+                        }
+                    }.getOrNull()
+                    info?.versionName
+                }
+                if (!versionName.isNullOrBlank()) {
+                    Text(
+                        stringResource(R.string.settings_version_line, versionName),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
         }
     }

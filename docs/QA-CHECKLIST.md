@@ -123,4 +123,5 @@ adb shell dumpsys deviceidle unforce
 
 ## 15. Regression quick-pass
 - ☐ `./gradlew :app:testDebugUnitTest :app:lintDebug` green.
+- ☐ Settings → About shows the installed version (e.g. `MediMinder 1.1.1`) and it matches Android Settings → Apps → MediMinder (the line is read from PackageManager, never hardcoded).
 - ☐ Rotate/force-stop/resume during the add flow does not lose entered data (Process Death not covered by VM state persistence is a known gap — verify acceptable).

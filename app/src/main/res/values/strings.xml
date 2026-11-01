@@ -212,6 +212,8 @@
     <string name="delete_all_confirm_text">This removes every medicine and all history from MediMinder. This cannot be undone.</string>
     <string name="delete_all_confirm_button">Delete everything</string>
     <string name="settings_about_title">About MediMinder</string>
+    <!-- Brand name + version number, identical in every language. -->
+    <string name="settings_version_line" translatable="false">MediMinder %1$s</string>
 
     <!-- Onboarding -->
     <string name="onboarding_skip">Skip</string>

@@ -199,6 +199,8 @@
     <string name="perm_fullscreen_missing">बंद — रिमाइंडर सिर्फ़ छोटे बैनर में दिखेगा</string>
     <string name="perm_allow">अनुमति दें</string>
     <string name="perm_open_settings">सेटिंग खोलें</string>
+    <string name="settings_channel_sound_title">रिमाइंडर की आवाज़ और बैनर</string>
+    <string name="settings_channel_sound_hint">दवा रिमाइंडर का सिस्टम पेज खोलता है। दूसरे ऐप में काम करते समय रिमाइंडर चुप रहे, तो यहाँ जाँचें कि Sound और Banner चालू हों।</string>
     <string name="settings_privacy_title">निजता</string>
     <string name="setting_delete_photos_title">सहेजने के बाद लेबल की फ़ोटो मिटाएँ</string>
     <string name="setting_delete_photos_subtitle">फ़ोटो आपके फ़ोन पर ही पढ़ी जाती है, तुरंत मिटाई जा सकती है</string>

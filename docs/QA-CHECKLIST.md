@@ -132,6 +132,18 @@ adb shell dumpsys deviceidle unforce
       and giant Taken / Snooze / Skip buttons (no unlock needed).
 - ☐ Screen on and unlocked: a heads-up notification appears; **tapping it**
       opens the same full-screen reminder.
+- ☐ **While using another app** (screen on, unlocked, MediMinder in the
+      background): Android never lets us take over the screen — the reminder
+      arrives as a **loud heads-up banner**: chime (alarm volume), vibration,
+      medicine name + dosage, and Taken / Snooze / Skip buttons directly on
+      the banner. With "Read reminders aloud" on, the phone also **speaks
+      the line** at the fire moment.
+- ☐ Update from ≤ 1.2.0: the first reminder after the update still rings
+      (the channel moved to "reminders_v2" on the alarm stream; the old
+      "reminders" channel is gone from Android's notification settings).
+- ☐ Settings → Permissions → "Reminder sound & banner" opens the system
+      page of the reminders channel, where Sound and Banner can be checked
+      (needed on OEM skins that turn "Banner" off per app).
 - ☐ "Taken" on the full-screen screen: screen closes, dose shows as taken
       in Today, the quiet confirmation notification appears, pill count
       decrements (same result as the notification button).
@@ -146,8 +158,9 @@ adb shell dumpsys deviceidle unforce
 - ☐ Android 14+: Settings → Permissions card "Show reminders full screen"
       opens the dedicated full-screen-intent grant screen; with it denied,
       reminders still arrive as heads-up notifications.
-- ☐ With "Read reminders aloud" ON, opening the full-screen reminder speaks
-      the medicine name once (not once per re-remind).
+- ☐ With "Read reminders aloud" ON, a firing reminder speaks the medicine
+      name once — including while another app is in the foreground and no
+      full-screen screen ever opens (not once per re-remind).
 
 ## 16. Regression quick-pass
 - ☐ `./gradlew :app:testDebugUnitTest :app:lintDebug` green.

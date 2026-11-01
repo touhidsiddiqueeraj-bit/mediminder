@@ -41,7 +41,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.mediminder.app.R
 import com.mediminder.app.domain.model.Medication
@@ -57,8 +56,6 @@ import com.mediminder.app.ui.components.BigButton
 import com.mediminder.app.ui.components.BigOutlinedButton
 import com.mediminder.app.ui.components.timeFormatter
 import com.mediminder.app.ui.theme.MediMinderTheme
-import com.mediminder.app.tts.ReminderSpeaker
-import com.mediminder.app.util.appLocale
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -165,22 +162,16 @@ class FullScreenReminderViewModel @Inject constructor(
  * Unlike the old behaviour — which cold-started the whole app over the lock
  * screen — this screen shows exactly one thing: the medicine that is due,
  * with three giant buttons. It turns the screen on, shows over the lock
- * screen, never lets the display sleep while visible, and optionally speaks
- * the reminder. All writes go through the same use cases the notification
- * buttons use, so behaviour stays identical across both entry points.
+ * screen and never lets the display sleep while visible. The spoken line
+ * happens once at the fire moment in ReminderTrigger (so it also plays when
+ * the user is in another app and only a banner appears). All writes go
+ * through the same use cases the notification buttons use, so behaviour
+ * stays identical across both entry points.
  */
 @AndroidEntryPoint
 class FullScreenReminderActivity : AppCompatActivity() {
 
     private val viewModel: FullScreenReminderViewModel by viewModels()
-
-    @Inject
-    lateinit var settingsRepository: SettingsRepository
-
-    private lateinit var speaker: ReminderSpeaker
-
-    /** One spoken line per dose, so re-reminders do not repeat themselves. */
-    private var spokenDoseId = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -199,11 +190,6 @@ class FullScreenReminderActivity : AppCompatActivity() {
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-        // Warm the engine immediately: speech must not race the TTS binding.
-        speaker = ReminderSpeaker(this)
-        speaker.language(appLocale())
-        speaker.init()
-
         loadDoseFrom(intent)
         setContent {
             val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
@@ -211,11 +197,6 @@ class FullScreenReminderActivity : AppCompatActivity() {
             val state by viewModel.state.collectAsStateWithLifecycle()
 
             LaunchedEffect(state) {
-                val content = (state as? ReminderUiState.Content)?.content
-                    ?: (state as? ReminderUiState.AlreadyDone)?.content
-                if (content != null) {
-                    maybeSpeakReminder(content.medication?.name, content.dose.id)
-                }
                 if (state is ReminderUiState.Done) finish()
             }
 
@@ -240,32 +221,9 @@ class FullScreenReminderActivity : AppCompatActivity() {
         loadDoseFrom(intent)
     }
 
-    override fun onDestroy() {
-        speaker.shutdown()
-        super.onDestroy()
-    }
-
     private fun loadDoseFrom(intent: Intent?) {
         val doseId = intent?.getLongExtra(EXTRA_DOSE_ID, -1L) ?: -1L
         viewModel.load(doseId)
-    }
-
-    /** Same speech logic as the in-app reminder path: only when enabled. */
-    private fun maybeSpeakReminder(medicationName: String?, doseId: Long) {
-        if (spokenDoseId == doseId) return
-        spokenDoseId = doseId
-        lifecycleScope.launch {
-            val settings = settingsRepository.current()
-            if (!settings.ttsEnabled) return@launch
-            speaker.language(appLocale())
-            speaker.init()
-            val text = if (medicationName != null) {
-                getString(R.string.tts_reminder_with_name, medicationName)
-            } else {
-                getString(R.string.tts_reminder_generic)
-            }
-            speaker.speak(text)
-        }
     }
 
     companion object {

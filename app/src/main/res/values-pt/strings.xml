@@ -199,6 +199,8 @@
     <string name="perm_fullscreen_missing">Desativado — os lembretes aparecem só como um aviso pequeno</string>
     <string name="perm_allow">Permitir</string>
     <string name="perm_open_settings">Abrir ajustes</string>
+    <string name="settings_channel_sound_title">Som e faixa dos lembretes</string>
+    <string name="settings_channel_sound_hint">Abre a página do sistema dos lembretes de remédios. Se um lembrete chegar sem som enquanto você usa outro aplicativo, verifique aqui se Som e Faixa (Banner) estão ativados.</string>
     <string name="settings_privacy_title">Privacidade</string>
     <string name="setting_delete_photos_title">Apagar as fotos de etiquetas depois de salvar</string>
     <string name="setting_delete_photos_subtitle">As fotos são lidas no seu telefone e podem ser apagadas logo em seguida</string>

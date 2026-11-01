@@ -69,6 +69,7 @@ ReminderAlarmReceiver → ReminderTrigger.fire(doseId)
   ├─ attempts ≥ max → mark MISSED + DoseEventListener hook
   └─ else → NotificationHelper.showDoseReminder()
              attempts += 1, re-arm at t₀ + interval  ──► repeats
+             ReminderAnnouncer.announce() (if TTS on, best-effort)
 Notification actions → ReminderActionReceiver
   Taken  → MarkDoseUseCase (TAKEN, decrement pills, cancel alarms)
   Snooze → SnoozeDoseUseCase (status SNOOZED, alarm +minutes)
@@ -86,16 +87,35 @@ content intent and as its **full-screen intent**. Both point at
 `FullScreenReminderActivity` — a dedicated, lock-screen-capable screen
 (`showWhenLocked`, `turnScreenOn`, `FLAG_KEEP_SCREEN_ON`, `excludeFromRecents`,
 `singleTop` + empty taskAffinity so re-reminds reload it instead of stacking).
-When the screen is on and unlocked Android shows the heads-up notification
-instead; tapping it opens the same screen.
+When the screen is on and the user is actively using the device, Android
+shows the heads-up notification instead (platform rule: only the default
+phone app may take over an in-use screen); tapping it opens the same screen.
+That heads-up is therefore a first-class surface: alarm category, max
+priority, the chime on the **alarm stream** and the three action buttons.
+
+Channel note: since v1.2.1 the channel is `reminders_v2` (alarm stream;
+the pre-1.2.1 `reminders` channel on the notification stream is deleted on
+startup — channel settings are frozen at creation, so a new id was the only
+way to change streams and to reset channel states that OEM skins or users
+had silenced). Settings → Permissions links to the channel's system page so
+Sound/Banner can be verified on any device.
 
 Its UI runs on a pure reducer (`ui/reminder/ReminderUiState.kt`, unit-tested):
 Loading → Content / AlreadyDone → Acting → Done. The reducer refuses a second
 `ActionStarted` while a write is in flight (double-tap guard) and puts the
 screen back to Content on failure so nothing is silently lost. The three
 buttons call the same `MarkDoseUseCase` / `SnoozeDoseUseCase` the notification
-actions use, so both entry points behave identically. Speech on open reuses
-`ReminderSpeaker`, once per dose id (re-reminds do not repeat the line).
+actions use, so both entry points behave identically.
+
+### Spoken reminders
+
+`ReminderAnnouncer` (called at the end of `ReminderTrigger.fire()`) speaks the
+localized reminder line **at the fire moment** through `ReminderSpeaker`, so
+the voice also plays when the user is in another app and only the heads-up
+banner appears. It is strictly best-effort: missing engine/language/hung
+engine return within a capped budget and never block the notification chain.
+The full-screen screen itself stays silent (it would double-speak with the
+trigger on the lock-screen path).
 
 On Android 14+ the full-screen-intent permission is denied by default; the
 Settings permission card links to

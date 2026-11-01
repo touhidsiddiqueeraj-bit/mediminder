@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.FilterChip
@@ -32,12 +34,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.BatteryFull
+import androidx.compose.material.icons.filled.Campaign
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material.icons.filled.RecordVoiceOver
 import androidx.compose.material.icons.filled.Security
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
+import androidx.compose.material3.TextButton
 import com.mediminder.app.R
 import com.mediminder.app.domain.repository.ThemeMode
 import com.mediminder.app.ui.components.BigButton
@@ -268,6 +274,16 @@ fun SettingsScreen(
                         onAction = { openFullScreenIntentSettings(context) },
                     )
                 }
+                // Not a permission: the reminder channel's own Sound and
+                // Banner switches. They decide whether a reminder that
+                // arrives while the user is in another app is heard and
+                // seen, and no in-app toggle can force them on.
+                ReminderChannelCard(
+                    title = stringResource(R.string.settings_channel_sound_title),
+                    hint = stringResource(R.string.settings_channel_sound_hint),
+                    actionLabel = stringResource(R.string.perm_open_settings),
+                    onAction = { openReminderChannelSettings(context) },
+                )
             }
         }
 
@@ -398,4 +414,48 @@ private fun VoiceStatusText(text: String) {
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
+}
+
+/**
+ * Neutral sibling of [PermissionStatusCard]: opens the system page of the
+ * medicine-reminder channel, where Sound and Banner are switched on or off.
+ */
+@Composable
+private fun ReminderChannelCard(
+    title: String,
+    hint: String,
+    actionLabel: String,
+    onAction: () -> Unit,
+) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.surfaceVariant,
+    ) {
+        Row(
+            Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Campaign,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(28.dp),
+            )
+            Column(Modifier.weight(1f)) {
+                Text(
+                    title,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    hint,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            TextButton(onClick = onAction) { Text(actionLabel) }
+        }
+    }
 }

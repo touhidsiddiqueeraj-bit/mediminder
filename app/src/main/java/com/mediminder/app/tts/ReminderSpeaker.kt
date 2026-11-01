@@ -3,11 +3,16 @@ package com.mediminder.app.tts
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
 import com.mediminder.app.util.appLocale
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withTimeoutOrNull
 import java.util.Locale
 
 /** What the speaker can currently do. */
@@ -108,6 +113,52 @@ class ReminderSpeaker(context: Context) {
         retryPending = false
         _state.value = SpeakerState.WARMING_UP
     }
+
+    /**
+     * Speaks [text] and suspends until the utterance finished (or failed).
+     *
+     * For background callers (the reminder trigger): the broadcast window is
+     * ~10 s, so every step is capped by [timeoutMs] and gives up instead of
+     * blocking. A missing engine, a missing language or a hung engine returns
+     * quietly — the notification is the critical path, speech is not.
+     */
+    suspend fun speakAwaitingDone(text: String, timeoutMs: Long = 7_000L) {
+        val utterance = text.trim()
+        if (utterance.isEmpty()) return
+        val deadline = SystemClock.elapsedRealtime() + timeoutMs
+
+        init()
+        // Binding to the engine is asynchronous; wait for a definite state.
+        val engineState = withTimeoutOrNull(remaining(deadline)) {
+            state.first { it != SpeakerState.WARMING_UP }
+        } ?: return
+        if (engineState != SpeakerState.READY) return
+
+        val current = engine ?: return
+        applyLanguage()
+        val finished = CompletableDeferred<Boolean>()
+        current.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+            override fun onStart(id: String?) = Unit
+            override fun onDone(id: String?) {
+                if (id == UTTERANCE_ID) finished.complete(true)
+            }
+
+            @Deprecated("Deprecated in Java")
+            override fun onError(id: String?) {
+                if (id == UTTERANCE_ID) finished.complete(false)
+            }
+
+            override fun onError(id: String?, errorCode: Int) {
+                if (id == UTTERANCE_ID) finished.complete(false)
+            }
+        })
+        val accepted = current.speak(utterance, TextToSpeech.QUEUE_FLUSH, null, UTTERANCE_ID)
+        if (accepted == TextToSpeech.ERROR) return
+        withTimeoutOrNull(remaining(deadline)) { finished.await() }
+    }
+
+    private fun remaining(deadline: Long): Long =
+        (deadline - SystemClock.elapsedRealtime()).coerceAtLeast(1L)
 
     private fun applyLanguage() {
         val current = engine ?: return

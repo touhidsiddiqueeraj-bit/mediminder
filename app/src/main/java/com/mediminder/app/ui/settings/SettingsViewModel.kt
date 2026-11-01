@@ -175,6 +175,23 @@ fun openAppNotificationSettings(context: Context) {
     runCatching { context.startActivity(intent) }
 }
 
+/**
+ * Opens the system page of the medicine-reminder channel itself, where
+ * Sound and Banner ("pop on screen") are controlled. Those two settings
+ * decide whether a reminder that arrives while the user is in another app
+ * is heard and seen — some OEM skins or tidy-up flows switch them off, and
+ * no in-app permission can force them back on. Falls back to the app's
+ * notification page if a device has no channel page.
+ */
+fun openReminderChannelSettings(context: Context) {
+    val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+        .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+        .putExtra(Settings.EXTRA_CHANNEL_ID, NotificationHelper.CHANNEL_REMINDERS)
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    runCatching { context.startActivity(intent) }
+        .onFailure { openAppNotificationSettings(context) }
+}
+
 fun openAppSettings(context: Context) {
     val intent = Intent(
         Settings.ACTION_APPLICATION_DETAILS_SETTINGS,

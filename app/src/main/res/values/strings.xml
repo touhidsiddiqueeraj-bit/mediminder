@@ -202,6 +202,8 @@
     <string name="perm_fullscreen_missing">Off — reminders only show as a small banner</string>
     <string name="perm_allow">Allow</string>
     <string name="perm_open_settings">Open settings</string>
+    <string name="settings_channel_sound_title">Reminder sound &amp; banner</string>
+    <string name="settings_channel_sound_hint">Opens the system page for medicine reminders, where Sound and Banner can be checked. If a reminder is silent while you use another app, this is where to fix it.</string>
     <string name="settings_privacy_title">Privacy</string>
     <string name="setting_delete_photos_title">Delete label photos after saving</string>
     <string name="setting_delete_photos_subtitle">Photos are read on your phone and can be removed right away</string>

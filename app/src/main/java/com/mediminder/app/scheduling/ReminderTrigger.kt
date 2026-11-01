@@ -8,6 +8,7 @@ import com.mediminder.app.domain.service.ClockProvider
 import com.mediminder.app.domain.service.DoseEventListener
 import com.mediminder.app.domain.service.ReRemindPolicy
 import com.mediminder.app.notifications.NotificationHelper
+import com.mediminder.app.tts.ReminderAnnouncer
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,6 +28,7 @@ class ReminderTrigger @Inject constructor(
     private val alarmScheduler: AlarmScheduler,
     private val clockProvider: ClockProvider,
     private val doseEventListener: DoseEventListener,
+    private val reminderAnnouncer: ReminderAnnouncer,
 ) {
     suspend fun fire(doseId: Long) {
         val dose = doseLogRepository.getDose(doseId)
@@ -69,6 +71,11 @@ class ReminderTrigger @Inject constructor(
         val nextAtMillis = clockProvider.clock.millis() +
             reRemindPolicy.nextReminderDelayMinutes(settings) * MILLIS_PER_MINUTE
         alarmScheduler.scheduleDoseReminder(doseId, medication.id, nextAtMillis)
+
+        // Said out loud at the fire moment — the user may be in another app,
+        // where Android only shows a banner and never our full-screen screen.
+        // Best-effort: never blocks the notification chain above.
+        reminderAnnouncer.announce(medication, settings.languageTag, settings.ttsEnabled)
     }
 
     private companion object {

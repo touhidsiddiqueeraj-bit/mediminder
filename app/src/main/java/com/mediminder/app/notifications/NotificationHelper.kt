@@ -56,10 +56,22 @@ class NotificationHelper @Inject constructor(
     fun ensureChannels(languageTag: String = "") {
         val strings = context.withAppLanguage(languageTag)
         val chime = Uri.parse("android.resource://${context.packageName}/${R.raw.reminder_chime}")
+        // Alarm stream, not the notification stream: reminders must be heard
+        // even when the notification volume is turned down, and users who
+        // allow alarms to ring in Do Not Disturb keep hearing them. Android
+        // freezes a channel's sound after creation, so moving streams requires
+        // the new channel id below.
         val audio = AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+            .setUsage(AudioAttributes.USAGE_ALARM)
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .build()
+
+        // v1.2.1: "reminders" (notification stream) -> "reminders_v2" (alarm
+        // stream). A new id is the only way to change the stream on phones
+        // that already have the old channel, and it also resets any state an
+        // OEM skin or a user may have silenced on it. The old channel is
+        // deleted so only one "Medicine reminders" entry remains in Settings.
+        notificationManager.deleteNotificationChannel(CHANNEL_REMINDERS_LEGACY)
 
         val reminders = NotificationChannel(
             CHANNEL_REMINDERS,
@@ -142,13 +154,21 @@ class NotificationHelper @Inject constructor(
         )
         val skipPi = actionPendingIntent(ReminderActionReceiver.ACTION_SKIP, doseId, 2)
 
+        // While the user is actively using another app, Android never lets a
+        // third-party app take over the screen: the full-screen intent only
+        // launches with the screen off or on the lock screen, and the system
+        // shows a heads-up banner instead otherwise (documented platform
+        // behaviour). That banner is therefore the "in another app" UX, and
+        // it must be loud and actionable: alarm category (also earns DND
+        // "alarms" treatment where the user allows it) and max priority so
+        // every OEM skin treats it as a peek banner, plus the actions below.
         val builder = NotificationCompat.Builder(context, CHANNEL_REMINDERS)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(title)
             .setContentText(details)
             .setStyle(NotificationCompat.BigTextStyle().bigText(details))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setCategory(NotificationCompat.CATEGORY_REMINDER)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setAutoCancel(true)
             .setOnlyAlertOnce(false) // every re-remind should alert again
@@ -253,7 +273,10 @@ class NotificationHelper @Inject constructor(
     }
 
     companion object {
-        const val CHANNEL_REMINDERS = "reminders"
+        const val CHANNEL_REMINDERS = "reminders_v2"
+
+        /** Pre-1.2.1 channel (notification stream); deleted on startup. */
+        private const val CHANNEL_REMINDERS_LEGACY = "reminders"
         const val CHANNEL_LOW_STOCK = "low_stock"
         const val CHANNEL_FEEDBACK = "feedback"
 

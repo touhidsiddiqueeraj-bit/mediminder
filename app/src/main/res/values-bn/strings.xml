@@ -199,6 +199,8 @@
     <string name="perm_fullscreen_missing">বন্ধ — রিমাইন্ডার শুধু ছোট ব্যানার হিসেবে দেখাবে</string>
     <string name="perm_allow">অনুমতি দিন</string>
     <string name="perm_open_settings">সেটিংস খুলুন</string>
+    <string name="settings_channel_sound_title">রিমাইন্ডারের শব্দ ও ব্যানার</string>
+    <string name="settings_channel_sound_hint">ওষুধের রিমাইন্ডারের সিস্টেম পেজ খোলে। অন্য অ্যাপ ব্যবহারের সময় রিমাইন্ডারে শব্দ না হলে এখানে Sound ও Banner চালু আছে কি না দেখুন।</string>
     <string name="settings_privacy_title">গোপনীয়তা</string>
     <string name="setting_delete_photos_title">সংরক্ষণের পর লেবেলের ছবি মুছে দিন</string>
     <string name="setting_delete_photos_subtitle">ছবি আপনার ফোনেই পড়া হয়, তারপর সাথে সাথে মুছে ফেলা যায়</string>

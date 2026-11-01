@@ -199,6 +199,8 @@
     <string name="perm_fullscreen_missing">معطّل — يظهر التذكير كشريط صغير فقط</string>
     <string name="perm_allow">السماح</string>
     <string name="perm_open_settings">فتح الإعدادات</string>
+    <string name="settings_channel_sound_title">صوت التنبيه ولافته</string>
+    <string name="settings_channel_sound_hint">يفتح صفحة النظام لتنبيهات الدواء. إذا وصل التنبيه صامتًا أثناء استخدامك تطبيقًا آخر، فتحقّق هنا من أن الصوت واللافتة (Banner) مُفعَّلان.</string>
     <string name="settings_privacy_title">الخصوصية</string>
     <string name="setting_delete_photos_title">حذف صور الملصقات بعد الحفظ</string>
     <string name="setting_delete_photos_subtitle">تُقرأ الصور على هاتفك ويمكن حذفها فورًا</string>

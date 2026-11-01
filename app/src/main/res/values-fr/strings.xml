@@ -199,6 +199,8 @@
     <string name="perm_fullscreen_missing">Désactivé — les rappels ne s\'affichent qu\'en petite bannière</string>
     <string name="perm_allow">Autoriser</string>
     <string name="perm_open_settings">Ouvrir les réglages</string>
+    <string name="settings_channel_sound_title">Son et bannière des rappels</string>
+    <string name="settings_channel_sound_hint">Ouvre la page système des rappels de médicaments. Si un rappel arrive en silence pendant que vous utilisez une autre application, vérifiez ici que Son et Bannière sont activés.</string>
     <string name="settings_privacy_title">Confidentialité</string>
     <string name="setting_delete_photos_title">Supprimer les photos d\'étiquettes après l\'enregistrement</string>
     <string name="setting_delete_photos_subtitle">Les photos sont lues sur votre téléphone et peuvent être effacées aussitôt</string>

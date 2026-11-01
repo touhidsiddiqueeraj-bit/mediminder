@@ -199,6 +199,8 @@
     <string name="perm_fullscreen_missing">Desactivado — los recordatorios solo aparecen como un aviso pequeño</string>
     <string name="perm_allow">Permitir</string>
     <string name="perm_open_settings">Abrir ajustes</string>
+    <string name="settings_channel_sound_title">Sonido y aviso de los recordatorios</string>
+    <string name="settings_channel_sound_hint">Abre la página del sistema para los recordatorios de medicamentos. Si un recordatorio llega en silencio mientras usas otra app, comprueba aquí que Sonido y Banner estén activados.</string>
     <string name="settings_privacy_title">Privacidad</string>
     <string name="setting_delete_photos_title">Borrar las fotos de etiquetas después de guardar</string>
     <string name="setting_delete_photos_subtitle">Las fotos se leen en su teléfono y se pueden borrar de inmediato</string>

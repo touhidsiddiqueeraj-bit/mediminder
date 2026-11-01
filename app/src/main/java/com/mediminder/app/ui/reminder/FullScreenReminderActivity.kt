@@ -121,7 +121,7 @@ class FullScreenReminderViewModel @Inject constructor(
 
     fun take() = act(ReminderAction.TAKEN)
     fun snooze() = act(ReminderAction.SNOOZE)
-    fun skip() = act(ReminderAction.SKIPPED)
+    fun skip() = act(ReminderAction.SKIP)
 
     private fun act(action: ReminderAction) {
         val doseId = loadingDoseId
@@ -143,7 +143,7 @@ class FullScreenReminderViewModel @Inject constructor(
                         val minutes = settingsRepository.current().snoozeMinutes
                         snoozeDoseUseCase(doseId, minutes)
                     }
-                    ReminderAction.SKIPPED -> markDoseUseCase(doseId, DoseOutcome.SKIPPED)
+                    ReminderAction.SKIP -> markDoseUseCase(doseId, DoseOutcome.SKIPPED)
                 }
                 _state.value = reduce(_state.value, ReminderEvent.ActionFinished)
             } catch (e: Exception) {

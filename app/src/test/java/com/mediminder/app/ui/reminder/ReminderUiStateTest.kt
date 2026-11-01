@@ -70,7 +70,7 @@ class ReminderUiStateTest {
             ReminderEvent.Loaded(content()),
         )
         state = reduce(state, ReminderEvent.ActionStarted(ReminderAction.TAKEN))
-        state = reduce(state, ReminderEvent.ActionStarted(ReminderAction.SKIPPED))
+        state = reduce(state, ReminderEvent.ActionStarted(ReminderAction.SKIP))
         assertTrue(state is ReminderUiState.Acting)
         assertEquals(ReminderAction.TAKEN, (state as ReminderUiState.Acting).action)
     }

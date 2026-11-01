@@ -254,6 +254,18 @@
     <string name="tts_voice_missing">لم يُثبَّت صوت لهذه اللغة على هاتفك بعد، فقد تبقى القراءة الصوتية صامتة.</string>
     <string name="tts_engine_missing">القراءة بصوت عالٍ غير ممكنة على هذا الهاتف — لم يُعثر على أي محرك نطق.</string>
     <string name="tts_open_voice_settings">فتح إعدادات الصوت</string>
+    <string name="tts_test_button">تجربة الصوت</string>
+    <string name="tts_test_sentence">هكذا ستبدو تنبيهاتك الصوتية.</string>
+    <string name="tts_status_ready">الصوت يعمل.</string>
+    <string name="tts_status_warming">جارٍ التحقق من الصوت…</string>
+    <string name="tts_install_engine">تثبيت محرك نطق</string>
+
+    <!-- Full-screen reminder -->
+    <string name="fullscreen_reminder_title">حان وقت تناول دوائك</string>
+    <string name="fullscreen_reminder_at">الوقت المحدد: %1$s</string>
+    <string name="fullscreen_loading">جارٍ تحميل دوائك…</string>
+    <string name="fullscreen_already_done">تم تسجيل هذه الجرعة بالفعل.</string>
+    <string name="fullscreen_close">إغلاق</string>
 
     <!-- PDF report -->
     <string name="report_title">تقرير أدوية ميدي مايندر</string>

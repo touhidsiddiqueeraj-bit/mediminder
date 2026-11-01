@@ -250,6 +250,18 @@
     <string name="tts_voice_missing">आपके फ़ोन में इस भाषा की आवाज़ अभी नहीं है, इसलिए पढ़कर सुनाना चुप रह सकता है।</string>
     <string name="tts_engine_missing">इस फ़ोन पर पढ़कर सुनाना संभव नहीं — कोई स्पीच इंजन नहीं मिला।</string>
     <string name="tts_open_voice_settings">आवाज़ की सेटिंग खोलें</string>
+    <string name="tts_test_button">आवाज़ आज़माएँ</string>
+    <string name="tts_test_sentence">आपके रिमाइंडर ऐसे सुनाई देंगे।</string>
+    <string name="tts_status_ready">आवाज़ काम कर रही है।</string>
+    <string name="tts_status_warming">आवाज़ की जाँच हो रही है…</string>
+    <string name="tts_install_engine">वॉइस इंजन इंस्टॉल करें</string>
+
+    <!-- Full-screen reminder -->
+    <string name="fullscreen_reminder_title">दवा लेने का समय हो गया है</string>
+    <string name="fullscreen_reminder_at">निर्धारित समय: %1$s</string>
+    <string name="fullscreen_loading">आपकी दवा लोड हो रही है…</string>
+    <string name="fullscreen_already_done">यह खुराक पहले ही दर्ज हो चुकी है।</string>
+    <string name="fullscreen_close">बंद करें</string>
 
     <!-- PDF report -->
     <string name="report_title">मेडीमाइंडर दवा रिपोर्ट</string>

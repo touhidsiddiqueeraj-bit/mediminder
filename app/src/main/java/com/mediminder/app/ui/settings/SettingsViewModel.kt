@@ -184,6 +184,39 @@ fun openAppSettings(context: Context) {
 }
 
 /**
+ * Android 14+: the dedicated screen where the user allows this app to show
+ * its full-screen reminder. Falls back to the general app settings page.
+ */
+fun openFullScreenIntentSettings(context: Context) {
+    if (Build.VERSION.SDK_INT >= 34) {
+        val intent = Intent(
+            Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT,
+            Uri.parse("package:${context.packageName}"),
+        ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        runCatching { context.startActivity(intent) }
+            .onFailure { openAppSettings(context) }
+    } else {
+        openAppSettings(context)
+    }
+}
+
+/**
+ * Opens Google Speech Services on the Play Store so a phone without any
+ * text-to-speech engine can get one. No INTERNET permission needed — the
+ * store app handles the download.
+ */
+fun installVoiceEngine(context: Context) {
+    val market = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.google.android.tts"))
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    val web = Intent(
+        Intent.ACTION_VIEW,
+        Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.tts"),
+    ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    runCatching { context.startActivity(market) }
+        .onFailure { runCatching { context.startActivity(web) } }
+}
+
+/**
  * Opens the system screen where text-to-speech voices are managed. There is
  * no public Settings constant for it, so try the well-known action first and
  * fall back to the related voice settings pages.

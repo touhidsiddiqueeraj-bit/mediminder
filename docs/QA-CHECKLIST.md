@@ -120,8 +120,36 @@ adb shell dumpsys deviceidle unforce
 - ☐ Settings → "Read reminders aloud" ON → open a reminder from the
       notification: the medicine name is spoken.
 - ☐ Airplane mode: TTS works fully offline (system voices are on-device).
+- ☐ Settings → Voice → "Test voice": speaks a sample sentence in the app
+      language and the status line under it says "Voice is working."
+- ☐ On a phone without any TTS engine: the status line says no speech engine
+      was found and offers "Install a voice engine" (Play Store) plus
+      "Open voice settings".
 
-## 15. Regression quick-pass
+## 15. Full-screen reminder
+- ☐ Screen **off/locked** when a reminder fires: the full-screen reminder
+      lights up over the lock screen — medicine name, dose, scheduled time,
+      and giant Taken / Snooze / Skip buttons (no unlock needed).
+- ☐ Screen on and unlocked: a heads-up notification appears; **tapping it**
+      opens the same full-screen reminder.
+- ☐ "Taken" on the full-screen screen: screen closes, dose shows as taken
+      in Today, the quiet confirmation notification appears, pill count
+      decrements (same result as the notification button).
+- ☐ "Snooze N min": screen closes, the dose re-fires after N minutes.
+- ☐ Double-tapping "Taken" quickly records the dose only once (the state
+      machine locks the buttons while the write is in flight).
+- ☐ Re-remind while the screen is still open from the first alert: the
+      screen reloads with the same dose (no stacked screens).
+- ☐ Taking the dose from the notification while the full-screen reminder is
+      open: the screen switches to "This dose was already recorded" with a
+      Close button.
+- ☐ Android 14+: Settings → Permissions card "Show reminders full screen"
+      opens the dedicated full-screen-intent grant screen; with it denied,
+      reminders still arrive as heads-up notifications.
+- ☐ With "Read reminders aloud" ON, opening the full-screen reminder speaks
+      the medicine name once (not once per re-remind).
+
+## 16. Regression quick-pass
 - ☐ `./gradlew :app:testDebugUnitTest :app:lintDebug` green.
 - ☐ Settings → About shows the installed version (e.g. `MediMinder 1.1.1`) and it matches Android Settings → Apps → MediMinder (the line is read from PackageManager, never hardcoded).
 - ☐ Rotate/force-stop/resume during the add flow does not lose entered data (Process Death not covered by VM state persistence is a known gap — verify acceptable).

@@ -13,13 +13,13 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import com.mediminder.app.MainActivity
 import com.mediminder.app.R
 import com.mediminder.app.domain.model.DoseLog
 import com.mediminder.app.domain.model.LowStockInfo
 import com.mediminder.app.domain.model.Medication
 import com.mediminder.app.domain.repository.ReminderSettings
 import com.mediminder.app.scheduling.ReminderActionReceiver
+import com.mediminder.app.ui.reminder.FullScreenReminderActivity
 import com.mediminder.app.util.withAppLanguage
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -112,9 +112,12 @@ class NotificationHelper @Inject constructor(
             .joinToString(separator = "  ·  ")
             .ifBlank { strings.getString(R.string.notif_reminder_fallback_text) }
 
-        val openIntent = Intent(context, MainActivity::class.java).apply {
-            action = MainActivity.ACTION_OPEN_REMINDER
-            putExtra(MainActivity.EXTRA_DOSE_ID, doseId)
+        // Tapping the notification opens the dedicated full-screen reminder —
+        // the same screen the full-screen intent launches when the phone is
+        // locked — so the "what do I take now?" answer is one tap away.
+        val openIntent = Intent(context, FullScreenReminderActivity::class.java).apply {
+            action = FullScreenReminderActivity.ACTION_SHOW_REMINDER
+            putExtra(FullScreenReminderActivity.EXTRA_DOSE_ID, doseId)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
         val contentPi = PendingIntent.getActivity(

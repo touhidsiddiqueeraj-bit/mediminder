@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -38,12 +41,16 @@ import androidx.compose.material.icons.filled.Security
 import com.mediminder.app.R
 import com.mediminder.app.domain.repository.ThemeMode
 import com.mediminder.app.ui.components.BigButton
+import com.mediminder.app.ui.components.BigOutlinedButton
 import com.mediminder.app.ui.components.ConfirmDialog
 import com.mediminder.app.ui.components.PermissionStatusCard
 import com.mediminder.app.ui.components.SectionCard
 import com.mediminder.app.ui.components.SelectionCard
 import android.content.pm.PackageManager
 import com.mediminder.app.ui.components.Stepper
+import com.mediminder.app.tts.ReminderSpeaker
+import com.mediminder.app.tts.SpeakerState
+import com.mediminder.app.util.appLocale
 import androidx.lifecycle.Lifecycle
 
 @Composable
@@ -146,6 +153,53 @@ fun SettingsScreen(
                     checked = settings.ttsEnabled,
                     onCheckedChange = viewModel::setTtsEnabled,
                 )
+                Spacer(Modifier.height(12.dp))
+
+                // Live voice diagnostics: the engine is warmed up while the
+                // user is on this screen so the test button never fires blind.
+                val speaker = remember { ReminderSpeaker(context) }
+                DisposableEffect(speaker) {
+                    speaker.language(appLocale())
+                    speaker.init()
+                    onDispose { speaker.shutdown() }
+                }
+                val speakerState by speaker.state.collectAsStateWithLifecycle()
+
+                BigButton(
+                    text = stringResource(R.string.tts_test_button),
+                    onClick = {
+                        speaker.language(appLocale())
+                        speaker.speak(context.getString(R.string.tts_test_sentence))
+                    },
+                )
+                Spacer(Modifier.height(8.dp))
+                when (speakerState) {
+                    SpeakerState.WARMING_UP ->
+                        VoiceStatusText(stringResource(R.string.tts_status_warming))
+                    SpeakerState.READY ->
+                        VoiceStatusText(stringResource(R.string.tts_status_ready))
+                    SpeakerState.LANGUAGE_MISSING -> {
+                        VoiceStatusText(stringResource(R.string.tts_voice_missing))
+                        Spacer(Modifier.height(8.dp))
+                        BigOutlinedButton(
+                            text = stringResource(R.string.tts_open_voice_settings),
+                            onClick = { openVoiceSettings(context) },
+                        )
+                    }
+                    SpeakerState.FAILED -> {
+                        VoiceStatusText(stringResource(R.string.tts_engine_missing))
+                        Spacer(Modifier.height(8.dp))
+                        BigOutlinedButton(
+                            text = stringResource(R.string.tts_install_engine),
+                            onClick = { installVoiceEngine(context) },
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        BigOutlinedButton(
+                            text = stringResource(R.string.tts_open_voice_settings),
+                            onClick = { openVoiceSettings(context) },
+                        )
+                    }
+                }
             }
         }
         item(key = "appearance") {
@@ -211,7 +265,7 @@ fun SettingsScreen(
                         grantedText = stringResource(R.string.perm_fullscreen_ok),
                         notGrantedText = stringResource(R.string.perm_fullscreen_missing),
                         actionLabel = stringResource(R.string.perm_open_settings),
-                        onAction = { openAppSettings(context) },
+                        onAction = { openFullScreenIntentSettings(context) },
                     )
                 }
             }
@@ -334,4 +388,14 @@ private fun ChipRow(
             )
         }
     }
+}
+
+/** Small status line under the "Test voice" button. */
+@Composable
+private fun VoiceStatusText(text: String) {
+    Text(
+        text,
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
 }

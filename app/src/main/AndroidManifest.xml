@@ -50,6 +50,19 @@
             </intent-filter>
         </activity>
 
+        <!-- Full-screen "time to take your medicine" screen. Opened by the
+             notification's full-screen intent (screen off / locked) and by
+             tapping the notification. Never appears in recents. -->
+        <activity
+            android:name=".ui.reminder.FullScreenReminderActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:showWhenLocked="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.MediMinder"
+            android:turnScreenOn="true" />
+
         <!-- Fires the exact reminder alarm for a dose. -->
         <receiver
             android:name=".scheduling.ReminderAlarmReceiver"

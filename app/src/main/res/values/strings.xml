@@ -255,6 +255,18 @@
     <string name="tts_voice_missing">No voice for this language is installed on your phone yet, so reading aloud may stay silent.</string>
     <string name="tts_engine_missing">Reading aloud is not possible on this phone — no speech engine was found.</string>
     <string name="tts_open_voice_settings">Open voice settings</string>
+    <string name="tts_test_button">Test voice</string>
+    <string name="tts_test_sentence">This is how your reminders will sound.</string>
+    <string name="tts_status_ready">Voice is working.</string>
+    <string name="tts_status_warming">Checking voice…</string>
+    <string name="tts_install_engine">Install a voice engine</string>
+
+    <!-- Full-screen reminder -->
+    <string name="fullscreen_reminder_title">Time to take your medicine</string>
+    <string name="fullscreen_reminder_at">Scheduled for %1$s</string>
+    <string name="fullscreen_loading">Loading your medicine…</string>
+    <string name="fullscreen_already_done">This dose was already recorded.</string>
+    <string name="fullscreen_close">Close</string>
 
     <!-- PDF report -->
     <string name="report_title">MediMinder medicine report</string>

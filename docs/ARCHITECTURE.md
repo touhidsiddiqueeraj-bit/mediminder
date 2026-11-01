@@ -79,6 +79,29 @@ Sweep (`MarkMissedDosesUseCase`, cutoff = whole chain + 5 min buffer) runs at
 app open, in the maintenance worker and after device events, catching
 anything the alarm chain could not deliver (device off, force-stopped).
 
+### Full-screen reminder
+
+`showDoseReminder()` attaches one PendingIntent twice: as the notification's
+content intent and as its **full-screen intent**. Both point at
+`FullScreenReminderActivity` — a dedicated, lock-screen-capable screen
+(`showWhenLocked`, `turnScreenOn`, `FLAG_KEEP_SCREEN_ON`, `excludeFromRecents`,
+`singleTop` + empty taskAffinity so re-reminds reload it instead of stacking).
+When the screen is on and unlocked Android shows the heads-up notification
+instead; tapping it opens the same screen.
+
+Its UI runs on a pure reducer (`ui/reminder/ReminderUiState.kt`, unit-tested):
+Loading → Content / AlreadyDone → Acting → Done. The reducer refuses a second
+`ActionStarted` while a write is in flight (double-tap guard) and puts the
+screen back to Content on failure so nothing is silently lost. The three
+buttons call the same `MarkDoseUseCase` / `SnoozeDoseUseCase` the notification
+actions use, so both entry points behave identically. Speech on open reuses
+`ReminderSpeaker`, once per dose id (re-reminds do not repeat the line).
+
+On Android 14+ the full-screen-intent permission is denied by default; the
+Settings permission card links to
+`ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT`, and without it the app degrades
+to heads-up notifications (never silent).
+
 ## Localization & the reminder text
 
 Per-app language (7 locales, `values-*/strings.xml`) is applied with

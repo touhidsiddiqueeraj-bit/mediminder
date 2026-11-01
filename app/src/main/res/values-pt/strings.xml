@@ -251,6 +251,18 @@
     <string name="tts_voice_missing">Ainda não há voz instalada para este idioma no seu telefone, então a leitura em voz alta pode ficar em silêncio.</string>
     <string name="tts_engine_missing">Não é possível ler em voz alta neste telefone — nenhum sistema de fala foi encontrado.</string>
     <string name="tts_open_voice_settings">Abrir ajustes de voz</string>
+    <string name="tts_test_button">Testar a voz</string>
+    <string name="tts_test_sentence">É assim que os seus lembretes vão soar.</string>
+    <string name="tts_status_ready">A voz está funcionando.</string>
+    <string name="tts_status_warming">Verificando a voz…</string>
+    <string name="tts_install_engine">Instalar um motor de voz</string>
+
+    <!-- Full-screen reminder -->
+    <string name="fullscreen_reminder_title">Está na hora de tomar o seu remédio</string>
+    <string name="fullscreen_reminder_at">Horário previsto: %1$s</string>
+    <string name="fullscreen_loading">Carregando o seu remédio…</string>
+    <string name="fullscreen_already_done">Esta dose já foi registrada.</string>
+    <string name="fullscreen_close">Fechar</string>
 
     <!-- PDF report -->
     <string name="report_title">Relatório de remédios do MediMinder</string>

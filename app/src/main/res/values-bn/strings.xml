@@ -250,6 +250,18 @@
     <string name="tts_voice_missing">এই ভাষার কণ্ঠস্বর এখনো আপনার ফোনে নেই, তাই পড়ে শোনানো নীরব থাকতে পারে।</string>
     <string name="tts_engine_missing">এই ফোনে পড়ে শোনানো সম্ভব নয় — কোনো স্পিচ ইঞ্জিন পাওয়া যায়নি।</string>
     <string name="tts_open_voice_settings">কণ্ঠস্বরের সেটিংস খুলুন</string>
+    <string name="tts_test_button">ভয়েস পরীক্ষা করুন</string>
+    <string name="tts_test_sentence">আপনার রিমাইন্ডার এভাবে শোনাবে।</string>
+    <string name="tts_status_ready">ভয়েস কাজ করছে।</string>
+    <string name="tts_status_warming">ভয়েস পরীক্ষা করা হচ্ছে…</string>
+    <string name="tts_install_engine">একটি ভয়েস ইঞ্জিন ইনস্টল করুন</string>
+
+    <!-- Full-screen reminder -->
+    <string name="fullscreen_reminder_title">ওষুধ খাওয়ার সময় হয়েছে</string>
+    <string name="fullscreen_reminder_at">নির্ধারিত সময়: %1$s</string>
+    <string name="fullscreen_loading">আপনার ওষুধ লোড হচ্ছে…</string>
+    <string name="fullscreen_already_done">এই ডোজের হিসাব আগেই রাখা হয়েছে।</string>
+    <string name="fullscreen_close">বন্ধ করুন</string>
 
     <!-- PDF report -->
     <string name="report_title">মেডিমাইন্ডার ওষুধ রিপোর্ট</string>

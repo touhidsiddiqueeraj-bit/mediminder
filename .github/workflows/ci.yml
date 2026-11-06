@@ -26,13 +26,13 @@ jobs:
           java-version: '17'
 
       - name: Set up Gradle (with dependency cache)
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
         with:
           # Branch builds share the cache; PR builds only read it.
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@v5
+        uses: gradle/actions/wrapper-validation@v6
 
       - name: Build, unit tests, lint, instrumented-test compile
         run: >
